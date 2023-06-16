@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class BulletBehavior : MonoBehaviour
 {
@@ -9,14 +10,14 @@ public class BulletBehavior : MonoBehaviour
     private Rigidbody RB;
     
     [SerializeField]
-    private float _bulletSpeed = 10f;
+    private float bulletSpeed = 10f;
     private float _bulletlifespan = 4f;
 
-    
-    void Update()
+
+    public void Update()
     {
         // SHOOT BULLET
-        transform.Translate(Vector3.forward * _bulletSpeed * Time.deltaTime);
+        transform.Translate(Vector3.forward * (bulletSpeed * Time.deltaTime));
 
         // DESTROY - if certain height is reached 
         //Destroy(this.gameObject, _bulletlifespan);
