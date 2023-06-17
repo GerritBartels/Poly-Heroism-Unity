@@ -129,7 +129,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RB: {fileID: -7383739922459633681}
-  _bulletSpeed: 10
+  bulletSpeed: 10
+  layersToHit:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!114 &8547556874429710020
 MonoBehaviour:
   m_ObjectHideFlags: 0

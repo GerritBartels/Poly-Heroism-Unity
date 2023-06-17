@@ -13,13 +13,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject bulletPrefab;
     private Rigidbody _rigidbody;
 
-    private readonly Player _playerModel;
+    public Player PlayerModel { get; }
 
     private const float RegenerationDelay = 1f;
 
     private PlayerController()
     {
-        _playerModel = new Player();
+        PlayerModel = new Player();
     }
 
     private void Start()
@@ -30,46 +30,76 @@ public class PlayerController : MonoBehaviour
 
     public void Update()
     {
-        _moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
-
-        // SPAWN BULLET
+        // attack
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            Instantiate(bulletPrefab, transform.position, transform.rotation);
+            Shout();
         }
 
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            ScatterShout();
+        }
+
+        //sprint or walk
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            _playerModel.Sprint();
+            PlayerModel.Sprint();
         }
         else
         {
-            _playerModel.Walk();
+            PlayerModel.Walk();
         }
+    }
 
-        _rigidbody.MovePosition(_rigidbody.position +
-                                transform.TransformDirection(_moveDirection) * (_playerModel.Speed * Time.deltaTime));
-        Debug.Log($"Stamina: {_playerModel.Stamina}");
-        Debug.Log($"Live: {_playerModel.Live}");
+    private void Shout()
+    {
+        Instantiate(bulletPrefab, transform.position, transform.rotation);
+    }
+
+    private void ScatterShout()
+    {
+        var scatterShoutManaCost = 20;
+        if (!PlayerModel.CastFor(scatterShoutManaCost)) return;
+        Instantiate(
+            bulletPrefab,
+            transform.position + (transform.forward * 0.5f),
+            transform.rotation
+        );
+        Instantiate(
+            bulletPrefab,
+            transform.position + (transform.forward * 0.5f) + (transform.right * -0.3f),
+            transform.rotation * Quaternion.Euler(0f, -10f, 0f)
+        );
+        Instantiate(
+            bulletPrefab,
+            transform.position + (transform.forward * 0.5f) + (transform.right * 0.3f),
+            transform.rotation * Quaternion.Euler(0f, 10f, 0f)
+        );
     }
 
     public void FixedUpdate()
     {
+        //move player
+        _moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
+        _rigidbody.MovePosition(_rigidbody.position +
+                                transform.TransformDirection(_moveDirection) * (PlayerModel.Speed * Time.deltaTime));
     }
 
     public void Damage(float damage)
     {
-        if (!_playerModel.TakeDamage(damage))
+        if (!PlayerModel.TakeDamage(damage))
         {
+            // death
             Destroy(this.gameObject);
         }
     }
 
-    IEnumerator Regeneration()
+    protected virtual IEnumerator Regeneration()
     {
-        while (_playerModel.IsAlive)
+        while (PlayerModel.IsAlive)
         {
-            _playerModel.Regenerate(RegenerationDelay);
+            PlayerModel.Regenerate(RegenerationDelay);
             yield return new WaitForSeconds(RegenerationDelay);
         }
 

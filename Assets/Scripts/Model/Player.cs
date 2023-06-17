@@ -4,25 +4,27 @@ namespace Model
 {
     public class Player
     {
-        public float Live { get; private set; } = 100;
+        public Resource Live { get; }
 
-        private const float LiveRegenerationRate = 1f;
+        public Resource Stamina { get; }
 
-        public float Stamina { get; private set; } = 100;
+        public Resource Mana { get; }
 
-        private const float StaminaRegenerationRate = 3f;
         private const float StaminaDrain = 20f;
-
         private const float BaseSpeed = 10f;
-        private const float SprintSpeed = 25f;
+        private const float SprintSpeed = BaseSpeed * 1.5f;
 
         private float _speed = BaseSpeed;
-
+        private float _startedSprintAt;
         private bool _isSprinting = false;
 
-        private float _startedSprintAt = 0f;
 
-        public bool IsAlive => Live > 0;
+        public Player()
+        {
+            Live = new Resource(1f);
+            Stamina = new Resource(3f);
+            Mana = new Resource(2f);
+        }
 
         public float Speed
         {
@@ -30,13 +32,31 @@ namespace Model
             private set
             {
                 _speed = value;
-                if (_isSprinting && (Time.time - _startedSprintAt) > 1f)
+                if (_isSprinting)
                 {
                     SprintedFor(Time.time - _startedSprintAt);
                 }
             }
         }
 
+        public bool CanSprint()
+        {
+            return !Stamina.Empty();
+        }
+
+        public bool IsAlive => !Live.Empty();
+
+        public bool CanCast(float cost)
+        {
+            return Mana.Value > cost;
+        }
+
+        public bool CastFor(float cost)
+        {
+            if (!CanCast(cost)) return false;
+            Mana.Value -= cost;
+            return true;
+        }
 
         public void Sprint()
         {
@@ -45,10 +65,10 @@ namespace Model
                 if (!_isSprinting)
                 {
                     _startedSprintAt = Time.time;
+                    _isSprinting = true;
                 }
 
                 Speed = SprintSpeed;
-                _isSprinting = true;
             }
             else
             {
@@ -64,30 +84,22 @@ namespace Model
 
         public bool TakeDamage(float damage)
         {
-            Live -= damage;
-            if (!(Live <= 0)) return true;
-            Live = 0;
-            return false;
+            Live.Value -= damage;
+            return !Live.Empty();
         }
 
         private void SprintedFor(float duration)
         {
-            var stamina = Stamina - StaminaDrain * duration;
-            Stamina = (int)(stamina > 0 ? stamina : 0);
+            Stamina.Value -= StaminaDrain * duration;
             _startedSprintAt = Time.time;
         }
 
-        public bool CanSprint()
-        {
-            return Stamina > StaminaDrain;
-        }
 
         public void Regenerate(float duration)
         {
-            var stamina = Stamina + StaminaRegenerationRate * duration;
-            var live = Live + LiveRegenerationRate * duration;
-            Stamina = (stamina > 100f ? 100f : stamina);
-            Live = (live > 100f ? 100f : live);
+            Stamina.Regenerate(duration);
+            Live.Regenerate(duration);
+            Mana.Regenerate(duration);
         }
     }
 }
