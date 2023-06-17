@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace Controllers
         private Vector3 _direction;
 
         [SerializeField] private LayerMask layersToHit;
+
 
         private void Start()
         {
@@ -37,7 +39,14 @@ namespace Controllers
         public void Update()
         {
             // SHOOT BULLET
-            transform.Translate(_direction * (bulletSpeed * Time.deltaTime));
+            transform.Translate(Vector3.forward * (bulletSpeed * Time.deltaTime));
+
+            // DESTROY
+            _lifeSpan -= Time.deltaTime;
+            if (_lifeSpan <= 0)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }

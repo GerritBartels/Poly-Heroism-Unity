@@ -27,6 +27,7 @@ namespace Controllers
         private void Start()
         {
             _rigidbody = GetComponent<Rigidbody>();
+            _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
             StartCoroutine(Regeneration());
         }
 
@@ -56,7 +57,8 @@ namespace Controllers
 
         private void Shout()
         {
-            Instantiate(bulletPrefab, transform.position, transform.rotation);
+            var transform1 = transform;
+            Instantiate(bulletPrefab, transform1.position + (transform1.forward * 0.5f), transform1.rotation);
         }
 
         private void ScatterShout()

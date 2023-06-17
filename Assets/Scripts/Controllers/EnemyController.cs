@@ -24,6 +24,7 @@ namespace Controllers
         {
             _rigidbodyPlayer = player.GetComponent<Rigidbody>();
             _rigidbody = GetComponent<Rigidbody>();
+            _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         }
 
         private void Update()

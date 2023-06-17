@@ -15,7 +15,7 @@ namespace Controllers
         private Vector3 _direction;
         private Rigidbody _rigidbody;
         private Rigidbody _rigidbodyPlayer;
-
+        [SerializeField] private float lifeSpan = 2f;
 
         private void Start()
         {
@@ -31,8 +31,12 @@ namespace Controllers
             // SHOOT BULLET
             transform.Translate(_direction * (bulletSpeed * Time.deltaTime));
 
-            // DESTROY - if certain height is reached 
-            //Destroy(this.gameObject, _bulletlifespan);
+            // DESTROY
+            lifeSpan -= Time.deltaTime;
+            if (lifeSpan <= 0)
+            {
+                Destroy(gameObject);
+            }
         }
 
         private void OnTriggerEnter(Collider other)
