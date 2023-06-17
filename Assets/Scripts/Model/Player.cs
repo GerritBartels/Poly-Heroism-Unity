@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Model.Abilities;
+using UnityEngine;
 
 namespace Model
 {
@@ -17,13 +18,26 @@ namespace Model
         private float _speed = BaseSpeed;
         private float _startedSprintAt;
         private bool _isSprinting = false;
-
+        private float _globalCooldownEnd = 0f;
 
         public Player()
         {
             Live = new Resource(1f);
             Stamina = new Resource(3f);
             Mana = new Resource(2f);
+        }
+
+        public bool GlobalCooldownActive()
+        {
+            return Time.time > _globalCooldownEnd;
+        }
+
+        public void UseAbility(IAbility ability)
+        {
+            if (ability.Use(this))
+            {
+                _globalCooldownEnd = Time.time + ability.GlobalCooldown;
+            }
         }
 
         public float Speed
