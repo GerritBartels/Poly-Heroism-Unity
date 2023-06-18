@@ -12,16 +12,20 @@ namespace Model
         public Resource Mana { get; }
 
         private const float StaminaDrain = 20f;
-        private const float BaseSpeed = 10f;
-        private const float SprintSpeed = BaseSpeed * 1.5f;
+        private readonly float _baseSpeed;
+        private readonly float _sprintSpeed;
 
-        private float _speed = BaseSpeed;
+        private float _speed;
         private float _startedSprintAt;
         private bool _isSprinting = false;
+        
         private float _globalCooldownEnd = 0f;
 
-        public Player()
+        public Player(float baseSpeed)
         {
+            _baseSpeed = baseSpeed;
+            _sprintSpeed = _baseSpeed * 1.5f;
+            _speed = _baseSpeed;
             Live = new Resource(1f);
             Stamina = new Resource(3f);
             Mana = new Resource(2f);
@@ -68,13 +72,6 @@ namespace Model
             return Mana.Value > cost;
         }
 
-        public bool CastFor(float cost)
-        {
-            if (!CanCast(cost)) return false;
-            Mana.Value -= cost;
-            return true;
-        }
-
         public void Sprint()
         {
             if (CanSprint())
@@ -84,8 +81,7 @@ namespace Model
                     _startedSprintAt = Time.time;
                     _isSprinting = true;
                 }
-
-                Speed = SprintSpeed;
+                Speed = _sprintSpeed;
             }
             else
             {
@@ -95,7 +91,7 @@ namespace Model
 
         public void Walk()
         {
-            Speed = BaseSpeed;
+            Speed = _baseSpeed;
             _isSprinting = false;
         }
 
@@ -110,7 +106,6 @@ namespace Model
             Stamina.Value -= StaminaDrain * duration;
             _startedSprintAt = Time.time;
         }
-
 
         public void Regenerate(float duration)
         {

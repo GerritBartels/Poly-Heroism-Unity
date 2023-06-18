@@ -44,7 +44,6 @@ namespace Model.Abilities
                     return true;
                 }
             }
-
             return false;
         }
     }
