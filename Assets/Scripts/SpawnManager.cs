@@ -5,30 +5,28 @@ using UnityEngine.Serialization;
 
 public class SpawnManager : MonoBehaviour
 {
-    // VARIABLES
     [SerializeField] private GameObject enemyPrefab;
 
-    private const float _delay = 0.5f;
+    private const float Delay = 0.5f;
     private bool _alive = true;
 
-    void Start()
+    public void Start()
     {
         StartCoroutine(SpawnSystem());
     }
 
-
-    public void onPlayerDeath()
+    public void OnPlayerDeath()
     {
         _alive = false;
     }
 
-    IEnumerator SpawnSystem()
+    private IEnumerator SpawnSystem()
     {
         // SPAWNING
         while (_alive)
         {
             Instantiate(enemyPrefab, new Vector3(Random.Range(-20f, 8f), 20f, 0), Quaternion.identity);
-            yield return new WaitForSeconds(_delay);
+            yield return new WaitForSeconds(Delay);
         }
 
         yield return null;

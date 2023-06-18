@@ -11,7 +11,7 @@ namespace Controllers.UI
         protected new void Awake()
         {
             base.Awake();
-            Resource = GameObject.Find("Player").GetComponent<PlayerController>().PlayerModel.Live;
+            Resource = GameObject.Find("Player").GetComponent<PlayerController>().PlayerModel.Health;
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Model
 {
     public class Player
     {
-        public Resource Live { get; }
+        public Resource Health { get; }
 
         public Resource Stamina { get; }
 
@@ -26,7 +26,7 @@ namespace Model
             _baseSpeed = baseSpeed;
             _sprintSpeed = _baseSpeed * 1.5f;
             _speed = _baseSpeed;
-            Live = new Resource(1f);
+            Health = new Resource(1f);
             Stamina = new Resource(3f);
             Mana = new Resource(2f);
         }
@@ -65,7 +65,7 @@ namespace Model
             return !Stamina.Empty();
         }
 
-        public bool IsAlive => !Live.Empty();
+        public bool IsAlive => !Health.Empty();
 
         public bool CanCast(float cost)
         {
@@ -97,8 +97,8 @@ namespace Model
 
         public bool TakeDamage(float damage)
         {
-            Live.Value -= damage;
-            return !Live.Empty();
+            Health.Value -= damage;
+            return !Health.Empty();
         }
 
         private void SprintedFor(float duration)
@@ -110,7 +110,7 @@ namespace Model
         public void Regenerate(float duration)
         {
             Stamina.Regenerate(duration);
-            Live.Regenerate(duration);
+            Health.Regenerate(duration);
             Mana.Regenerate(duration);
         }
     }
