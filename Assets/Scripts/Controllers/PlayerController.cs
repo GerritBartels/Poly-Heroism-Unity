@@ -17,6 +17,7 @@ namespace Controllers
         [SerializeField] private GameObject meleePrefab;
 
         [SerializeField] private float baseSpeed = 5f;
+        [SerializeField] private GameObject planet;
 
         private Rigidbody _rigidbody;
 
@@ -28,6 +29,8 @@ namespace Controllers
         private ScatterShot _scatterShot;
         private MeleeAttack _meleeAttack;
 
+        private Camera cam;
+
         private PlayerController()
         {
             PlayerModel = new Player(baseSpeed);
@@ -35,6 +38,7 @@ namespace Controllers
 
         private void Start()
         {
+            cam = Camera.main;
             _rangedAttack = new RangedAttack(transform, bulletPrefab);
             _scatterShot = new ScatterShot(transform, bulletPrefab);
             _meleeAttack = new MeleeAttack(transform, meleePrefab);
@@ -62,7 +66,7 @@ namespace Controllers
                 ScatterShot();
             }
 
-            //sprint or walk
+            // sprint or walk
             if (Input.GetKey(KeyCode.LeftShift))
             {
                 PlayerModel.Sprint();
@@ -71,6 +75,17 @@ namespace Controllers
             {
                 PlayerModel.Walk();
             }
+        }
+
+        public void LateUpdate()
+        {
+            float mouseX = Input.GetAxis("Mouse X");
+            //float mouseY = Input.GetAxis("Mouse Y");
+            float rotationSpeed = 950f;
+            float rotationY = mouseX * rotationSpeed;
+
+            transform.RotateAround(transform.position, transform.up, Time.deltaTime * rotationY);
+            //planet.transform.RotateAround(transform.position, transform.up, Time.deltaTime * 90f);
         }
 
         private void Shot()
@@ -90,7 +105,7 @@ namespace Controllers
 
         public void FixedUpdate()
         {
-            //move player
+            // move player
             _moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
             _rigidbody.MovePosition(_rigidbody.position +
                                     transform.TransformDirection(_moveDirection) *
