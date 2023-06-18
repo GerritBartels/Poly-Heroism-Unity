@@ -18,7 +18,6 @@ namespace Controllers
         private float _nextFireTime = 0.5f;
         private Rigidbody _rigidbody;
         private Rigidbody _rigidbodyPlayer;
-        private Rigidbody _rigidbody1;
 
         private void Start()
         {
@@ -29,7 +28,6 @@ namespace Controllers
 
         private void Update()
         {
-            // move towards player
             var position = _rigidbody.position;
             var playerPosition = _rigidbodyPlayer.position;
             var moveDirection = (playerPosition - position).normalized;
@@ -56,7 +54,7 @@ namespace Controllers
             if (other.CompareTag("Player"))
             {
                 Destroy(this.gameObject);
-                other.GetComponent<PlayerController>().Damage(25);
+                player.GetComponent<PlayerController>().Damage(25);
             }
         }
     }

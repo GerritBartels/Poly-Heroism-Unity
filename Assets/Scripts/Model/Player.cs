@@ -12,8 +12,8 @@ namespace Model
         public Resource Mana { get; }
 
         private const float StaminaDrain = 20f;
-        private const float BaseSpeed = 10f;
-        private const float SprintSpeed = BaseSpeed * 1.5f;
+        private const float BaseSpeed = 5f;
+        private const float SprintSpeed = BaseSpeed * 2f;
 
         private float _speed = BaseSpeed;
         private float _startedSprintAt;
@@ -83,6 +83,7 @@ namespace Model
                 }
 
                 Speed = SprintSpeed;
+                
             }
             else
             {
