@@ -29,14 +29,17 @@ namespace Model
 
         public bool GlobalCooldownActive()
         {
-            return Time.time > _globalCooldownEnd;
+            return Time.time < _globalCooldownEnd;
         }
 
         public void UseAbility(IAbility ability)
         {
-            if (ability.Use(this))
+            if (!GlobalCooldownActive())
             {
-                _globalCooldownEnd = Time.time + ability.GlobalCooldown;
+                if (ability.Use(this))
+                {
+                    _globalCooldownEnd = Time.time + ability.GlobalCooldown;
+                }
             }
         }
 

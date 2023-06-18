@@ -1,14 +1,22 @@
-﻿namespace Model.Abilities
+﻿using UnityEngine;
+
+namespace Model.Abilities
 {
     public class RangedAttack : AbilityBase
     {
-        public RangedAttack() : base(0f, 0.2f, 2f)
+        private readonly Transform _transform;
+        private readonly GameObject _prefab;
+
+        public RangedAttack(Transform transform, GameObject prefab) : base(0f, 0f, 2f)
         {
+            _transform = transform;
+            _prefab = prefab;
         }
 
         protected override bool PerformAbility(Player player)
         {
-            throw new System.NotImplementedException();
+            Instantiate(_prefab, _transform.position + (_transform.forward * 0.5f), _transform.rotation);
+            return true;
         }
 
         protected override Resource GetResource(Player player)
