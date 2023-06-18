@@ -22,8 +22,7 @@ namespace Controllers.UI
         // Update is called once per frame
         private void Update()
         {
-            var fillValue = Resource.Value / Resource.MaxValue;
-            _slider.value = fillValue;
+            _slider.value = Resource.Value / Resource.MaxValue;
         }
     }
 }
