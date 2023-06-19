@@ -5,15 +5,19 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Debug = UnityEngine.Debug;
 using Model;
+using Model.Abilities;
 
 namespace Controllers
 {
     public class PlayerController : MonoBehaviour
     {
         private Vector3 _moveDirection;
-        private Vector3 currentSpeed;
 
         [SerializeField] private GameObject bulletPrefab;
+        [SerializeField] private GameObject meleePrefab;
+
+        [SerializeField] private float baseSpeed = 5f;
+
         private Rigidbody _rigidbody;
 
         public Player PlayerModel { get; }
@@ -21,24 +25,27 @@ namespace Controllers
         private const float RegenerationDelay = 1f;
         
         private Animator _animator;
-        
-        [SerializeField]
-        private GameObject Planet;
-        private Vector3 _planetUp;
+
+        private RangedAttack _rangedAttack;
+        private ScatterShot _scatterShot;
+        private MeleeAttack _meleeAttack;
 
         private PlayerController()
         {
-            PlayerModel = new Player();
+            PlayerModel = new Player(baseSpeed);
         }
 
         private void Start()
         {
+            _rangedAttack = new RangedAttack(transform, bulletPrefab);
+            _scatterShot = new ScatterShot(transform, bulletPrefab);
+            _meleeAttack = new MeleeAttack(transform, meleePrefab);
+
             _rigidbody = GetComponent<Rigidbody>();
             _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
             
             _animator = GetComponent<Animator>();
-            _planetUp = Planet.transform.up;
-            
+
             StartCoroutine(Regeneration());
         }
 
@@ -47,12 +54,17 @@ namespace Controllers
             // attack
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                Shout();
+                Shot();
             }
 
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
-                ScatterShout();
+                Attack();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                ScatterShot();
             }
 
             //sprint or walk
@@ -81,37 +93,19 @@ namespace Controllers
             }
         }
 
-        private void Shout()
+        private void Shot()
         {
-            var transform1 = transform;
-            Instantiate(bulletPrefab, transform1.position + (transform1.forward * 0.5f) + transform.up, transform1.rotation);
-            
-            _animator.SetTrigger("quickShot");
-            
+            PlayerModel.UseAbility(_rangedAttack);
         }
 
-        private void ScatterShout()
+        private void Attack()
         {
-            var scatterShoutManaCost = 20;
-            if (!PlayerModel.CastFor(scatterShoutManaCost)) return;
-            
-            _animator.SetTrigger("scatterShot");
-            // Wait for animation to finish
-            Instantiate(
-                bulletPrefab,
-                transform.position + (transform.forward * 0.5f)  + transform.up,
-                transform.rotation
-            );
-            Instantiate(
-                bulletPrefab,
-                transform.position + (transform.forward * 0.5f) + (transform.right * -0.3f)  + transform.up,
-                transform.rotation * Quaternion.Euler(0f, -10f, 0f)
-            );
-            Instantiate(
-                bulletPrefab,
-                transform.position + (transform.forward * 0.5f) + (transform.right * 0.3f)  + transform.up,
-                transform.rotation * Quaternion.Euler(0f, 10f, 0f)
-            );
+            PlayerModel.UseAbility(_meleeAttack);
+        }
+
+        private void ScatterShot()
+        {
+            PlayerModel.UseAbility(_scatterShot);
         }
 
         public void FixedUpdate()
@@ -123,7 +117,7 @@ namespace Controllers
                                     (PlayerModel.Speed * Time.deltaTime));
         }
 
-        public void Damage(float damage) 
+        public void Damage(float damage)
         {
             if (!PlayerModel.TakeDamage(damage))
             {

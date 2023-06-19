@@ -2,12 +2,12 @@
 
 namespace Model.Abilities
 {
-    public class RangedAttack : AbilityBase
+    public class MeleeAttack : AbilityBase
     {
         private readonly Transform _transform;
         private readonly GameObject _prefab;
 
-        public RangedAttack(Transform transform, GameObject prefab) : base(0f, 0.2f, 2f)
+        public MeleeAttack(Transform transform, GameObject prefab) : base(0, 1, 2)
         {
             _transform = transform;
             _prefab = prefab;
@@ -21,7 +21,7 @@ namespace Model.Abilities
 
         protected override Resource GetResource(Player player)
         {
-            return player.Mana;
+            return player.Stamina;
         }
     }
 }
