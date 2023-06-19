@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 4698398665952451012}
   - component: {fileID: 4698398665952451013}
   - component: {fileID: 4698398665952451018}
-  - component: {fileID: 4698398665952451011}
   m_Layer: 0
   m_Name: TestEnemyMelee
   m_TagString: Enemy
@@ -96,7 +95,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4698398665952451019}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5000001
   m_Height: 2
@@ -145,20 +144,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 990e3d61b0474457bb07f35aff0ff176, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
-  damage: 15
+  baseDamage: 25
   player: {fileID: 0}
---- !u!136 &4698398665952451011
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4698398665952451019}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}

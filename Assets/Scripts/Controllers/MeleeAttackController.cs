@@ -7,28 +7,12 @@ using Controllers.Enemy;
 
 namespace Controllers
 {
-    public class MeleeAttackController : MonoBehaviour
+    public class MeleeAttackController : PlayerAttackControllerBase
     {
-        private float _lifeSpan = 0.1f;
-
-        public void Update()
+        private void Awake()
         {
-            // DESTROY
-            _lifeSpan -= Time.deltaTime;
-            if (_lifeSpan <= 0)
-            {
-                Destroy(gameObject);
-            }
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            // DESTROY ENEMY
-            if (other.CompareTag("Enemy"))
-            {
-                var enemyGameObject = other.GetComponent<EnemyController>().gameObject;
-                Destroy(enemyGameObject);
-            }
+            lifeSpan = 0.1f;
+            damage = 100f;
         }
     }
 }

@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 8556855155222611685}
   - component: {fileID: 8556855155222611682}
   - component: {fileID: 8556855155222611681}
-  - component: {fileID: 8556855155222611683}
   m_Layer: 0
   m_Name: TestEnemyRanged
   m_TagString: Enemy
@@ -96,7 +95,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8556855155222611694}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -129,8 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e22c8e3a76442f44389973c0f7a7e87f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
-  damage: 25
+  baseDamage: 25
   player: {fileID: 0}
   bulletPrefab: {fileID: 7553974433958985813, guid: 56739b2bab76e034cbdfb0c66938668f, type: 3}
   distanceToPlayer: 10
@@ -149,16 +147,3 @@ MonoBehaviour:
   autoOrient: 1
   autoOrientSpeed: 5
   gravity: 50
---- !u!65 &8556855155222611683
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8556855155222611694}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}

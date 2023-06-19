@@ -1,21 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using Model.Enemy;
+using Model.Enemy.Abilities;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace Controllers.Enemy
 {
-    public class RangedEnemyController : EnemyController
+    public class RangedEnemyController : EnemyController<EnemyBasic>
     {
         [SerializeField] private GameObject bulletPrefab;
-        private float _distanceToPlayer = 4f;
-        private const float FireCoolDownTime = 1f;
-        private float _nextFireTime = 0.5f;
+        [SerializeField] private float distanceToPlayer = 4f;
 
         private void Update()
         {
-            if (DistanceToPlayer() > _distanceToPlayer)
+            if (DistanceToPlayer() > distanceToPlayer)
             {
                 MoveTowardsPlayer();
             }
@@ -24,22 +24,12 @@ namespace Controllers.Enemy
                 MoveAwayFromPlayer();
             }
 
-            //fire bullet
-            if (_nextFireTime < Time.time)
-            {
-                Instantiate(bulletPrefab, transform.position + SelfToPlayerVector().normalized, transform.rotation);
-                _nextFireTime = Time.time + FireCoolDownTime;
-            }
+            Enemy.Attack();
         }
 
-        private void OnTriggerEnter(Collider other)
+        protected override EnemyBasic CreateEnemy()
         {
-            // DESTROY ENEMY + BULLET
-            if (other.CompareTag("Bullet"))
-            {
-                Destroy(this.gameObject);
-                Destroy(other.gameObject);
-            }
+            return new EnemyBasic(100, new RangedAttack(bulletPrefab, transform, SelfToPlayerVector), 2f);
         }
     }
 }

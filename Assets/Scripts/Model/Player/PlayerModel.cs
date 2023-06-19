@@ -1,9 +1,8 @@
-﻿using Model.Abilities;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Model
+namespace Model.Player
 {
-    public class Player
+    public class PlayerModel
     {
         public Resource Health { get; }
 
@@ -18,10 +17,11 @@ namespace Model
         private float _speed;
         private float _startedSprintAt;
         private bool _isSprinting = false;
-        
-        private float _globalCooldownEnd = 0f;
 
-        public Player(float baseSpeed)
+        private readonly Cooldown _globalCooldown = new();
+        private readonly Cooldown _blockMovement = new();
+
+        public PlayerModel(float baseSpeed)
         {
             _baseSpeed = baseSpeed;
             _sprintSpeed = _baseSpeed * 1.5f;
@@ -33,16 +33,16 @@ namespace Model
 
         public bool GlobalCooldownActive()
         {
-            return Time.time < _globalCooldownEnd;
+            return _globalCooldown.IsCooldownActive();
         }
 
-        public void UseAbility(IAbility ability)
+        public void UseAbility(IAbility<PlayerModel> ability)
         {
             if (!GlobalCooldownActive())
             {
                 if (ability.Use(this))
                 {
-                    _globalCooldownEnd = Time.time + ability.GlobalCooldown;
+                    _globalCooldown.Apply(ability.GlobalCooldown);
                 }
             }
         }
@@ -62,15 +62,10 @@ namespace Model
 
         public bool CanSprint()
         {
-            return !Stamina.Empty();
+            return !Stamina.Empty() && !MovementBlocked();
         }
 
         public bool IsAlive => !Health.Empty();
-
-        public bool CanCast(float cost)
-        {
-            return Mana.Value > cost;
-        }
 
         public void Sprint()
         {
@@ -81,7 +76,12 @@ namespace Model
                     _startedSprintAt = Time.time;
                     _isSprinting = true;
                 }
+
                 Speed = _sprintSpeed;
+            }
+            else if (MovementBlocked())
+            {
+                Stay();
             }
             else
             {
@@ -89,10 +89,33 @@ namespace Model
             }
         }
 
+        public void Stay()
+        {
+            Speed = 0f;
+            _isSprinting = false;
+        }
+
         public void Walk()
         {
-            Speed = _baseSpeed;
-            _isSprinting = false;
+            if (MovementBlocked())
+            {
+                Stay();
+            }
+            else
+            {
+                Speed = _baseSpeed;
+                _isSprinting = false;
+            }
+        }
+
+        public void BlockMovement(float duration)
+        {
+            _blockMovement.Apply(duration);
+        }
+
+        public bool MovementBlocked()
+        {
+            return _blockMovement.IsCooldownActive();
         }
 
         public bool TakeDamage(float damage)

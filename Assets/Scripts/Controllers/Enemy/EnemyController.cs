@@ -6,37 +6,53 @@ using UnityEngine.Serialization;
 
 namespace Controllers.Enemy
 {
-    public class EnemyController : MonoBehaviour
+    public abstract class EnemyController<T> : AbstractEnemyController where T : Model.Enemy.Enemy
     {
-        [SerializeField] private float speed = 1f;
-
-        [SerializeField] protected float damage = 25f;
+        [SerializeField] protected float baseDamage = 25f;
 
         [SerializeField] protected GameObject player;
 
         private Rigidbody _rigidbody;
         private Rigidbody _rigidbodyPlayer;
+        public T Enemy { get; private set; }
 
         protected void Start()
         {
+            Enemy = CreateEnemy();
             _rigidbodyPlayer = player.GetComponent<Rigidbody>();
             _rigidbody = GetComponent<Rigidbody>();
             _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+        }
+
+        protected abstract T CreateEnemy();
+
+        public override void TakeDamage(float damage)
+        {
+            if (!Enemy.TakeDamage(damage))
+            {
+                OnDeath();
+            }
+        }
+
+        protected virtual void OnDeath()
+        {
+            Destroy(gameObject);
         }
 
         protected void MoveTowardsPlayer()
         {
             var position = _rigidbody.position;
             var moveDirection = SelfToPlayerVector().normalized;
-            _rigidbody.MovePosition(position + transform.TransformDirection(moveDirection) * (speed * Time.deltaTime));
+            _rigidbody.MovePosition(position +
+                                    transform.TransformDirection(moveDirection) * (Enemy.Speed * Time.deltaTime));
         }
 
         protected void MoveAwayFromPlayer()
         {
             var position = _rigidbody.position;
-            var moveDirection = SelfToPlayerVector().normalized;
-            moveDirection = new Vector3(-moveDirection.x, -moveDirection.y, -moveDirection.z);
-            _rigidbody.MovePosition(position + transform.TransformDirection(moveDirection) * (speed * Time.deltaTime));
+            var moveDirection = -SelfToPlayerVector().normalized;
+            _rigidbody.MovePosition(position +
+                                    transform.TransformDirection(moveDirection) * (Enemy.Speed * Time.deltaTime));
         }
 
         protected Vector3 SelfToPlayerVector()

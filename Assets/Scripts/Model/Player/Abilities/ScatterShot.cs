@@ -1,19 +1,19 @@
 ﻿using UnityEngine;
 
-namespace Model.Abilities
+namespace Model.Player.Abilities
 {
     public class ScatterShot : AbilityBase
     {
         private readonly Transform _transform;
         private readonly GameObject _prefab;
 
-        public ScatterShot(Transform transform, GameObject prefab) : base(5f, 1f, 20f)
+        public ScatterShot(Transform transform, GameObject prefab) : base(5f, 0.5f, 20f, 0.5f)
         {
             _transform = transform;
             _prefab = prefab;
         }
 
-        protected override bool PerformAbility(Player player)
+        protected override bool PerformAbility(PlayerModel player)
         {
             Instantiate(_prefab, _transform.position + (_transform.forward * 0.5f), _transform.rotation);
             Instantiate(
@@ -29,7 +29,7 @@ namespace Model.Abilities
             return true;
         }
 
-        protected override Resource GetResource(Player player)
+        protected override Resource GetResource(PlayerModel player)
         {
             return player.Stamina;
         }

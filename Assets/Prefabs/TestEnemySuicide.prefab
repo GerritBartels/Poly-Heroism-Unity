@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 1636258794931324400}
   - component: {fileID: 1636258794931324401}
   - component: {fileID: 1636258794931324175}
-  - component: {fileID: 1636258794931324174}
   m_Layer: 0
   m_Name: TestEnemySuicide
   m_TagString: Enemy
@@ -96,7 +95,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1636258794931324406}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
@@ -113,8 +112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2c68692b6db4fb19cd8259093203caa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
-  damage: 25
+  baseDamage: 25
   player: {fileID: 0}
 --- !u!114 &1636258794931324401
 MonoBehaviour:
@@ -147,16 +145,3 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!135 &1636258794931324174
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1636258794931324406}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}

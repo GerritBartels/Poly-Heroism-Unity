@@ -5,7 +5,8 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Debug = UnityEngine.Debug;
 using Model;
-using Model.Abilities;
+using Model.Player;
+using Model.Player.Abilities;
 
 namespace Controllers
 {
@@ -20,7 +21,7 @@ namespace Controllers
 
         private Rigidbody _rigidbody;
 
-        public Player PlayerModel { get; }
+        public PlayerModel PlayerModel { get; }
 
         private const float RegenerationDelay = 1f;
 
@@ -30,7 +31,7 @@ namespace Controllers
 
         private PlayerController()
         {
-            PlayerModel = new Player(baseSpeed);
+            PlayerModel = new PlayerModel(baseSpeed);
         }
 
         private void Start()

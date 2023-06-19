@@ -1,32 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
+using Model.Enemy;
+using Model.Enemy.Abilities;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace Controllers.Enemy
 {
-    public class SuicideEnemyController : EnemyController
+    public class SuicideEnemyController : EnemyController<EnemyBasic>
     {
+        private PlayerController _playerController;
+
+        private new void Start()
+        {
+            base.Start();
+            baseDamage = 25;
+            _playerController = player.GetComponent<PlayerController>();
+        }
+
+        protected override EnemyBasic CreateEnemy()
+        {
+            return new EnemyBasic(50, new MeleeAttack(DistanceToPlayer, 1f), 4f);
+        }
+
         private void Update()
         {
             MoveTowardsPlayer();
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            // DAMAGE PLAYER
-            if (other.CompareTag("Player"))
+            if (Enemy.Attack())
             {
-                other.GetComponent<PlayerController>().Damage(damage);
-                Destroy(this.gameObject);
-            }
-
-            // DESTROY ENEMY + BULLET
-            if (other.CompareTag("Bullet"))
-            {
-                Destroy(this.gameObject);
-                Destroy(other.gameObject);
+                _playerController.Damage(baseDamage);
+                Destroy(gameObject);
             }
         }
     }
