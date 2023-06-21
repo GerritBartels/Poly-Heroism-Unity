@@ -138,7 +138,7 @@ namespace Controllers
         /// <c>Regeneration</c> calls the <see cref="Player.Regenerate(float)"/> method with a given <c>RegenerationDelay</c> while the Player is alive.
         /// </summary>
         /// <returns>
-        /// <see cref="WaitForSeconds"/> delay or <c>null</c>
+        /// <see cref="WaitForSeconds"/> delay if player is alive; otherwise, <c>null</c>.
         /// </returns>
         protected virtual IEnumerator Regeneration()
         {
