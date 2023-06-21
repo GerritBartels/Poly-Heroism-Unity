@@ -120,7 +120,7 @@ namespace Controllers
 
         public void Damage(float damage)
         {
-            if (!PlayerModel.TakeDamage(damage*1000))
+            if (!PlayerModel.TakeDamage(damage))
             {
                 _animator.SetTrigger("dead");
             }
