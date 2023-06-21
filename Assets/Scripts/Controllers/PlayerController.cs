@@ -6,6 +6,7 @@ using UnityEngine.Serialization;
 using Debug = UnityEngine.Debug;
 using Model;
 using Model.Abilities;
+using TMPro.EditorUtilities;
 
 namespace Controllers
 {
@@ -54,7 +55,7 @@ namespace Controllers
             // attack
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                Shot();
+                _animator.SetTrigger("shot");
             }
 
             if (Input.GetKeyDown(KeyCode.Mouse1))
@@ -64,7 +65,7 @@ namespace Controllers
 
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                ScatterShot();
+                _animator.SetTrigger("scatterShot");
             }
 
             //sprint or walk
@@ -93,17 +94,17 @@ namespace Controllers
             }
         }
 
-        private void Shot()
+        public void Shot()
         {
             PlayerModel.UseAbility(_rangedAttack);
         }
 
-        private void Attack()
+        public void Attack()
         {
             PlayerModel.UseAbility(_meleeAttack);
         }
 
-        private void ScatterShot()
+        public void ScatterShot()
         {
             PlayerModel.UseAbility(_scatterShot);
         }

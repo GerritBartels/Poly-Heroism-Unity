@@ -24,7 +24,7 @@ namespace Model
         public Player(float baseSpeed)
         {
             _baseSpeed = baseSpeed;
-            _sprintSpeed = _baseSpeed * 1.5f;
+            _sprintSpeed = _baseSpeed * 2f;
             _speed = _baseSpeed;
             Live = new Resource(1f);
             Stamina = new Resource(3f);

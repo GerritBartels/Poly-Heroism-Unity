@@ -15,7 +15,7 @@ namespace Model.Abilities
 
         protected override bool PerformAbility(Player player)
         {
-            Instantiate(_prefab, _transform.position + (_transform.forward * 0.5f), _transform.rotation);
+            Instantiate(_prefab, _transform.position + (_transform.forward * 0.5f) + _transform.up, _transform.rotation);
             return true;
         }
 
