@@ -1,25 +1,25 @@
-﻿namespace Model.Abilities
+﻿namespace Model.Player.Abilities
 {
-    public class NullAbility : IAbility
+    public class NullAbility : IAbility<PlayerModel>
     {
-        public bool Use(Player player)
+        public bool Use(PlayerModel player)
         {
             return true;
         }
 
-        public float ActiveCooldown()
+        public float CooldownTimeRemaining()
         {
             return 0f;
         }
 
         public NullAbility()
         {
-            CoolDown = 0f;
+            Cooldown = 0f;
             GlobalCooldown = 0f;
             ResourceCost = 0f;
         }
 
-        public float CoolDown { get; }
+        public float Cooldown { get; }
         public float GlobalCooldown { get; }
         public float ResourceCost { get; }
     }

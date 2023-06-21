@@ -5,7 +5,8 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Debug = UnityEngine.Debug;
 using Model;
-using Model.Abilities;
+using Model.Player;
+using Model.Player.Abilities;
 
 namespace Controllers
 {
@@ -20,7 +21,7 @@ namespace Controllers
 
         private Rigidbody _rigidbody;
 
-        public Player PlayerModel { get; }
+        public PlayerModel PlayerModel { get; }
 
         private const float RegenerationDelay = 1f;
 
@@ -30,7 +31,7 @@ namespace Controllers
 
         private PlayerController()
         {
-            PlayerModel = new Player(baseSpeed);
+            PlayerModel = new PlayerModel(baseSpeed);
         }
 
         private void Start()
@@ -49,17 +50,17 @@ namespace Controllers
             // attack
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                Shot();
+                PlayerModel.UseAbility(_rangedAttack);
             }
 
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
-                Attack();
+                PlayerModel.UseAbility(_meleeAttack);
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                ScatterShot();
+                PlayerModel.UseAbility(_scatterShot);
             }
 
             //sprint or walk
@@ -71,21 +72,6 @@ namespace Controllers
             {
                 PlayerModel.Walk();
             }
-        }
-
-        private void Shot()
-        {
-            PlayerModel.UseAbility(_rangedAttack);
-        }
-
-        private void Attack()
-        {
-            PlayerModel.UseAbility(_meleeAttack);
-        }
-
-        private void ScatterShot()
-        {
-            PlayerModel.UseAbility(_scatterShot);
         }
 
         public void FixedUpdate()
