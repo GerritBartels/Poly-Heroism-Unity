@@ -19,7 +19,7 @@ namespace Controllers
             }
         }
 
-        private void OnTriggerEnter(Collider other)
+        protected virtual void OnTriggerEnter(Collider other)
         {
             // Apply damage enemy
             if (other.CompareTag("Enemy"))
