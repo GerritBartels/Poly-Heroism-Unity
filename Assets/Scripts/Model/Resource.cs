@@ -47,5 +47,10 @@ namespace Model
         {
             Value += _regenerationRate * duration;
         }
+
+        public void Drain(float drainRate, float duration)
+        {
+            Value -= drainRate * duration;
+        }
     }
 }

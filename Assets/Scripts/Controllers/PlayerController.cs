@@ -28,6 +28,7 @@ namespace Controllers
         private RangedAttack _rangedAttack;
         private ScatterShot _scatterShot;
         private MeleeAttack _meleeAttack;
+        private BulletTime _bulletTime;
 
         private PlayerController()
         {
@@ -39,6 +40,7 @@ namespace Controllers
             _rangedAttack = new RangedAttack(transform, bulletPrefab);
             _scatterShot = new ScatterShot(transform, bulletPrefab);
             _meleeAttack = new MeleeAttack(transform, meleePrefab);
+            _bulletTime = new BulletTime(cooldown:0f, globalCooldown:0f, resourceCost:5f, blockMovementFor:0f);
 
             _rigidbody = GetComponent<Rigidbody>();
             _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
@@ -61,6 +63,11 @@ namespace Controllers
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 PlayerModel.UseAbility(_scatterShot);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                PlayerModel.UseAbility(_bulletTime);
             }
 
             //sprint or walk
