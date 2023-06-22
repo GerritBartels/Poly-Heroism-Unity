@@ -6,7 +6,7 @@ using UnityEngine.Serialization;
 
 namespace Controllers
 {
-    public class BulletController : PlayerAttackControllerBase
+    public class RangedAttackController : PlayerAttackControllerBase
     {
         [SerializeField] private float bulletSpeed = 10f;
 

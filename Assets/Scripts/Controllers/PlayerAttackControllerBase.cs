@@ -26,6 +26,7 @@ namespace Controllers
             {
                 var enemy = other.GetComponent<AbstractEnemyController>();
                 enemy.TakeDamage(damage);
+                Destroy(gameObject);
             }
             else if (other.CompareTag("Terrain"))
             {
