@@ -10,14 +10,19 @@ using Model.Player.Abilities;
 
 namespace Controllers
 {
+    /// <summary>
+    /// <c>PlayerController</c> defines control for the player game object within unity.
+    /// </summary>
     public class PlayerController : MonoBehaviour
     {
         private Vector3 _moveDirection;
+        private float _mouseX;
 
         [SerializeField] private GameObject bulletPrefab;
         [SerializeField] private GameObject meleePrefab;
 
         [SerializeField] private float baseSpeed = 5f;
+        [SerializeField] private float rotationSpeed = 4000f;
 
         private Rigidbody _rigidbody;
 
@@ -29,6 +34,9 @@ namespace Controllers
         private ScatterShot _scatterShot;
         private MeleeAttack _meleeAttack;
 
+        /// <summary>
+        /// Constructor that initializes a <c>PlayerController</c> by instantiating a new <see cref="Model.Player.PlayerModel"/> with a given <c>baseSpeed</c>.
+        /// </summary>
         private PlayerController()
         {
             PlayerModel = new PlayerModel(baseSpeed);
@@ -36,6 +44,7 @@ namespace Controllers
 
         private void Start()
         {
+            // Instantiate abilites
             _rangedAttack = new RangedAttack(transform, bulletPrefab);
             _scatterShot = new ScatterShot(transform, bulletPrefab);
             _meleeAttack = new MeleeAttack(transform, meleePrefab);
@@ -47,7 +56,7 @@ namespace Controllers
 
         public void Update()
         {
-            // attack
+            // Attack
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 PlayerModel.UseAbility(_rangedAttack);
@@ -63,7 +72,7 @@ namespace Controllers
                 PlayerModel.UseAbility(_scatterShot);
             }
 
-            //sprint or walk
+            // Sprint or walk
             if (Input.GetKey(KeyCode.LeftShift))
             {
                 PlayerModel.Sprint();
@@ -74,24 +83,41 @@ namespace Controllers
             }
         }
 
+        public void LateUpdate()
+        {
+            // Rotate player
+            _mouseX = Input.GetAxis("Mouse X");
+            transform.RotateAround(transform.position, transform.up, Time.deltaTime * _mouseX * rotationSpeed);
+        }
+
         public void FixedUpdate()
         {
-            //move player
+            // Move player
             _moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
             _rigidbody.MovePosition(_rigidbody.position +
                                     transform.TransformDirection(_moveDirection) *
                                     (PlayerModel.Speed * Time.deltaTime));
         }
 
+        /// <summary>
+        /// <c>Damage</c> calls the <see cref="PlayerModel.TakeDamage"/> method and destroys the player game object upon death.
+        /// </summary>
+        /// <param name="damage">the amount of damage taken</param>
         public void Damage(float damage)
         {
             if (!PlayerModel.TakeDamage(damage))
             {
-                // death
+                // Death
                 Destroy(this.gameObject);
             }
         }
 
+        /// <summary>
+        /// <c>Regeneration</c> calls the <see cref="PlayerModel.Regenerate(float)"/> method with a given <c>RegenerationDelay</c> while the Player is alive.
+        /// </summary>
+        /// <returns>
+        /// <see cref="WaitForSeconds"/> delay if player is alive; otherwise, <c>null</c>.
+        /// </returns>
         protected virtual IEnumerator Regeneration()
         {
             while (PlayerModel.IsAlive)
