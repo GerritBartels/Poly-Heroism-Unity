@@ -40,7 +40,7 @@ namespace Controllers
             _rangedAttack = new RangedAttack(transform, bulletPrefab);
             _scatterShot = new ScatterShot(transform, bulletPrefab);
             _meleeAttack = new MeleeAttack(transform, meleePrefab);
-            _bulletTime = new BulletTime(cooldown:0f, globalCooldown:0f, resourceCost:5f, blockMovementFor:0f);
+            _bulletTime = new BulletTime(this);
 
             _rigidbody = GetComponent<Rigidbody>();
             _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
@@ -65,7 +65,7 @@ namespace Controllers
                 PlayerModel.UseAbility(_scatterShot);
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha2))
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 PlayerModel.UseAbility(_bulletTime);
             }

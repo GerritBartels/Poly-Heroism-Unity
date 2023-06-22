@@ -1,53 +1,73 @@
+using System.Collections;
+using UnityEditor;
 using UnityEngine;
 
 namespace Model.Player.Abilities
 {
-    public class BulletTime : AbilityBase
+    public class BulletTime : IAbility<PlayerModel>
     {
+        public float Cooldown => 0;
+        public float GlobalCooldown => 0;
+        public float ResourceCost { get; }
+        public float CooldownTimeRemaining() => 0;
+
+        private readonly float _tickSpeed = 0.1f;
+
         private bool _bulletTimeActive;
 
-        public BulletTime(float cooldown, float globalCooldown, float resourceCost, float blockMovementFor) : base(cooldown, globalCooldown, resourceCost, blockMovementFor)
+        private readonly MonoBehaviour _behaviour;
+
+        public BulletTime(MonoBehaviour behaviour)
         {
+            _behaviour = behaviour;
+            _bulletTimeActive = false;
+            ResourceCost = 20;
+        }
+
+        protected void PerformAbility()
+        {
+            Time.timeScale = 0.4f;
+            Time.fixedDeltaTime = 0.02f * Time.timeScale;
+            _bulletTimeActive = true;
+        }
+
+        private void Deactivate()
+        {
+            Time.timeScale = 1.0f;
+            Time.fixedDeltaTime = 0.02f;
             _bulletTimeActive = false;
         }
 
-        protected override Resource GetResource(PlayerModel playerModel)
-        {
-            return playerModel.Mana;
-        }
-
-        protected override bool PerformAbility(PlayerModel playerModel)
+        public bool Use(PlayerModel playerModel)
         {
             if (!_bulletTimeActive)
             {
-                Time.timeScale = 0.4f;
-                Time.fixedDeltaTime = 0.02f * Time.timeScale;
+                PerformAbility();
+                _behaviour.StartCoroutine(ManaDrain(playerModel.Mana));
+                return true;
             }
-            else
-            {
-                Time.timeScale = 1.0f;
-                Time.fixedDeltaTime = 0.02f;
-            }  
 
-            _bulletTimeActive = !_bulletTimeActive;
-
-            return true;
+            Deactivate();
+            return false;
         }
 
-        public override bool Use(PlayerModel playerModel)
+        protected virtual IEnumerator ManaDrain(Resource resource)
         {
-            var resource = GetResource(playerModel);
-            if (resource.Value >= ResourceCost)
+            while (_bulletTimeActive)
             {
-                if (PerformAbility(playerModel))
+                if (resource.Value >= ResourceCost * _tickSpeed)
                 {
-                    // TODO: drain Mana while skill is active 
-                    resource.Drain(ResourceCost, 1f);
-                    return true;
+                    resource.Drain(ResourceCost, _tickSpeed);
                 }
+                else
+                {
+                    Deactivate();
+                }
+
+                yield return new WaitForSeconds(_tickSpeed);
             }
 
-            return false;
+            yield return null;
         }
     }
 }
