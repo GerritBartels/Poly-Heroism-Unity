@@ -5,7 +5,7 @@ namespace Model
 {
     /// <summary>
     /// <c>Player</c> manages game related functionalities for the player game object in unity.
-    /// That includes novmement, abilities, resources and cooldowns.
+    /// That includes movement, abilities, resources and cooldowns.
     /// </summary>
     public class Player
     {
@@ -134,7 +134,7 @@ namespace Model
         }
 
         /// <summary>
-        /// <c>Walk</c> sets the player's <c>Speed</c> property to base speed and the <c>_isSprinting</c> bool to false.
+        /// <c>Walk</c> sets the player's <c>Speed</c> property to base speed.
         /// </summary>
         public void Walk()
         {
