@@ -20,6 +20,8 @@ namespace Controllers
 
         [SerializeField] private GameObject bulletPrefab;
         [SerializeField] private GameObject meleePrefab;
+        [SerializeField] private GameObject fireBallPrefab;
+
 
         [SerializeField] private float baseSpeed = 5f;
         [SerializeField] private float rotationSpeed = 4000f;
@@ -33,6 +35,7 @@ namespace Controllers
         private RangedAttack _rangedAttack;
         private ScatterShot _scatterShot;
         private MeleeAttack _meleeAttack;
+        private FireBall _fireBall;
 
         /// <summary>
         /// Constructor that initializes a <c>PlayerController</c> by instantiating a new <see cref="Model.Player.PlayerModel"/> with a given <c>baseSpeed</c>.
@@ -48,6 +51,7 @@ namespace Controllers
             _rangedAttack = new RangedAttack(transform, bulletPrefab);
             _scatterShot = new ScatterShot(transform, bulletPrefab);
             _meleeAttack = new MeleeAttack(transform, meleePrefab);
+            _fireBall = new FireBall(transform, fireBallPrefab);
 
             _rigidbody = GetComponent<Rigidbody>();
             _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
@@ -70,6 +74,11 @@ namespace Controllers
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 PlayerModel.UseAbility(_scatterShot);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                PlayerModel.UseAbility(_fireBall);
             }
 
             // Sprint or walk
