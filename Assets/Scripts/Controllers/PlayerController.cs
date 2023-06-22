@@ -35,7 +35,7 @@ namespace Controllers
         private MeleeAttack _meleeAttack;
 
         /// <summary>
-        /// Constructor that initializes a <c>PlayerController</c> by instantiating a new <see cref="PlayerModel"/> with a given <c>baseSpeed</c>.
+        /// Constructor that initializes a <c>PlayerController</c> by instantiating a new <see cref="Model.Player.PlayerModel"/> with a given <c>baseSpeed</c>.
         /// </summary>
         private PlayerController()
         {
@@ -44,6 +44,7 @@ namespace Controllers
 
         private void Start()
         {
+            // Instantiate abilites
             _rangedAttack = new RangedAttack(transform, bulletPrefab);
             _scatterShot = new ScatterShot(transform, bulletPrefab);
             _meleeAttack = new MeleeAttack(transform, meleePrefab);

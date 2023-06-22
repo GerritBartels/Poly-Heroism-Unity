@@ -42,9 +42,10 @@ namespace Model.Player
 
         /// <summary>
         /// <c>GlobalCooldownActive</c> is a global cooldown that prevents the use of all abilities while active.
+        /// Internally calls the <see cref="Cooldown.IsCooldownActive"/> method.
         /// </summary>
         /// <returns>
-        /// True if end of cooldown is not yet reached; otherwise, flase.
+        /// True if end of global cooldown is not yet reached; otherwise, flase.
         /// </returns>
         public bool GlobalCooldownActive()
         {
@@ -52,9 +53,11 @@ namespace Model.Player
         }
 
         /// <summary>
-        /// <c>UseAbility</c> lets the player perform a specific ability and triggers its cooldown if no global cooldown is active.
+        /// <c>UseAbility</c> lets the player perform a specific ability and triggers its cooldown (see <see cref="Cooldown.Apply(float)"/>) if no global cooldown is active.
         /// </summary>
-        /// <param name="ability">Ability that implements the <see cref="IAbility"/> interface</param>
+        /// <param name="ability">
+        /// Ability implementing the <see cref="IAbility{T}"/> interface, where T must be of type <see cref="PlayerModel"/>
+        /// </param>
         public void UseAbility(IAbility<PlayerModel> ability)
         {
             if (!GlobalCooldownActive())
@@ -84,10 +87,10 @@ namespace Model.Player
         }
 
         /// <summary>
-        /// <c>CanSprint</c> is linked to the <c>Stamina</c> resource and indicates whether the player can sprint.
+        /// <c>CanSprint</c> is linked to the <c>Stamina</c> resource and <see cref="MovementBlocked"/> method and indicates whether the player can sprint.
         /// </summary>
         /// <returns>
-        /// True if the <c>Stamina</c> resource is not empty; otherwise, false.
+        /// True if the <c>Stamina</c> resource is not empty and movement is not blocked; otherwise, false.
         /// </returns>
         public bool CanSprint()
         {
@@ -103,7 +106,7 @@ namespace Model.Player
         public bool IsAlive => !Health.Empty();
 
         /// <summary>
-        /// <c>Sprint</c> lets the player sprint if he has enough <c>Stamina</c>, otherwise he walks.
+        /// <c>Sprint</c> lets the player sprint if he has enough <c>Stamina</c>, stay put if his movement is blocked or walk otherwise.
         /// </summary>
         public void Sprint()
         {
@@ -127,6 +130,9 @@ namespace Model.Player
             }
         }
 
+        /// <summary>
+        /// <c>Stay</c> lets the player stay put by setting its <c>Speed</c> property to 0.
+        /// </summary>
         public void Stay()
         {
             Speed = 0f;
@@ -134,7 +140,7 @@ namespace Model.Player
         }
 
         /// <summary>
-        /// <c>Walk</c> sets the player's <c>Speed</c> property to base speed.
+        /// <c>Walk</c> lets the player walk if his movement is not blocked, or otherwise stay put.
         /// </summary>
         public void Walk()
         {
@@ -149,11 +155,20 @@ namespace Model.Player
             }
         }
 
+        /// <summary>
+        /// <c>BlockMovement</c> triggers a movement cooldown (see <see cref="Cooldown.Apply(float)"/>) with a given duration.
+        /// </summary>
+        /// <param name="duration">amount of time the player movement will be blocked</param>
         public void BlockMovement(float duration)
         {
             _blockMovement.Apply(duration);
         }
 
+        /// <summary>
+        /// <c>MovementBlocked</c> is a cooldown that prevents the player from moving while casting an ability.
+        /// Internally calls the <see cref="Cooldown.IsCooldownActive"/> method.
+        /// </summary>
+        /// <returns>True if end of cooldown is not yet reached; otherwise, flase.</returns>
         public bool MovementBlocked()
         {
             return _blockMovement.IsCooldownActive();
@@ -161,7 +176,6 @@ namespace Model.Player
 
         /// <summary>
         /// <c>TakeDamage</c> deals the specified damage to the player by subtracting it from the player's <c>Health</c> resource.
-        /// Also indicates if the player is still alive afterwards.
         /// </summary>
         /// <param name="damage">amount of <c>Health</c> to be substracted</param>
         /// <returns>True if the player still has some <c>Health</c> left after taking damage; otherwise, false.</returns>
