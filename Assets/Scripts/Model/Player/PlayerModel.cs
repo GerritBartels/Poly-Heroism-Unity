@@ -1,15 +1,14 @@
-﻿using Model.Abilities;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Model
+namespace Model.Player
 {
     /// <summary>
-    /// <c>Player</c> manages game related functionalities for the player game object in unity.
+    /// <c>PlayerModel</c> manages game related functionalities for the player game object in unity.
     /// That includes movement, abilities, resources and cooldowns.
     /// </summary>
-    public class Player
+    public class PlayerModel
     {
-        public Resource Live { get; }
+        public Resource Health { get; }
 
         public Resource Stamina { get; }
 
@@ -22,20 +21,21 @@ namespace Model
         private float _speed;
         private float _startedSprintAt;
         private bool _isSprinting = false;
-        
-        private float _globalCooldownEnd = 0f;
+
+        private readonly Cooldown _globalCooldown = new();
+        private readonly Cooldown _blockMovement = new();
 
         /// <summary>
-        /// Constructor that initializes a <c>Player</c> with a given <c>baseSpeed</c>.
+        /// Constructor that initializes a <c>PlayerModel</c> with a given <c>baseSpeed</c>.
         /// Also sets the sprinting speed and instantiates the respective resources (see <see cref="Model.Resource"/>).
         /// </summary>
         /// <param name="baseSpeed">walking speed</param>
-        public Player(float baseSpeed)
+        public PlayerModel(float baseSpeed)
         {
             _baseSpeed = baseSpeed;
             _sprintSpeed = _baseSpeed * 1.5f;
             _speed = _baseSpeed;
-            Live = new Resource(1f);
+            Health = new Resource(1f);
             Stamina = new Resource(3f);
             Mana = new Resource(2f);
         }
@@ -48,20 +48,20 @@ namespace Model
         /// </returns>
         public bool GlobalCooldownActive()
         {
-            return Time.time < _globalCooldownEnd;
+            return _globalCooldown.IsCooldownActive();
         }
 
         /// <summary>
         /// <c>UseAbility</c> lets the player perform a specific ability and triggers its cooldown if no global cooldown is active.
         /// </summary>
         /// <param name="ability">Ability that implements the <see cref="IAbility"/> interface</param>
-        public void UseAbility(IAbility ability)
+        public void UseAbility(IAbility<PlayerModel> ability)
         {
             if (!GlobalCooldownActive())
             {
                 if (ability.Use(this))
                 {
-                    _globalCooldownEnd = Time.time + ability.GlobalCooldown;
+                    _globalCooldown.Apply(ability.GlobalCooldown);
                 }
             }
         }
@@ -91,7 +91,7 @@ namespace Model
         /// </returns>
         public bool CanSprint()
         {
-            return !Stamina.Empty();
+            return !Stamina.Empty() && !MovementBlocked();
         }
 
         /// <summary>
@@ -100,18 +100,7 @@ namespace Model
         /// <returns>
         /// True if <c>Health</c> resource is not empty; otherwise, false.
         /// </returns>
-        public bool IsAlive => !Live.Empty();
-
-        /// <summary>
-        /// <c>CanCast</c> is linked to the <c>Mana</c> resource and indicates whether a given cost exceeds the current <c>Mana</c> value 
-        /// (i.e., whether an ability with that cost can be cast).
-        /// </summary>
-        /// <param name="cost">amount of <c>Mana</c> required for casting</param>
-        /// <returns>True if player has more <c>Mana</c> than the ability costs; otherwise, false.</returns>
-        public bool CanCast(float cost)
-        {
-            return Mana.Value > cost;
-        }
+        public bool IsAlive => !Health.Empty();
 
         /// <summary>
         /// <c>Sprint</c> lets the player sprint if he has enough <c>Stamina</c>, otherwise he walks.
@@ -125,7 +114,12 @@ namespace Model
                     _startedSprintAt = Time.time;
                     _isSprinting = true;
                 }
+
                 Speed = _sprintSpeed;
+            }
+            else if (MovementBlocked())
+            {
+                Stay();
             }
             else
             {
@@ -133,13 +127,36 @@ namespace Model
             }
         }
 
+        public void Stay()
+        {
+            Speed = 0f;
+            _isSprinting = false;
+        }
+
         /// <summary>
         /// <c>Walk</c> sets the player's <c>Speed</c> property to base speed.
         /// </summary>
         public void Walk()
         {
-            Speed = _baseSpeed;
-            _isSprinting = false;
+            if (MovementBlocked())
+            {
+                Stay();
+            }
+            else
+            {
+                Speed = _baseSpeed;
+                _isSprinting = false;
+            }
+        }
+
+        public void BlockMovement(float duration)
+        {
+            _blockMovement.Apply(duration);
+        }
+
+        public bool MovementBlocked()
+        {
+            return _blockMovement.IsCooldownActive();
         }
 
         /// <summary>
@@ -150,8 +167,8 @@ namespace Model
         /// <returns>True if the player still has some <c>Health</c> left after taking damage; otherwise, false.</returns>
         public bool TakeDamage(float damage)
         {
-            Live.Value -= damage;
-            return !Live.Empty();
+            Health.Value -= damage;
+            return !Health.Empty();
         }
 
         /// <summary>
@@ -171,7 +188,7 @@ namespace Model
         public void Regenerate(float duration)
         {
             Stamina.Regenerate(duration);
-            Live.Regenerate(duration);
+            Health.Regenerate(duration);
             Mana.Regenerate(duration);
         }
     }

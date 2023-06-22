@@ -3,19 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Controllers
+namespace Controllers.Enemy
 {
     public class EnemyBulletController : MonoBehaviour
     {
-        [SerializeField] private Rigidbody RB;
-
-        [SerializeField] private float bulletSpeed = 50f;
-
-
         private Vector3 _direction;
         private Rigidbody _rigidbody;
         private Rigidbody _rigidbodyPlayer;
         [SerializeField] private float lifeSpan = 2f;
+        [SerializeField] private float bulletSpeed = 50f;
 
         private void Start()
         {
@@ -41,11 +37,10 @@ namespace Controllers
 
         private void OnTriggerEnter(Collider other)
         {
-            // DESTROY ENEMY + BULLET
             if (other.CompareTag("Player"))
             {
                 other.GetComponent<PlayerController>().Damage(10);
-                Destroy(this.gameObject);
+                Destroy(gameObject);
             }
         }
     }

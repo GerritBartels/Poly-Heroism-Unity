@@ -5,7 +5,8 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Debug = UnityEngine.Debug;
 using Model;
-using Model.Abilities;
+using Model.Player;
+using Model.Player.Abilities;
 
 namespace Controllers
 {
@@ -25,7 +26,7 @@ namespace Controllers
 
         private Rigidbody _rigidbody;
 
-        public Player PlayerModel { get; }
+        public PlayerModel PlayerModel { get; }
 
         private const float RegenerationDelay = 1f;
 
@@ -34,11 +35,11 @@ namespace Controllers
         private MeleeAttack _meleeAttack;
 
         /// <summary>
-        /// Constructor that initializes a <c>PlayerController</c> by instantiating a new <see cref="Player"/> with a given <c>baseSpeed</c>.
+        /// Constructor that initializes a <c>PlayerController</c> by instantiating a new <see cref="PlayerModel"/> with a given <c>baseSpeed</c>.
         /// </summary>
         private PlayerController()
         {
-            PlayerModel = new Player(baseSpeed);
+            PlayerModel = new PlayerModel(baseSpeed);
         }
 
         private void Start()
@@ -57,17 +58,17 @@ namespace Controllers
             // Attack
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                Shot();
+                PlayerModel.UseAbility(_rangedAttack);
             }
 
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
-                Attack();
+                PlayerModel.UseAbility(_meleeAttack);
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                ScatterShot();
+                PlayerModel.UseAbility(_scatterShot);
             }
 
             // Sprint or walk
@@ -88,30 +89,6 @@ namespace Controllers
             transform.RotateAround(transform.position, transform.up, Time.deltaTime * _mouseX * rotationSpeed);
         }
 
-        /// <summary>
-        /// <c>Shot</c> calls the <see cref="Player.UseAbility(IAbility)"/> method with the <see cref="Model.Abilities.RangedAttack"/> ability.
-        /// </summary>
-        private void Shot()
-        {
-            PlayerModel.UseAbility(_rangedAttack);
-        }
-
-        /// <summary>
-        /// <c>Attack</c> calls the <see cref="Player.UseAbility(IAbility)"/> method with the <see cref="Model.Abilities.MeleeAttack"/> ability.
-        /// </summary>
-        private void Attack()
-        {
-            PlayerModel.UseAbility(_meleeAttack);
-        }
-
-        /// <summary>
-        /// <c>ScatterShot</c> calls the <see cref="Player.UseAbility(IAbility)"/> method with the <see cref="Model.Abilities.ScatterShot"/> ability.
-        /// </summary>
-        private void ScatterShot()
-        {
-            PlayerModel.UseAbility(_scatterShot);
-        }
-
         public void FixedUpdate()
         {
             // Move player
@@ -122,7 +99,7 @@ namespace Controllers
         }
 
         /// <summary>
-        /// <c>Damage</c> calls the <see cref="Player.TakeDamage"/> method and destroys the player game object upon death.
+        /// <c>Damage</c> calls the <see cref="PlayerModel.TakeDamage"/> method and destroys the player game object upon death.
         /// </summary>
         /// <param name="damage">the amount of damage taken</param>
         public void Damage(float damage)
@@ -135,7 +112,7 @@ namespace Controllers
         }
 
         /// <summary>
-        /// <c>Regeneration</c> calls the <see cref="Player.Regenerate(float)"/> method with a given <c>RegenerationDelay</c> while the Player is alive.
+        /// <c>Regeneration</c> calls the <see cref="PlayerModel.Regenerate(float)"/> method with a given <c>RegenerationDelay</c> while the Player is alive.
         /// </summary>
         /// <returns>
         /// <see cref="WaitForSeconds"/> delay if player is alive; otherwise, <c>null</c>.
