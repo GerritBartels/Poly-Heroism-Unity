@@ -49,10 +49,10 @@ namespace Controllers
         private void Start()
         {
             // Instantiate abilites
-            _rangedAttack = new RangedAttack(transform, bulletPrefab);
-            _scatterShot = new ScatterShot(transform, bulletPrefab);
-            _meleeAttack = new MeleeAttack(transform, meleePrefab);
-            _fireBall = new FireBall(transform, fireBallPrefab);
+            _rangedAttack = new RangedAttack(transform, bulletPrefab, _animator);
+            _scatterShot = new ScatterShot(transform, bulletPrefab, _animator);
+            _meleeAttack = new MeleeAttack(transform, meleePrefab, _animator);
+            _fireBall = new FireBall(transform, fireBallPrefab, _animator);
 
             _rigidbody = GetComponent<Rigidbody>();
             _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;

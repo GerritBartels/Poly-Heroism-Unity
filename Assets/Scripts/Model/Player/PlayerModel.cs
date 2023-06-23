@@ -33,7 +33,7 @@ namespace Model.Player
         public PlayerModel(float baseSpeed)
         {
             _baseSpeed = baseSpeed;
-            _sprintSpeed = _baseSpeed * 1.5f;
+            _sprintSpeed = _baseSpeed * 2f;
             _speed = _baseSpeed;
             Health = new Resource(1f);
             Stamina = new Resource(3f);

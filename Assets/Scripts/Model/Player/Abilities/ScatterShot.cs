@@ -6,11 +6,18 @@ namespace Model.Player.Abilities
     {
         private readonly Transform _transform;
         private readonly GameObject _prefab;
+        private readonly Animator _animator;
 
-        public ScatterShot(Transform transform, GameObject prefab) : base(5f, 0.5f, 20f, 0.5f)
+        public ScatterShot(Transform transform, GameObject prefab, Animator animator) : base(5f, 0.5f, 20f, 0.5f)
         {
             _transform = transform;
             _prefab = prefab;
+            _animator = animator;
+        }
+
+        public void PerformAnimation()
+        {
+            _animator.SetTrigger("scatterShot");
         }
 
         protected override bool PerformAbility(PlayerModel player)

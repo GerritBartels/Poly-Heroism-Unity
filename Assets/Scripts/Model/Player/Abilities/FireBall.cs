@@ -6,11 +6,18 @@ namespace Model.Player.Abilities
     {
         private readonly Transform _transform;
         private readonly GameObject _prefab;
+        private readonly Animator _animator;
 
-        public FireBall(Transform transform, GameObject prefab) : base(0f, 0.5f, 10f, 0.5f)
+        public FireBall(Transform transform, GameObject prefab, Animator animator) : base(0f, 0.5f, 10f, 0.5f)
         {
             _transform = transform;
             _prefab = prefab;
+            _animator = animator;
+        }
+
+        public void PerformAnimation()
+        {
+            _animator.SetTrigger("fireBall"); // TODO: add animation
         }
 
         protected override bool PerformAbility(PlayerModel player)
