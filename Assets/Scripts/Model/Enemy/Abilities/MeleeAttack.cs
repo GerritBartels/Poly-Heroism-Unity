@@ -7,7 +7,7 @@ namespace Model.Enemy.Abilities
         private readonly Func<float> _distanceToPlayer;
         private readonly float _range;
 
-        public MeleeAttack(Func<float> distanceToPlayer, float range = 1f) : base(1f, 1f)
+        public MeleeAttack(Func<float> distanceToPlayer, float range = 3f) : base(1f, 1f)
         {
             _distanceToPlayer = distanceToPlayer;
             _range = range;
