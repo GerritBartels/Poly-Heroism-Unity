@@ -5,7 +5,7 @@ using UnityEngine.Serialization;
 
 namespace Controllers.Enemy
 {
-    public class EnemyBulletController : MonoBehaviour
+    public class EnemyRangedAttackController : MonoBehaviour
     {
         private Vector3 _direction;
         private Rigidbody _rigidbody;

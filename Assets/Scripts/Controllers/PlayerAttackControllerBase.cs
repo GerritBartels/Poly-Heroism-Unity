@@ -19,13 +19,14 @@ namespace Controllers
             }
         }
 
-        private void OnTriggerEnter(Collider other)
+        protected virtual void OnTriggerEnter(Collider other)
         {
             // Apply damage enemy
             if (other.CompareTag("Enemy"))
             {
                 var enemy = other.GetComponent<AbstractEnemyController>();
                 enemy.TakeDamage(damage);
+                Destroy(gameObject);
             }
             else if (other.CompareTag("Terrain"))
             {
