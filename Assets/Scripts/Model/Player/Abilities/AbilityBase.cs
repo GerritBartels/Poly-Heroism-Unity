@@ -26,7 +26,7 @@
             return _cooldown.RemainingTime();
         }
 
-        public virtual bool Use(PlayerModel playerModel)
+        public bool Use(PlayerModel playerModel)
         {
             var resource = GetResource(playerModel);
             if (!_cooldown.IsCooldownActive() && resource.Value >= ResourceCost)
