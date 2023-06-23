@@ -128,7 +128,7 @@ namespace Controllers
         }
 
         /// <summary>
-        /// <c>Damage</c> calls the <see cref="PlayerModel.TakeDamage"/> method and destroys the player game object upon death.
+        /// <c>Damage</c> calls the <see cref="PlayerModel.TakeDamage"/> method and upon death triggers the player's death animation.
         /// </summary>
         /// <param name="damage">the amount of damage taken</param>
         public void Damage(float damage)

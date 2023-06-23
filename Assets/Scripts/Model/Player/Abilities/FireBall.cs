@@ -22,7 +22,7 @@ namespace Model.Player.Abilities
 
         protected override bool PerformAbility(PlayerModel player)
         {
-            Instantiate(_prefab, _transform.position + (_transform.forward * 1f), _transform.rotation);
+            Instantiate(_prefab, _transform.position + (_transform.forward * 1f) + _transform.up, _transform.rotation);
             return true;
         }
 
