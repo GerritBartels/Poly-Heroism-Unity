@@ -37,6 +37,7 @@ namespace Controllers
         private ScatterShot _scatterShot;
         private MeleeAttack _meleeAttack;
         private FireBall _fireBall;
+        private BulletTime _bulletTime;
         private static readonly int Dead = Animator.StringToHash("dead");
         private static readonly int PlayerSpeed = Animator.StringToHash("playerSpeed");
 
@@ -57,6 +58,7 @@ namespace Controllers
             _scatterShot = new ScatterShot(transform, bulletPrefab, _animator);
             _meleeAttack = new MeleeAttack(transform, meleePrefab, _animator);
             _fireBall = new FireBall(transform, fireBallPrefab, _animator);
+            _bulletTime = new BulletTime(this);
 
             _rigidbody = GetComponent<Rigidbody>();
             _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
@@ -85,6 +87,11 @@ namespace Controllers
             if (Input.GetKeyDown(KeyCode.Alpha2) && PlayerModel.IsAlive)
             {
                 PlayerModel.UseAbility(_fireBall);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space) && PlayerModel.IsAlive)
+            {
+                PlayerModel.UseAbility(_bulletTime);
             }
 
             // Sprint or walk
@@ -185,7 +192,7 @@ namespace Controllers
         }
 
         /// <summary>
-        /// <c>Regeneration</c> calls the <see cref="PlayerModel.Regenerate(float)"/> method with a given <c>RegenerationDelay</c> while the Player is alive.
+        /// <c>Regeneration</c> coroutine calls the <see cref="PlayerModel.Regenerate(float)"/> method with a given <c>RegenerationDelay</c> while the Player is alive.
         /// </summary>
         /// <returns>
         /// <see cref="WaitForSeconds"/> delay if player is alive; otherwise, <c>null</c>.
