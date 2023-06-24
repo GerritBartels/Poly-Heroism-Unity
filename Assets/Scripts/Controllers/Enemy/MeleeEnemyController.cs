@@ -21,7 +21,7 @@ namespace Controllers.Enemy
 
         protected override EnemyBasic CreateEnemy()
         {
-            return new EnemyBasic(150, new MeleeAttack(DistanceToPlayer, 1f), 4f);
+            return new EnemyBasic(150, new MeleeAttack(DistanceToPlayer, 2f), 4f);
         }
 
         private void Update()

@@ -33,7 +33,7 @@ namespace Model.Player
         public PlayerModel(float baseSpeed)
         {
             _baseSpeed = baseSpeed;
-            _sprintSpeed = _baseSpeed * 1.5f;
+            _sprintSpeed = _baseSpeed * 2f;
             _speed = _baseSpeed;
             Health = new Resource(1f);
             Stamina = new Resource(3f);
@@ -53,7 +53,7 @@ namespace Model.Player
         }
 
         /// <summary>
-        /// <c>UseAbility</c> lets the player perform a specific ability and triggers its cooldown (see <see cref="Cooldown.Apply(float)"/>) if no global cooldown is active.
+        /// <c>UseAbility</c> lets the player perform a specific ability animation and triggers its cooldown (see <see cref="Cooldown.Apply(float)"/>) if no global cooldown is active.
         /// </summary>
         /// <param name="ability">
         /// Ability implementing the <see cref="IAbility{T}"/> interface, where T must be of type <see cref="PlayerModel"/>

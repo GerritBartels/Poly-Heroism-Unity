@@ -6,15 +6,24 @@ namespace Model.Player.Abilities
     {
         private readonly Transform _transform;
         private readonly GameObject _prefab;
+        private readonly Animator _animator;
 
-        public MeleeAttack(Transform transform, GameObject prefab) : base(0f, 0.2f, 2f, 0.2f)
+        public MeleeAttack(Transform transform, GameObject prefab, Animator animator) :
+            base(cooldown: 0f, globalCooldown: 0.2f, resourceCost: 2f, blockMovementFor: 0.2f)
         {
             _transform = transform;
             _prefab = prefab;
+            _animator = animator;
         }
 
-        protected override bool PerformAbility(PlayerModel player)
+        public override void PerformAbility()
         {
+            Instantiate(_prefab, _transform.position + (_transform.forward * 0.5f), _transform.rotation);
+        }
+
+        protected override bool TriggerAnimation(PlayerModel player)
+        {
+            // TODO: add actual animation + trigger and call animator here
             Instantiate(_prefab, _transform.position + (_transform.forward * 0.5f), _transform.rotation);
             return true;
         }
