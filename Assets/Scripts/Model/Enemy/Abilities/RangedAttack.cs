@@ -19,7 +19,7 @@ namespace Model.Enemy.Abilities
 
         protected override bool PerformAbility(Enemy enemy)
         {
-            Instantiate(_bulletPrefab, _transform.position + _selfToPlayerVector().normalized, _transform.rotation);
+            Instantiate(_bulletPrefab, _transform.position + _selfToPlayerVector().normalized + _transform.up, _transform.rotation);
             return true;
         }
     }
