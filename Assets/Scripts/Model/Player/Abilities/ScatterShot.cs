@@ -7,6 +7,7 @@ namespace Model.Player.Abilities
         private readonly Transform _transform;
         private readonly GameObject _prefab;
         private readonly Animator _animator;
+        private static readonly int Shot = Animator.StringToHash("scatterShot");
 
         public ScatterShot(Transform transform, GameObject prefab, Animator animator) :
             base(cooldown: 5f, globalCooldown: 2.7f, resourceCost: 20f, blockMovementFor: 2.7f)
@@ -18,8 +19,8 @@ namespace Model.Player.Abilities
 
         public override void PerformAbility()
         {
-            Debug.Log("Instantiate actual scatter shot ability");
-            Instantiate(_prefab, _transform.position + (_transform.forward * 0.5f) + _transform.up, _transform.rotation);
+            Instantiate(_prefab, _transform.position + (_transform.forward * 0.5f) + _transform.up,
+                _transform.rotation);
             Instantiate(
                 _prefab,
                 _transform.position + (_transform.forward * 0.5f) + (_transform.right * -0.3f) + _transform.up,
@@ -34,8 +35,7 @@ namespace Model.Player.Abilities
 
         protected override bool TriggerAnimation(PlayerModel player)
         {
-            Debug.Log("Triggered scatter shot animation");
-            _animator.SetTrigger("scatterShot");
+            _animator.SetTrigger(Shot);
             return true;
         }
 

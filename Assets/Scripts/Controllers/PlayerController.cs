@@ -37,6 +37,8 @@ namespace Controllers
         private ScatterShot _scatterShot;
         private MeleeAttack _meleeAttack;
         private FireBall _fireBall;
+        private static readonly int Dead = Animator.StringToHash("dead");
+        private static readonly int PlayerSpeed = Animator.StringToHash("playerSpeed");
 
         /// <summary>
         /// Constructor that initializes a <c>PlayerController</c> by instantiating a new <see cref="Model.Player.PlayerModel"/> with a given <c>baseSpeed</c>.
@@ -94,20 +96,20 @@ namespace Controllers
             {
                 PlayerModel.Walk();
             }
-            
+
             // Pass the player's movement direction to the animator
             // Might make sense to inlcude a sideways movement animation as well for a and d
-            if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) && PlayerModel.IsAlive) 
+            if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) && PlayerModel.IsAlive)
             {
-                _animator.SetFloat("playerSpeed", PlayerModel.Speed);
+                _animator.SetFloat(PlayerSpeed, PlayerModel.Speed);
             }
             else if (Input.GetKey(KeyCode.S) && PlayerModel.IsAlive)
             {
-                _animator.SetFloat("playerSpeed", -PlayerModel.Speed);
+                _animator.SetFloat(PlayerSpeed, -PlayerModel.Speed);
             }
             else
             {
-                _animator.SetFloat("playerSpeed", 0);
+                _animator.SetFloat(PlayerSpeed, 0);
             }
         }
 
@@ -118,7 +120,7 @@ namespace Controllers
             {
                 _mouseX = Input.GetAxis("Mouse X");
                 transform.RotateAround(transform.position, transform.up, Time.deltaTime * _mouseX * rotationSpeed);
-            } 
+            }
         }
 
         public void FixedUpdate()
@@ -152,10 +154,10 @@ namespace Controllers
         }
 
         /// <summary>
-        /// <c>Meele</c> is called from an event in the player's <c>Meele Attack</c> animation and
+        /// <c>Melee</c> is called from an event in the player's <c>Meele Attack</c> animation and
         /// performs the actual ability by triggering its <see cref="MeleeAttack.PerformAbility"/> method.
         /// </summary>
-        private void Meele()
+        private void Melee()
         {
             _meleeAttack.PerformAbility();
         }
@@ -178,7 +180,7 @@ namespace Controllers
             if (!PlayerModel.TakeDamage(damage))
             {
                 // Death
-                _animator.SetTrigger("dead");
+                _animator.SetTrigger(Dead);
             }
         }
 
