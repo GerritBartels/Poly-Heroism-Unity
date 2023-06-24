@@ -8,20 +8,24 @@ namespace Model.Player.Abilities
         private readonly GameObject _prefab;
         private readonly Animator _animator;
 
-        public FireBall(Transform transform, GameObject prefab, Animator animator) : base(0f, 0.5f, 10f, 0.5f)
+        public FireBall(Transform transform, GameObject prefab, Animator animator) : 
+            base(cooldown: 0f, globalCooldown: 0.5f, resourceCost: 10f, blockMovementFor: 0.5f)
         {
             _transform = transform;
             _prefab = prefab;
             _animator = animator;
         }
 
-        public void PerformAnimation()
+        public override void PerformAbility()
         {
-            _animator.SetTrigger("fireBall"); // TODO: add animation
+            Debug.Log("Instantiate actual fireball ability");
+            Instantiate(_prefab, _transform.position + (_transform.forward * 1f) + _transform.up, _transform.rotation);
         }
 
-        protected override bool PerformAbility(PlayerModel player)
+        protected override bool TriggerAnimation(PlayerModel player)
         {
+            // TODO: add actual animation + trigger and call animator here 
+            //Debug.Log("Triggered fireball animation");
             Instantiate(_prefab, _transform.position + (_transform.forward * 1f) + _transform.up, _transform.rotation);
             return true;
         }

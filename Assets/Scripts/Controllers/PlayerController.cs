@@ -48,6 +48,8 @@ namespace Controllers
 
         private void Start()
         {
+            _animator = GetComponent<Animator>();
+
             // Instantiate abilites
             _rangedAttack = new RangedAttack(transform, bulletPrefab, _animator);
             _scatterShot = new ScatterShot(transform, bulletPrefab, _animator);
@@ -56,8 +58,6 @@ namespace Controllers
 
             _rigidbody = GetComponent<Rigidbody>();
             _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-            
-            _animator = GetComponent<Animator>();
 
             StartCoroutine(Regeneration());
         }
@@ -131,6 +131,42 @@ namespace Controllers
                                         transform.TransformDirection(_moveDirection) *
                                         (PlayerModel.Speed * Time.deltaTime));
             }
+        }
+
+        /// <summary>
+        /// <c>Shot</c> is called from an event in the player's <c>Quick Shooting</c> animation and
+        /// performs the actual ability by triggering its <see cref="RangedAttack.PerformAbility"/> method.
+        /// </summary>
+        private void Shot()
+        {
+            _rangedAttack.PerformAbility();
+        }
+
+        /// <summary>
+        /// <c>ScatterShot</c> is called from an event in the player's <c>Scatter Shot</c> animation and
+        /// performs the actual ability by triggering its <see cref="ScatterShot.PerformAbility"/> method.
+        /// </summary>
+        private void ScatterShot()
+        {
+            _scatterShot.PerformAbility();
+        }
+
+        /// <summary>
+        /// <c>Meele</c> is called from an event in the player's <c>Meele Attack</c> animation and
+        /// performs the actual ability by triggering its <see cref="MeleeAttack.PerformAbility"/> method.
+        /// </summary>
+        private void Meele()
+        {
+            _meleeAttack.PerformAbility();
+        }
+
+        /// <summary>
+        /// <c>FireBall</c> is called from an event in the player's <c>Fireball</c> animation and
+        /// performs the actual ability by triggering its <see cref="FireBall.PerformAbility"/> method.
+        /// </summary>
+        private void FireBall()
+        {
+            _fireBall.PerformAbility();
         }
 
         /// <summary>

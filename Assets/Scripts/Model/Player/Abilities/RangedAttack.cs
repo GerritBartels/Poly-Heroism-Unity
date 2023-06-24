@@ -8,21 +8,24 @@ namespace Model.Player.Abilities
         private readonly GameObject _prefab;
         private readonly Animator _animator;
 
-        public RangedAttack(Transform transform, GameObject prefab, Animator animator) : base(0f, 0.2f, 2f, 0.2f)
+        public RangedAttack(Transform transform, GameObject prefab, Animator animator) :
+            base(cooldown: 0f, globalCooldown: 0.8f, resourceCost: 2f, blockMovementFor: 0.8f)
         {
             _transform = transform;
             _prefab = prefab;
             _animator = animator;
         }
 
-        public void PerformAnimation()
+        public override void PerformAbility()
         {
-            _animator.SetTrigger("shot");
+            Debug.Log("Instantiate actual shot ability");
+            Instantiate(_prefab, _transform.position + (_transform.forward * 0.5f) + _transform.up, _transform.rotation);
         }
 
-        protected override bool PerformAbility(PlayerModel player)
+        protected override bool TriggerAnimation(PlayerModel player)
         {
-            Instantiate(_prefab, _transform.position + (_transform.forward * 0.5f) + _transform.up, _transform.rotation);
+            Debug.Log("Triggered shot animation");
+            _animator.SetTrigger("shot");
             return true;
         }
 

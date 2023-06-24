@@ -18,7 +18,8 @@
         public float GlobalCooldown { get; }
         public float ResourceCost { get; }
 
-        protected abstract bool PerformAbility(PlayerModel playerModel);
+        public abstract void PerformAbility();
+        protected abstract bool TriggerAnimation(PlayerModel playerModel);
         protected abstract Resource GetResource(PlayerModel playerModel);
 
         public float CooldownTimeRemaining()
@@ -31,7 +32,7 @@
             var resource = GetResource(playerModel);
             if (!_cooldown.IsCooldownActive() && resource.Value >= ResourceCost)
             {
-                if (PerformAbility(playerModel))
+                if (TriggerAnimation(playerModel))
                 {
                     resource.Value -= ResourceCost;
                     _cooldown.Apply();

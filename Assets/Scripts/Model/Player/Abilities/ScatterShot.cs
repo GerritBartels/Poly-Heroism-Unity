@@ -8,20 +8,17 @@ namespace Model.Player.Abilities
         private readonly GameObject _prefab;
         private readonly Animator _animator;
 
-        public ScatterShot(Transform transform, GameObject prefab, Animator animator) : base(5f, 0.5f, 20f, 0.5f)
+        public ScatterShot(Transform transform, GameObject prefab, Animator animator) :
+            base(cooldown: 5f, globalCooldown: 2.7f, resourceCost: 20f, blockMovementFor: 2.7f)
         {
             _transform = transform;
             _prefab = prefab;
             _animator = animator;
         }
 
-        public void PerformAnimation()
+        public override void PerformAbility()
         {
-            _animator.SetTrigger("scatterShot");
-        }
-
-        protected override bool PerformAbility(PlayerModel player)
-        {
+            Debug.Log("Instantiate actual scatter shot ability");
             Instantiate(_prefab, _transform.position + (_transform.forward * 0.5f) + _transform.up, _transform.rotation);
             Instantiate(
                 _prefab,
@@ -33,6 +30,12 @@ namespace Model.Player.Abilities
                 _transform.position + (_transform.forward * 0.5f) + (_transform.right * 0.3f) + _transform.up,
                 _transform.rotation * Quaternion.Euler(0f, 10f, 0f)
             );
+        }
+
+        protected override bool TriggerAnimation(PlayerModel player)
+        {
+            Debug.Log("Triggered scatter shot animation");
+            _animator.SetTrigger("scatterShot");
             return true;
         }
 

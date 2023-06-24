@@ -8,20 +8,24 @@ namespace Model.Player.Abilities
         private readonly GameObject _prefab;
         private readonly Animator _animator;
 
-        public MeleeAttack(Transform transform, GameObject prefab, Animator animator) : base(0f, 0.2f, 2f, 0.2f)
+        public MeleeAttack(Transform transform, GameObject prefab, Animator animator) : 
+            base(cooldown: 0f, globalCooldown: 0.2f, resourceCost: 2f, blockMovementFor: 0.2f)
         {
             _transform = transform;
             _prefab = prefab;
             _animator = animator;
         }
 
-        public void PerformAnimation()
+        public override void PerformAbility()
         {
-            _animator.SetTrigger("meleeAttack"); // TODO: add animation
+            Debug.Log("Instantiate actual meele ability");
+            Instantiate(_prefab, _transform.position + (_transform.forward * 0.5f), _transform.rotation);
         }
 
-        protected override bool PerformAbility(PlayerModel player)
+        protected override bool TriggerAnimation(PlayerModel player)
         {
+            // TODO: add actual animation + trigger and call animator here 
+            //Debug.Log("Triggered meele animation");
             Instantiate(_prefab, _transform.position + (_transform.forward * 0.5f), _transform.rotation);
             return true;
         }
