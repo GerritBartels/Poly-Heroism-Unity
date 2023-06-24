@@ -65,28 +65,28 @@ namespace Controllers
         public void Update()
         {
             // Attack
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+            if (Input.GetKeyDown(KeyCode.Mouse0) && PlayerModel.IsAlive)
             {
                 PlayerModel.UseAbility(_rangedAttack);
             }
 
-            if (Input.GetKeyDown(KeyCode.Mouse1))
+            if (Input.GetKeyDown(KeyCode.Mouse1) && PlayerModel.IsAlive)
             {
                 PlayerModel.UseAbility(_meleeAttack);
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha1))
+            if (Input.GetKeyDown(KeyCode.Alpha1) && PlayerModel.IsAlive)
             {
                 PlayerModel.UseAbility(_scatterShot);
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha2))
+            if (Input.GetKeyDown(KeyCode.Alpha2) && PlayerModel.IsAlive)
             {
                 PlayerModel.UseAbility(_fireBall);
             }
 
             // Sprint or walk
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKey(KeyCode.LeftShift) && PlayerModel.IsAlive)
             {
                 PlayerModel.Sprint();
             }
@@ -97,11 +97,11 @@ namespace Controllers
             
             // Pass the player's movement direction to the animator
             // Might make sense to inlcude a sideways movement animation as well for a and d
-            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) 
+            if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) && PlayerModel.IsAlive) 
             {
                 _animator.SetFloat("playerSpeed", PlayerModel.Speed);
             }
-            else if (Input.GetKey(KeyCode.S))
+            else if (Input.GetKey(KeyCode.S) && PlayerModel.IsAlive)
             {
                 _animator.SetFloat("playerSpeed", -PlayerModel.Speed);
             }
@@ -114,17 +114,23 @@ namespace Controllers
         public void LateUpdate()
         {
             // Rotate player
-            _mouseX = Input.GetAxis("Mouse X");
-            transform.RotateAround(transform.position, transform.up, Time.deltaTime * _mouseX * rotationSpeed);
+            if (PlayerModel.IsAlive)
+            {
+                _mouseX = Input.GetAxis("Mouse X");
+                transform.RotateAround(transform.position, transform.up, Time.deltaTime * _mouseX * rotationSpeed);
+            } 
         }
 
         public void FixedUpdate()
         {
             // Move player
-            _moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
-            _rigidbody.MovePosition(_rigidbody.position +
-                                    transform.TransformDirection(_moveDirection) *
-                                    (PlayerModel.Speed * Time.deltaTime));
+            if (PlayerModel.IsAlive)
+            {
+                _moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
+                _rigidbody.MovePosition(_rigidbody.position +
+                                        transform.TransformDirection(_moveDirection) *
+                                        (PlayerModel.Speed * Time.deltaTime));
+            }
         }
 
         /// <summary>

@@ -42,7 +42,7 @@ namespace Controllers.Enemy
                 other.GetComponentInParent<PlayerController>().Damage(10);
                 Destroy(gameObject);
             }
-            else if (other.CompareTag("Terrain"))
+            else if (other.CompareTag("Terrain") || other.CompareTag("Enemy"))
             {
                 Destroy(gameObject);
             }
