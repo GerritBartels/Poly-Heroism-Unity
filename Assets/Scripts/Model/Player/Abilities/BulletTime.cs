@@ -9,8 +9,11 @@ namespace Model.Player.Abilities
     /// </summary>
     public class BulletTime : IAbility<PlayerModel>
     {
-        public float Cooldown => 0;
+        public float CooldownTime => 0;
         public float GlobalCooldown => 0;
+
+        public Cooldown Cooldown { get; } = new();
+
         public float ResourceCost { get; }
         public float CooldownTimeRemaining() => 0;
 

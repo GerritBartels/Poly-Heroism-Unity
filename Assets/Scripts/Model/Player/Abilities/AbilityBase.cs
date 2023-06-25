@@ -7,15 +7,16 @@
 
         protected AbilityBase(float cooldown, float globalCooldown, float resourceCost, float blockMovementFor)
         {
-            Cooldown = cooldown;
+            CooldownTime = cooldown;
             GlobalCooldown = globalCooldown;
             ResourceCost = resourceCost;
             _blockMovementFor = blockMovementFor;
             _cooldown = new CooldownFixed(cooldown);
         }
 
-        public float Cooldown { get; }
+        public float CooldownTime { get; }
         public float GlobalCooldown { get; }
+        public Cooldown Cooldown => _cooldown;
         public float ResourceCost { get; }
 
         public abstract void PerformAbility();

@@ -37,9 +37,13 @@ namespace Controllers
         private ScatterShot _scatterShot;
         private MeleeAttack _meleeAttack;
         private FireBall _fireBall;
+        public FireBall FireBallAbility => _fireBall;
         private BulletTime _bulletTime;
         private static readonly int Dead = Animator.StringToHash("dead");
         private static readonly int PlayerSpeed = Animator.StringToHash("playerSpeed");
+
+        private IAbility<PlayerModel>[] _abilities;
+        public IAbility<PlayerModel>[] Abilities => _abilities;
 
         /// <summary>
         /// Constructor that initializes a <c>PlayerController</c> by instantiating a new <see cref="Model.Player.PlayerModel"/> with a given <c>baseSpeed</c>.
@@ -59,6 +63,8 @@ namespace Controllers
             _meleeAttack = new MeleeAttack(transform, meleePrefab, _animator);
             _fireBall = new FireBall(transform, fireBallPrefab, _animator);
             _bulletTime = new BulletTime(this);
+
+            _abilities = new IAbility<PlayerModel>[] { _rangedAttack, _meleeAttack, _scatterShot, _bulletTime };
 
             _rigidbody = GetComponent<Rigidbody>();
             _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;

@@ -1,0 +1,11 @@
+﻿namespace Controllers
+{
+    public enum Abilities
+    {
+        RangedAttack = 0,
+        MeleeAttack = 1,
+        ScatterShot = 2,
+        FireBall = 3,
+        BulletTime = 4
+    }
+}

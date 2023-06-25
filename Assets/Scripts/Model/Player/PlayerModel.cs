@@ -23,6 +23,8 @@ namespace Model.Player
         private bool _isSprinting = false;
 
         private readonly Cooldown _globalCooldown = new();
+        public Cooldown GlobalCooldown => _globalCooldown;
+
         private readonly Cooldown _blockMovement = new();
 
         /// <summary>
