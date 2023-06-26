@@ -7,6 +7,7 @@ using Debug = UnityEngine.Debug;
 using Model;
 using Model.Player;
 using Model.Player.Abilities;
+using GameUI;
 
 namespace Controllers
 {
@@ -22,9 +23,10 @@ namespace Controllers
         [SerializeField] private GameObject meleePrefab;
         [SerializeField] private GameObject fireBallPrefab;
 
-
         [SerializeField] private float baseSpeed = 5f;
         [SerializeField] private float rotationSpeed = 4000f;
+
+        [SerializeField] private GameObject canvas;
 
         private Rigidbody _rigidbody;
         private Animator _animator;
@@ -186,6 +188,7 @@ namespace Controllers
 
         /// <summary>
         /// <c>Damage</c> calls the <see cref="PlayerModel.TakeDamage"/> method and upon death triggers the player's death animation.
+        /// Also calls the <see cref="GameMenu.GameOver"/> method to trigger the UI's game over menu / animation.
         /// </summary>
         /// <param name="damage">the amount of damage taken</param>
         public void Damage(float damage)
@@ -194,6 +197,7 @@ namespace Controllers
             {
                 // Death
                 _animator.SetTrigger(Dead);
+                canvas.GetComponent<GameMenu>().GameOver();
             }
         }
 
