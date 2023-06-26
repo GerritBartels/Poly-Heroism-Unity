@@ -3,15 +3,16 @@
     public abstract class AbilityBase : UnityEngine.Object, IAbility<Enemy>
     {
         private readonly CooldownFixed _cooldown;
+        public Cooldown Cooldown => _cooldown;
 
         protected AbilityBase(float cooldown, float globalCooldown)
         {
-            Cooldown = cooldown;
+            CooldownTime = cooldown;
             GlobalCooldown = globalCooldown;
             _cooldown = new CooldownFixed(cooldown);
         }
 
-        public float Cooldown { get; }
+        public float CooldownTime { get; }
         public float GlobalCooldown { get; }
 
         protected abstract bool PerformAbility(Enemy enemy);
