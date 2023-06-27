@@ -45,6 +45,7 @@ namespace Controllers.Enemy
             var moveDirection = SelfToPlayerVector().normalized;
             _rigidbody.MovePosition(position +
                                     transform.TransformDirection(moveDirection) * (Enemy.Speed * Time.deltaTime));
+            // TODO: rotate into player direction
         }
 
         protected void MoveAwayFromPlayer()
