@@ -188,7 +188,7 @@ namespace Controllers
 
         /// <summary>
         /// <c>Damage</c> calls the <see cref="PlayerModel.TakeDamage"/> method and upon death triggers the player's death animation.
-        /// Also calls the <see cref="GameMenu.GameOver"/> method to trigger the UI's game over menu / animation.
+        /// Also calls the <see cref="GameMenu.GameOver"/> method to trigger the UI's game over menu and destroys all remaining enemies.
         /// </summary>
         /// <param name="damage">the amount of damage taken</param>
         public void Damage(float damage)
@@ -198,6 +198,16 @@ namespace Controllers
                 // Death
                 _animator.SetTrigger(Dead);
                 canvas.GetComponent<GameMenu>().GameOver();
+
+                // Destroy all remaining enemies
+                GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+                if (enemies != null)
+                {
+                    foreach (GameObject enemy in enemies)
+                    {
+                        Destroy(enemy);
+                    }
+                }
             }
         }
 
