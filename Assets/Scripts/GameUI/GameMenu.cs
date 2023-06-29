@@ -5,14 +5,23 @@ using UnityEngine.SceneManagement;
 namespace GameUI
 {
     /// <summary>
-    /// <c>PauseMenu</c> defines UI events for the pause menu screen.
+    /// <c>GameMenu</c> defines UI events for the main game. This includes a pause menu and a game over menu.
     /// </summary>
-    public class PauseMenu : MonoBehaviour
+    public class GameMenu : MonoBehaviour
     {
         [SerializeField] private GameObject pauseMenuUI;
+        [SerializeField] private GameObject gameOverMenuUI;
+        [SerializeField] private GameObject playerResourcesUI;
+        [SerializeField] private GameObject playerAbilitiesUI;
         [SerializeField] private GameObject player;
 
         public static bool GameIsPaused = false;
+        private Camera _cam;
+
+        private void Awake()
+        {
+            _cam = Camera.main;
+        }
 
         private void Update()
         {
@@ -70,6 +79,26 @@ namespace GameUI
         {
             Debug.Log("Quit!");
             Application.Quit();
+        }
+
+        /// <summary>
+        /// <c>GameOver</c> activates the game over menu and triggers the camera's game over animation.
+        /// Also deactivates the player's resource and ability UI.
+        /// </summary>
+        public void GameOver()
+        {
+            playerAbilitiesUI.SetActive(false);
+            playerResourcesUI.SetActive(false);
+            gameOverMenuUI.SetActive(true);
+            _cam.GetComponent<Animator>().SetTrigger("dead");
+        }
+
+        /// <summary>
+        /// <c>Restart</c> is hooked up to the "Restart" button which, when clicked, restarts the level.
+        /// </summary>
+        public void Restart()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 }
