@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: -2598065352025025259}
   - component: {fileID: -7383739922459633681}
   - component: {fileID: 1182837888364109402}
-  - component: {fileID: 1601918146946304319}
+  - component: {fileID: 6577360259981213806}
   m_Layer: 0
-  m_Name: Explosion
+  m_Name: FireBallEnemy
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 7553974433958985813}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.2813468, y: 0.64897525, z: 6.682814}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -144,8 +144,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoOrient: 1
   autoOrientSpeed: 1
-  gravity: 12
---- !u!114 &1601918146946304319
+  gravity: 20
+--- !u!114 &6577360259981213806
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -154,8 +154,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7553974433958985813}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9177bf90735d45e489d88ff9d3b87dcf, type: 3}
+  m_Script: {fileID: 11500000, guid: 25027276e0a1430b92e74b99c8fae678, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 100
-  lifeSpan: 1
+  lifeSpan: 2
+  bulletSpeed: 50
+  explosionPrefab: {fileID: 7553974433958985813, guid: 35e73ffa81ea2ea418caef4b340f1eed, type: 3}

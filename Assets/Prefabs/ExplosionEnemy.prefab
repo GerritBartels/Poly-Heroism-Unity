@@ -14,10 +14,10 @@ GameObject:
   - component: {fileID: 6914616966628529324}
   - component: {fileID: -2598065352025025259}
   - component: {fileID: -7383739922459633681}
+  - component: {fileID: 3649621671471545116}
   - component: {fileID: 1182837888364109402}
-  - component: {fileID: 1601918146946304319}
   m_Layer: 0
-  m_Name: Explosion
+  m_Name: ExplosionEnemy
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -130,6 +130,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &3649621671471545116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7553974433958985813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d693500e973494388c1b03f7a650d85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 50
+  lifeSpan: 0.4
 --- !u!114 &1182837888364109402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,17 +159,3 @@ MonoBehaviour:
   autoOrient: 1
   autoOrientSpeed: 1
   gravity: 12
---- !u!114 &1601918146946304319
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7553974433958985813}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9177bf90735d45e489d88ff9d3b87dcf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 100
-  lifeSpan: 1
