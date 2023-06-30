@@ -19,16 +19,16 @@ namespace Model.Enemy.Abilities
 
         protected override bool PerformAbility(Enemy enemy)
         {
-            var direction = _selfToPlayerVector().normalized + new Vector3(2, 2, 2);
-            Instantiate(_fireBallPrefab, _transform.position + direction * 0.5f + _transform.up, _transform.rotation);
+            Instantiate(_fireBallPrefab, _transform.position + _transform.forward * 3f + _transform.up,
+                _transform.rotation);
             Instantiate(
                 _fireBallPrefab,
-                _transform.position + direction + (_transform.right * -0.3f) + _transform.up,
+                _transform.position + _transform.forward * 3f + (_transform.right * -0.3f) + _transform.up,
                 _transform.rotation * Quaternion.Euler(0f, -10f, 0f)
             );
             Instantiate(
                 _fireBallPrefab,
-                _transform.position + direction + (_transform.right * 0.3f) + _transform.up,
+                _transform.position + _transform.forward * 3f + (_transform.right * 0.3f) + _transform.up,
                 _transform.rotation * Quaternion.Euler(0f, 10f, 0f)
             );
             return true;
