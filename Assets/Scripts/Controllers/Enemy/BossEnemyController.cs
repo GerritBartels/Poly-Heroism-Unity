@@ -8,9 +8,10 @@ using UnityEngine.Serialization;
 
 namespace Controllers.Enemy
 {
-    public class BossEnemyController : EnemyController<EnemyBasic>
+    public class BossEnemyController : EnemyController<EnemyBoss>
     {
         [SerializeField] private GameObject fireballPrefab;
+        [SerializeField] private GameObject homingMissilePrefab;
         [SerializeField] private float distanceToPlayer = 4f;
 
         private void Update()
@@ -23,9 +24,10 @@ namespace Controllers.Enemy
             Enemy.Attack();
         }
 
-        protected override EnemyBasic CreateEnemy()
+        protected override EnemyBoss CreateEnemy()
         {
-            return new EnemyBasic(300, new InfernoAttack(fireballPrefab, transform, SelfToPlayerVector), 1f);
+            return new EnemyBoss(300, new InfernoAttack(fireballPrefab, transform, SelfToPlayerVector),
+                new HomingMissilesAttack(homingMissilePrefab, transform), 1f);
         }
     }
 }
