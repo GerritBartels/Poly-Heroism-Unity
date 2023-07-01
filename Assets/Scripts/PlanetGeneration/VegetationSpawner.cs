@@ -59,7 +59,6 @@ namespace PlanetGeneration
                 maxTries = 1000;
 
                 // Raycast downwards to find the surface position
-                // ToDo: Raycast cannot find the planet surface, why?
                 RaycastHit hit;
                 if (Physics.Raycast(spawnPosition, -spawnPosition.normalized, out hit, radius, layerMask2))
                 {
