@@ -18,13 +18,13 @@ namespace Controllers
     {
         private Vector3 _moveDirection;
         private float _mouseX;
+        public float rotationSpeed;
 
         [SerializeField] private GameObject bulletPrefab;
         [SerializeField] private GameObject meleePrefab;
         [SerializeField] private GameObject fireBallPrefab;
 
         [SerializeField] private float baseSpeed = 5f;
-        [SerializeField] private float rotationSpeed = 4000f;
 
         [SerializeField] private GameObject canvas;
 
@@ -57,6 +57,9 @@ namespace Controllers
 
         private void Start()
         {
+            // Load mouse sensitivity from PlayerPrefs
+            rotationSpeed = PlayerPrefs.GetFloat("mouseSensitivity", 2000);
+
             _animator = GetComponent<Animator>();
 
             // Instantiate abilites
