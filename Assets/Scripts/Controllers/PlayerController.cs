@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -75,6 +76,15 @@ namespace Controllers
             _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 
             StartCoroutine(Regeneration());
+        }
+
+        public void OnCollisionEnter(Collision other)
+        {
+            if (other.gameObject.CompareTag("Bedrock"))
+            {
+                transform.position += (transform.up * 0.25f);
+
+            }
         }
 
         public void Update()
