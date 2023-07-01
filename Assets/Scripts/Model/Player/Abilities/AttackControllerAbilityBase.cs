@@ -16,7 +16,6 @@ namespace Model.Player.Abilities
             var obj = InstantiateAttack();
             var controller = obj.GetComponent<PlayerAttackControllerBase>();
             controller.Damage = Damage(playerModel);
-            Debug.Log("damage set:" + Damage(playerModel));
         }
 
         protected abstract GameObject InstantiateAttack();

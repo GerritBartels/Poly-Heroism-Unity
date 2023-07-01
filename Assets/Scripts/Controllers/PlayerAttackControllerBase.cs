@@ -26,7 +26,6 @@ namespace Controllers
             if (other.CompareTag("Enemy"))
             {
                 var enemy = other.GetComponent<AbstractEnemyController>();
-                Debug.Log("damage enemy in controller:" + Damage);
                 enemy.TakeDamage(Damage);
                 Destroy(gameObject);
             }

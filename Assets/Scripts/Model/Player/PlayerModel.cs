@@ -77,7 +77,7 @@ namespace Model.Player
             return AttributePoints > 0;
         }
 
-        private void OnLvlUp()
+        public void OnLvlUp()
         {
             _attributePoints += 5;
         }

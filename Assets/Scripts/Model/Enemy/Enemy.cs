@@ -21,7 +21,6 @@ namespace Model.Enemy
 
         public bool TakeDamage(float damage)
         {
-            Debug.Log("damage enemy:" + damage);
             Health.Value -= damage;
             return !Health.Empty();
         }
