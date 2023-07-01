@@ -1,4 +1,6 @@
-﻿namespace Model.Enemy
+﻿using UnityEngine;
+
+namespace Model.Enemy
 {
     public class Enemy
     {
@@ -19,6 +21,7 @@
 
         public bool TakeDamage(float damage)
         {
+            Debug.Log("damage enemy:" + damage);
             Health.Value -= damage;
             return !Health.Empty();
         }

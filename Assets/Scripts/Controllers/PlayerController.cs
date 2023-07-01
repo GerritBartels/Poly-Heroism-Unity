@@ -39,7 +39,7 @@ namespace Controllers
         private ScatterShot _scatterShot;
         private MeleeAttack _meleeAttack;
         private FireBall _fireBall;
-        public FireBall FireBallAbility => _fireBall;
+
         private BulletTime _bulletTime;
         private static readonly int Dead = Animator.StringToHash("dead");
         private static readonly int PlayerSpeed = Animator.StringToHash("playerSpeed");
@@ -59,14 +59,14 @@ namespace Controllers
         {
             _animator = GetComponent<Animator>();
 
-            // Instantiate abilites
+            // Instantiate abilities
             _rangedAttack = new RangedAttack(transform, bulletPrefab, _animator);
             _scatterShot = new ScatterShot(transform, bulletPrefab, _animator);
             _meleeAttack = new MeleeAttack(transform, meleePrefab, _animator);
             _fireBall = new FireBall(transform, fireBallPrefab, _animator);
-            _bulletTime = new BulletTime(this);
+            _abilities = new IAbility<PlayerModel>[] { _rangedAttack, _meleeAttack, _scatterShot, _fireBall };
 
-            _abilities = new IAbility<PlayerModel>[] { _rangedAttack, _meleeAttack, _scatterShot, _bulletTime };
+            _bulletTime = new BulletTime(this);
 
             _rigidbody = GetComponent<Rigidbody>();
             _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
@@ -99,7 +99,7 @@ namespace Controllers
 
             if (Input.GetKeyDown(KeyCode.Space) && PlayerModel.IsAlive)
             {
-                PlayerModel.UseAbility(_bulletTime);
+                _bulletTime.Use(PlayerModel);
             }
 
             // Sprint or walk
@@ -156,7 +156,7 @@ namespace Controllers
         /// </summary>
         private void Shot()
         {
-            _rangedAttack.PerformAbility();
+            _rangedAttack.PerformAbility(PlayerModel);
         }
 
         /// <summary>
@@ -165,16 +165,16 @@ namespace Controllers
         /// </summary>
         private void ScatterShot()
         {
-            _scatterShot.PerformAbility();
+            _scatterShot.PerformAbility(PlayerModel);
         }
 
         /// <summary>
-        /// <c>Melee</c> is called from an event in the player's <c>Meele Attack</c> animation and
+        /// <c>Melee</c> is called from an event in the player's <c>Melee Attack</c> animation and
         /// performs the actual ability by triggering its <see cref="MeleeAttack.PerformAbility"/> method.
         /// </summary>
         private void Melee()
         {
-            _meleeAttack.PerformAbility();
+            _meleeAttack.PerformAbility(PlayerModel);
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace Controllers
         /// </summary>
         private void FireBall()
         {
-            _fireBall.PerformAbility();
+            _fireBall.PerformAbility(PlayerModel);
         }
 
         /// <summary>

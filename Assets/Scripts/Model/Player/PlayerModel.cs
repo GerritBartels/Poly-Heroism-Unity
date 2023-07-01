@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using Unity.VisualScripting;
+using UnityEngine;
 
 namespace Model.Player
 {
@@ -26,6 +28,37 @@ namespace Model.Player
         public Cooldown GlobalCooldown => _globalCooldown;
 
         private readonly Cooldown _blockMovement = new();
+
+        private int _attributePoints = 1;
+        private int _intelligence = 1;
+        private int _agility = 1;
+        private int _strength = 1;
+        private int AttributePoints => _attributePoints;
+        private int Intelligence => _intelligence;
+        private int Agility => _agility;
+        private int Strength => _strength;
+
+        public float PhysicalDamageModificator() => 1f + Strength / 100f;
+        public float MagicDamageModificator() => 1f + Intelligence / 100f;
+        public float SpeedModificator() => 1f + Agility / 100f;
+
+        private bool HasSkillPoints()
+        {
+            return AttributePoints > 0;
+        }
+
+        private bool IncreaseAttribute(Action<int> attribute)
+        {
+            if (!HasSkillPoints()) return false;
+            attribute(1);
+            _attributePoints -= 1;
+            return true;
+        }
+
+        public bool IncreaseStrength() => IncreaseAttribute((i) => _strength += i);
+        public bool IncreaseAgility() => IncreaseAttribute((i) => _agility += i);
+        public bool IncreaseIntelligence() => IncreaseAttribute((i) => _intelligence += i);
+
 
         /// <summary>
         /// Constructor that initializes a <c>PlayerModel</c> with a given <c>baseSpeed</c>.

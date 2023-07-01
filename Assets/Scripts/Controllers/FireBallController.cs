@@ -10,11 +10,10 @@ namespace Controllers
     {
         [SerializeField] private float speed = 15f;
         [SerializeField] private GameObject explosionPrefab;
-         
+
         private void Awake()
         {
             lifeSpan = 4f;
-            damage = 0f;
         }
 
         public new void Update()
@@ -27,7 +26,8 @@ namespace Controllers
         {
             if (other.CompareTag("Enemy") || other.CompareTag("Terrain"))
             {
-                Instantiate(explosionPrefab, transform.position, transform.rotation);
+                var obj = Instantiate(explosionPrefab, transform.position, transform.rotation);
+                obj.GetComponent<PlayerAttackControllerBase>().Damage = Damage;
                 Destroy(gameObject);
             }
         }
