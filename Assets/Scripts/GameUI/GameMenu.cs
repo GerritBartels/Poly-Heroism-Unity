@@ -21,6 +21,7 @@ namespace GameUI
 
         private void Awake()
         {
+            Cursor.visible = false;
             _cam = Camera.main;
         }
 
@@ -47,6 +48,7 @@ namespace GameUI
         {
             // Disable PlayerController script to avoid casting abilities through Key events triggered during the pause screen
             player.GetComponent<PlayerController>().enabled = false;
+            Cursor.visible = true;
             playerAbilitiesUI.SetActive(false);
             playerResourcesUI.SetActive(false);
             pauseMenuUI.SetActive(true);
@@ -61,6 +63,7 @@ namespace GameUI
         public void Resume()
         {
             player.GetComponent<PlayerController>().enabled = true;
+            Cursor.visible = false;
             pauseMenuUI.SetActive(false);
             settingsMenuUi.SetActive(false);
             playerAbilitiesUI.SetActive(true);
@@ -94,6 +97,7 @@ namespace GameUI
         /// </summary>
         public void GameOver()
         {
+            Cursor.visible = true;
             playerAbilitiesUI.SetActive(false);
             playerResourcesUI.SetActive(false);
             gameOverMenuUI.SetActive(true);
