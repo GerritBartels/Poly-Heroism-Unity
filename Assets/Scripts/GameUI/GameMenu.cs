@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 namespace GameUI
 {
     /// <summary>
-    /// <c>GameMenu</c> defines UI events for the main game. This includes a pause menu and a game over menu.
+    /// <c>GameMenu</c> defines UI events for the main game. This includes a pause, settings and game over menu.
     /// </summary>
     public class GameMenu : MonoBehaviour
     {
@@ -13,6 +13,7 @@ namespace GameUI
         [SerializeField] private GameObject gameOverMenuUI;
         [SerializeField] private GameObject playerResourcesUI;
         [SerializeField] private GameObject playerAbilitiesUI;
+        [SerializeField] private GameObject settingsMenuUi;
         [SerializeField] private GameObject player;
 
         public static bool GameIsPaused = false;
@@ -25,7 +26,7 @@ namespace GameUI
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape) && player.GetComponent<PlayerController>().PlayerModel.IsAlive)
             {
                 if (GameIsPaused)
                 {
@@ -39,12 +40,15 @@ namespace GameUI
         }
 
         /// <summary>
-        /// <c>Pause</c> activates the pause menu and pauses the game by freezing time. 
+        /// <c>Pause</c> activates the pause menu and pauses the game by freezing time.
+        /// Also deactivates the player's resource and ability UI.
         /// </summary>
         private void Pause()
         {
             // Disable PlayerController script to avoid casting abilities through Key events triggered during the pause screen
             player.GetComponent<PlayerController>().enabled = false;
+            playerAbilitiesUI.SetActive(false);
+            playerResourcesUI.SetActive(false);
             pauseMenuUI.SetActive(true);
             Time.timeScale = 0f;
             GameIsPaused = true;
@@ -52,12 +56,15 @@ namespace GameUI
 
         /// <summary>
         /// <c>Resume</c> deactivates the pause menu and resumes the game by unfreezing time.
-        /// It is also hooked up to the "Resume" button.
+        /// It is also hooked up to the "Resume" button and activates the player's resource and ability UI.
         /// </summary>
         public void Resume()
         {
             player.GetComponent<PlayerController>().enabled = true;
             pauseMenuUI.SetActive(false);
+            settingsMenuUi.SetActive(false);
+            playerAbilitiesUI.SetActive(true);
+            playerResourcesUI.SetActive(true);
             Time.timeScale = 1f;
             GameIsPaused = false;
         }
