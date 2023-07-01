@@ -10,11 +10,11 @@ namespace Model.Player
     /// </summary>
     public class PlayerModel
     {
-        public Resource Health { get; }
+        public Resource Health { get; private set; }
 
-        public Resource Stamina { get; }
+        public Resource Stamina { get; private set; }
 
-        public Resource Mana { get; }
+        public Resource Mana { get; private set; }
 
         private const float StaminaDrain = 20f;
         private readonly float _baseSpeed;
@@ -30,13 +30,43 @@ namespace Model.Player
         private readonly Cooldown _blockMovement = new();
 
         private int _attributePoints = 1;
-        private int _intelligence = 1;
-        private int _agility = 1;
-        private int _strength = 1;
         private int AttributePoints => _attributePoints;
-        private int Intelligence => _intelligence;
-        private int Agility => _agility;
-        private int Strength => _strength;
+
+        private int _strength = 1;
+
+        public int Strength
+        {
+            get => _strength;
+            set
+            {
+                _strength = value;
+                Health = new Resource(Health.RegenerationRate, 100f + _strength, Health.Value);
+            }
+        }
+
+        private int _intelligence = 1;
+
+        public int Intelligence
+        {
+            get => _intelligence;
+            set
+            {
+                _intelligence = value;
+                Mana = new Resource(Mana.RegenerationRate, 100f + _intelligence, Mana.Value);
+            }
+        }
+
+        private int _agility = 1;
+
+        public int Agility
+        {
+            get => _agility;
+            set
+            {
+                _agility = value;
+                Stamina = new Resource(Stamina.RegenerationRate, 100f + _agility, Stamina.Value);
+            }
+        }
 
         public float PhysicalDamageModificator() => 1f + Strength / 100f;
         public float MagicDamageModificator() => 1f + Intelligence / 100f;
@@ -45,6 +75,11 @@ namespace Model.Player
         private bool HasSkillPoints()
         {
             return AttributePoints > 0;
+        }
+
+        private void OnLvlUp()
+        {
+            _attributePoints += 5;
         }
 
         private bool IncreaseAttribute(Action<int> attribute)
@@ -95,12 +130,10 @@ namespace Model.Player
         /// </param>
         public void UseAbility(IAbility<PlayerModel> ability)
         {
-            if (!GlobalCooldownActive())
+            if (GlobalCooldownActive()) return;
+            if (ability.Use(this))
             {
-                if (ability.Use(this))
-                {
-                    _globalCooldown.Apply(ability.GlobalCooldown);
-                }
+                _globalCooldown.Apply(ability.GlobalCooldown);
             }
         }
 
@@ -110,7 +143,7 @@ namespace Model.Player
         /// </summary>
         public float Speed
         {
-            get => _speed;
+            get => _speed * SpeedModificator();
             private set
             {
                 _speed = value;
@@ -239,6 +272,13 @@ namespace Model.Player
             Stamina.Regenerate(duration);
             Health.Regenerate(duration);
             Mana.Regenerate(duration);
+        }
+
+        public void Reset()
+        {
+            Stamina.Reset();
+            Health.Reset();
+            Mana.Reset();
         }
     }
 }

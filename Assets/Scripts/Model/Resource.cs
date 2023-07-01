@@ -1,18 +1,15 @@
-﻿using TMPro;
-using Unity.VisualScripting;
-
-namespace Model
+﻿namespace Model
 {
     public class Resource
     {
         public Resource(float regenerationRate, float maxValue = 100f, float value = 100f)
         {
-            _regenerationRate = regenerationRate;
+            RegenerationRate = regenerationRate;
             MaxValue = maxValue;
             Value = value;
         }
 
-        private readonly float _regenerationRate;
+        public float RegenerationRate { get; }
         public float MaxValue { get; }
 
         private float _value;
@@ -45,12 +42,17 @@ namespace Model
 
         public void Regenerate(float duration)
         {
-            Value += _regenerationRate * duration;
+            Value += Value * (RegenerationRate / 100) * duration;
         }
 
         public void Drain(float drainRate, float duration)
         {
             Value -= drainRate * duration;
+        }
+
+        public void Reset()
+        {
+            Value = MaxValue;
         }
     }
 }
