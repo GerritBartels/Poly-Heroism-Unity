@@ -105,9 +105,9 @@ namespace Model.Player
             _baseSpeed = baseSpeed;
             _sprintSpeed = _baseSpeed * 2f;
             _speed = _baseSpeed;
-            Health = new Resource(1f);
-            Stamina = new Resource(3f);
-            Mana = new Resource(2f);
+            Health = new Resource(2f, 100f + _strength, 100f + _strength);
+            Stamina = new Resource(7f, 100 + _agility, 100f + _strength);
+            Mana = new Resource(5f, 100f + _intelligence, 100f + _strength);
         }
 
         /// <summary>

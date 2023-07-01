@@ -42,7 +42,7 @@
 
         public void Regenerate(float duration)
         {
-            Value += Value * (RegenerationRate / 100) * duration;
+            Value += MaxValue * (RegenerationRate / 100) * duration;
         }
 
         public void Drain(float drainRate, float duration)

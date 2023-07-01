@@ -33,7 +33,7 @@ namespace Controllers
 
         public PlayerModel PlayerModel { get; }
 
-        private const float RegenerationDelay = 1f;
+        private const float RegenerationDelay = 0.1f;
 
         private RangedAttack _rangedAttack;
         private ScatterShot _scatterShot;
@@ -144,13 +144,11 @@ namespace Controllers
         public void FixedUpdate()
         {
             // Move player
-            if (PlayerModel.IsAlive)
-            {
-                _moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
-                _rigidbody.MovePosition(_rigidbody.position +
-                                        transform.TransformDirection(_moveDirection) *
-                                        (PlayerModel.Speed * Time.deltaTime));
-            }
+            if (!PlayerModel.IsAlive) return;
+            _moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
+            _rigidbody.MovePosition(_rigidbody.position +
+                                    transform.TransformDirection(_moveDirection) *
+                                    (PlayerModel.Speed * Time.deltaTime));
         }
 
         /// <summary>
@@ -204,12 +202,10 @@ namespace Controllers
 
                 // Destroy all remaining enemies
                 GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-                if (enemies != null)
+                if (enemies == null) return;
+                foreach (var enemy in enemies)
                 {
-                    foreach (GameObject enemy in enemies)
-                    {
-                        Destroy(enemy);
-                    }
+                    Destroy(enemy);
                 }
             }
         }
