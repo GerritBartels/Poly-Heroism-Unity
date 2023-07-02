@@ -190,8 +190,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1.16, z: 1}
-  m_Center: {x: 0, y: 0.6, z: 0}
+  m_Size: {x: 1, y: 1.1600001, z: 0.7136501}
+  m_Center: {x: 0, y: 0.6, z: 0.08656889}
 --- !u!114 &7201867487640105481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -206,7 +206,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseDamage: 25
   player: {fileID: 0}
-  fireballPrefab: {fileID: 7553974433958985813, guid: ae8b496f78dd1b448a2621d10b105e3a, type: 3}
+  fireballPrefab: {fileID: 2583839736373720835, guid: 666d04243c5f30849b5f91fc24653f28, type: 3}
   homingMissilePrefab: {fileID: 7553974433958985813, guid: e76190d2f49b1dd40b8530c5300e1ef4, type: 3}
   distanceToPlayer: 4
 --- !u!114 &7201867487640105478
