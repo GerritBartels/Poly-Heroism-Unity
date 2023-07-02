@@ -58,8 +58,12 @@ namespace Controllers
 
         private void Start()
         {
-            // Load mouse sensitivity from PlayerPrefs
+            // Load mouse sensitivity and player stats from PlayerPrefs
             rotationSpeed = PlayerPrefs.GetFloat("mouseSensitivity", 2000);
+            PlayerModel.Strength = PlayerPrefs.GetInt("Strength", 1);
+            PlayerModel.Agility = PlayerPrefs.GetInt("Agility", 1);
+            PlayerModel.Intelligence = PlayerPrefs.GetInt("Intelligence", 1);
+            PlayerModel.Reset();
 
             _animator = GetComponent<Animator>();
 
@@ -80,6 +84,7 @@ namespace Controllers
 
         public void OnCollisionEnter(Collision other)
         {
+            // Prevents the player from falling through the planet
             if (other.gameObject.CompareTag("Bedrock"))
             {
                 transform.position += (transform.up * 0.25f);

@@ -10,7 +10,7 @@ namespace Model.Player.Abilities
         private static readonly int Shot = Animator.StringToHash("shot");
 
         public RangedAttack(Transform transform, GameObject prefab, Animator animator) :
-            base(cooldown: 0.8f, globalCooldown: 0.8f, resourceCost: 2f, blockMovementFor: 0.8f, baseDamage: 15f)
+            base(cooldown: 0.8f, globalCooldown: 0.8f, resourceCost: 2f, blockMovementFor: 0.8f, baseDamage: 25f)
         {
             _transform = transform;
             _prefab = prefab;

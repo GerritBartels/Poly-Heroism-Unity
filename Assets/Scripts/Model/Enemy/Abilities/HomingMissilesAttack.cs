@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Model.Enemy.Abilities
 {
@@ -7,7 +6,6 @@ namespace Model.Enemy.Abilities
     {
         private readonly GameObject _missilePrefab;
         private readonly Transform _transform;
-        private readonly Func<Vector3> _selfToPlayerVector;
 
         public HomingMissilesAttack(GameObject bulletPrefab, Transform transform) :
             base(3f, 3f)
@@ -18,11 +16,14 @@ namespace Model.Enemy.Abilities
 
         protected override bool PerformAbility(Enemy enemy)
         {
-            Instantiate(_missilePrefab, _transform.position + _transform.forward * 4f + _transform.up * 6f,
+            Instantiate(_missilePrefab,
+                _transform.position + _transform.forward * 4f + _transform.up * 3f,
                 _transform.rotation);
-            Instantiate(_missilePrefab, _transform.position + _transform.forward * 4f + _transform.up * 6f,
+            Instantiate(_missilePrefab,
+                _transform.position + _transform.forward * 4f + (_transform.right * -2f) + _transform.up * 3f,
                 _transform.rotation * Quaternion.Euler(0f, -10f, 0f));
-            Instantiate(_missilePrefab, _transform.position + _transform.forward * 4f + _transform.up * 6f,
+            Instantiate(_missilePrefab,
+                _transform.position + _transform.forward * 4f + (_transform.right * 2f) + _transform.up * 3f,
                 _transform.rotation * Quaternion.Euler(0f, 10f, 0f));
             return true;
         }

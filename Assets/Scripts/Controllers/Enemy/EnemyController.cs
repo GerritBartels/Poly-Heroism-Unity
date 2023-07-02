@@ -10,18 +10,40 @@ namespace Controllers.Enemy
     {
         [SerializeField] protected float baseDamage = 25f;
 
-        [SerializeField] protected GameObject player;
-
         private Rigidbody _rigidbody;
         private Rigidbody _rigidbodyPlayer;
-        public T Enemy { get; private set; }
+
+        private T _enemy;
+
+        public T Enemy
+        {
+            get
+            {
+                if (_enemy is null)
+                {
+                    _enemy = CreateEnemy();
+                }
+
+                return _enemy;
+            }
+        }
 
         protected void Start()
         {
-            Enemy = CreateEnemy();
             _rigidbodyPlayer = player.GetComponent<Rigidbody>();
             _rigidbody = GetComponent<Rigidbody>();
             _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+        }
+
+        public override Model.Enemy.Enemy GetEnemy() => Enemy;
+
+        public void OnCollisionEnter(Collision other)
+        {
+            // Prevent enemies from falling through the planet
+            if (other.gameObject.CompareTag("Bedrock"))
+            {
+                transform.position += (transform.up * 0.25f);
+            }
         }
 
         protected abstract T CreateEnemy();
@@ -39,21 +61,23 @@ namespace Controllers.Enemy
             Destroy(gameObject);
         }
 
+        protected void RotateTowardsPlayer()
+        {
+            // Rotate whilst keeping orientation perpendicular to the planet
+            Vector3 up = transform.position.normalized;
+            Vector3 targetDir = _rigidbodyPlayer.position.normalized;
+            Vector3 forward = targetDir - up * Vector3.Dot(targetDir, up);
+            transform.rotation = Quaternion.LookRotation(forward.normalized, up.normalized);
+        }
+
         protected void MoveTowardsPlayer()
         {
-            var position = _rigidbody.position;
-            var moveDirection = SelfToPlayerVector().normalized;
-            _rigidbody.MovePosition(position +
-                                    transform.TransformDirection(moveDirection) * (Enemy.Speed * Time.deltaTime));
-            // TODO: rotate into player direction
+            _rigidbody.MovePosition(_rigidbody.position + transform.forward * (Enemy.Speed * Time.deltaTime));
         }
 
         protected void MoveAwayFromPlayer()
         {
-            var position = _rigidbody.position;
-            var moveDirection = -SelfToPlayerVector().normalized;
-            _rigidbody.MovePosition(position +
-                                    transform.TransformDirection(moveDirection) * (Enemy.Speed * Time.deltaTime));
+            _rigidbody.MovePosition(_rigidbody.position - transform.forward * (Enemy.Speed * Time.deltaTime));
         }
 
         protected Vector3 SelfToPlayerVector()

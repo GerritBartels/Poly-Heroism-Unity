@@ -11,7 +11,7 @@ namespace Model.Player.Abilities
         private static readonly int Shot = Animator.StringToHash("scatterShot");
 
         public ScatterShot(Transform transform, GameObject prefab, Animator animator) :
-            base(cooldown: 5f, globalCooldown: 1.8f, resourceCost: 20f, blockMovementFor: 1.8f, baseDamage: 15f)
+            base(cooldown: 5f, globalCooldown: 1.8f, resourceCost: 20f, blockMovementFor: 1.8f, baseDamage: 50f)
         {
             _transform = transform;
             _prefab = prefab;
@@ -20,16 +20,16 @@ namespace Model.Player.Abilities
 
         public override void PerformAbility(PlayerModel playerModel)
         {
-            var obj1 = Instantiate(_prefab, _transform.position + (_transform.forward * 0.7f) + _transform.up,
+            var obj1 = Instantiate(_prefab, _transform.position + (_transform.forward * 0.5f) + _transform.up,
                 _transform.rotation);
             var obj2 = Instantiate(
                 _prefab,
-                _transform.position + (_transform.forward * 0.7f) + (_transform.right * -1.0f) + _transform.up,
+                _transform.position + (_transform.forward * 0.5f) + (_transform.right * -0.3f) + _transform.up,
                 _transform.rotation * Quaternion.Euler(0f, -10f, 0f)
             );
             var obj3 = Instantiate(
                 _prefab,
-                _transform.position + (_transform.forward * 0.7f) + (_transform.right * 1.0f) + _transform.up,
+                _transform.position + (_transform.forward * 0.5f) + (_transform.right * 0.3f) + _transform.up,
                 _transform.rotation * Quaternion.Euler(0f, 10f, 0f)
             );
 

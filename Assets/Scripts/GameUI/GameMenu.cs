@@ -40,6 +40,16 @@ namespace GameUI
             }
         }
 
+        void OnApplicationQuit()
+        {
+            // Delete player stats and level
+            PlayerPrefs.DeleteKey("Strength");
+            PlayerPrefs.DeleteKey("Agility");
+            PlayerPrefs.DeleteKey("Intelligence");
+            PlayerPrefs.DeleteKey("Level");
+            Debug.Log("Application ending after " + Time.time + " seconds");
+        }
+
         /// <summary>
         /// <c>Pause</c> activates the pause menu and pauses the game by freezing time.
         /// Also deactivates the player's resource and ability UI.

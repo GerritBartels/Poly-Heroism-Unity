@@ -15,7 +15,7 @@ namespace Controllers.Enemy
         private new void Start()
         {
             base.Start();
-            baseDamage = 15;
+            baseDamage = 10;
             _playerController = player.GetComponent<PlayerController>();
         }
 
@@ -26,11 +26,16 @@ namespace Controllers.Enemy
 
         private void Update()
         {
-            MoveTowardsPlayer();
+            RotateTowardsPlayer();
             if (Enemy.Attack())
             {
                 _playerController.Damage(baseDamage);
             }
+        }
+
+        private void FixedUpdate()
+        {
+            MoveTowardsPlayer();
         }
     }
 }

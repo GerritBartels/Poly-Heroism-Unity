@@ -8,9 +8,10 @@ using TMPro;
 
 namespace Controllers.UI
 {
-    public class ResourceBarController : MonoBehaviour
+    public abstract class ResourceBarController : MonoBehaviour
     {
-        protected Resource Resource { get; set; }
+        protected PlayerController Player;
+        protected abstract Resource Resource { get;}
 
         private Slider _slider;
         private TMP_Text _valueText;
@@ -18,6 +19,7 @@ namespace Controllers.UI
         // Start is called before the first frame update
         protected void Awake()
         {
+            Player = GameObject.Find("Player").GetComponent<PlayerController>();
             _slider = GetComponent<Slider>();
             _valueText = GetComponentInChildren<TMP_Text>();
         }

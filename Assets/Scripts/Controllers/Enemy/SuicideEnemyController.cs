@@ -26,12 +26,18 @@ namespace Controllers.Enemy
 
         private void Update()
         {
-            MoveTowardsPlayer();
+            RotateTowardsPlayer();
             if (Enemy.Attack())
             {
                 _playerController.Damage(baseDamage);
+                Enemy.TakeDamage(Enemy.Health.MaxValue);
                 Destroy(gameObject);
             }
+        }
+
+        private void FixedUpdate()
+        {
+            MoveTowardsPlayer();
         }
     }
 }
