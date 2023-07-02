@@ -1,4 +1,6 @@
-﻿namespace Model.Enemy
+﻿using UnityEngine;
+
+namespace Model.Enemy
 {
     public class Enemy
     {

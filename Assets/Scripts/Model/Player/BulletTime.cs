@@ -2,20 +2,14 @@ using System.Collections;
 using UnityEditor;
 using UnityEngine;
 
-namespace Model.Player.Abilities
+namespace Model.Player
 {
     /// <summary>
-    /// <c>BulletTime</c> is an ability that implements the <see cref="IAbility{T}"/> interface and allows the player to slow down time.
+    /// <c>BulletTime</c> is an ability that allows the player to slow down time.
     /// </summary>
-    public class BulletTime : IAbility<PlayerModel>
+    public class BulletTime
     {
-        public float CooldownTime => 0;
-        public float GlobalCooldown => 0;
-
-        public Cooldown Cooldown { get; } = new();
-
-        public float ResourceCost { get; }
-        public float CooldownTimeRemaining() => 0;
+        private float ResourceCost { get; }
 
         private readonly float _tickSpeed = 0.1f;
 
@@ -36,9 +30,9 @@ namespace Model.Player.Abilities
         }
 
         /// <summary>
-        /// <c>PerformAbility</c> activates the Bullet Time ability by lowering the in-game time scale in Unity.
+        /// <c>Activate</c> activates the Bullet Time ability by lowering the in-game time scale in Unity.
         /// </summary>
-        protected void PerformAbility()
+        private void Activate()
         {
             Time.timeScale = 0.4f;
             Time.fixedDeltaTime = 0.02f * Time.timeScale;
@@ -67,7 +61,7 @@ namespace Model.Player.Abilities
         {
             if (!_bulletTimeActive)
             {
-                PerformAbility();
+                Activate();
                 _behaviour.StartCoroutine(ManaDrain(playerModel.Mana));
                 return true;
             }
