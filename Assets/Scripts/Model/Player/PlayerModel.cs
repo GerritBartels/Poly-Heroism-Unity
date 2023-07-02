@@ -78,7 +78,7 @@ namespace Model.Player
         }
 
         /// <summary>
-        /// calculates the multiplicative modifier for physical attack damage based on the skilled attributes
+        /// <c>PhysicalDamageModificator</c> calculates the multiplicative modifier for physical attack damage based on the skilled attributes
         /// </summary>
         /// <returns>
         /// the multiplicative modifier for all physical attacks
@@ -86,7 +86,7 @@ namespace Model.Player
         public float PhysicalDamageModificator() => 1f + Strength / 100f;
 
         /// <summary>
-        /// calculates the multiplicative modifier for magic attack damage based on the skilled attributes
+        /// <c>MagicDamageModificator</c> calculates the multiplicative modifier for magic attack damage based on the skilled attributes
         /// </summary>
         /// <returns>
         /// the multiplicative modifier for all magic attacks
@@ -94,7 +94,7 @@ namespace Model.Player
         public float MagicDamageModificator() => 1f + Intelligence / 100f;
 
         /// <summary>
-        /// calculates the multiplicative modifier for movement speed based on the skilled attributes
+        /// <c>SpeedModificator</c> calculates the multiplicative modifier for movement speed based on the skilled attributes
         /// </summary>
         /// <returns>
         /// the multiplicative modifier for movement speed
@@ -102,7 +102,7 @@ namespace Model.Player
         public float SpeedModificator() => 1f + Agility / 100f;
 
         /// <summary>
-        /// indicates if the player has skill points to invest into attributes
+        /// <c>HasSkillPoints</c> indicates if the player has skill points to invest into attributes
         /// </summary>
         public bool HasSkillPoints()
         {
@@ -110,7 +110,7 @@ namespace Model.Player
         }
 
         /// <summary>
-        /// player lvl up by granting 5 additional <see cref="AttributePoints"/>
+        /// <c>OnLvlUp</c> applies a player lvl up by granting 5 additional <see cref="AttributePoints"/>
         /// </summary>
         public void OnLvlUp()
         {
