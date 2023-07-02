@@ -10,6 +10,7 @@ In our game, you will play a tiny knight that has to fight its way through waves
 - **Sprint** by holding down ```shift```
 - Activate/Deactivate **Bullettime** by hitting ```spacebar```
 - **Attack** using ```left/right mouse click```, ```1``` and ```2```
+- **Rotate** player by ```moving the mouse horizontally```
 
 # Showcase
 
