@@ -12,7 +12,6 @@ namespace Controllers
         private void Awake()
         {
             lifeSpan = 0.1f;
-            damage = 100f;
         }
     }
 }

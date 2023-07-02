@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using Unity.VisualScripting;
+using UnityEngine;
 
 namespace Model.Player
 {
@@ -8,11 +10,11 @@ namespace Model.Player
     /// </summary>
     public class PlayerModel
     {
-        public Resource Health { get; }
+        public Resource Health { get; private set; }
 
-        public Resource Stamina { get; }
+        public Resource Stamina { get; private set; }
 
-        public Resource Mana { get; }
+        public Resource Mana { get; private set; }
 
         private const float StaminaDrain = 20f;
         private readonly float _baseSpeed;
@@ -27,6 +29,118 @@ namespace Model.Player
 
         private readonly Cooldown _blockMovement = new();
 
+        private int _attributePoints = 1;
+        private int AttributePoints => _attributePoints;
+
+        private int _strength = 1;
+
+        /// <summary>
+        /// <c>Strength</c> property that determines the amount of strength of the player
+        /// </summary>
+        public int Strength
+        {
+            get => _strength;
+            set
+            {
+                _strength = value;
+                Health = new Resource(Health.RegenerationRate, 100f + _strength, Health.Value);
+            }
+        }
+
+        private int _intelligence = 1;
+
+        /// <summary>
+        /// <c>Strength</c> property that determines the amount of Intelligence of the player
+        /// </summary>
+        public int Intelligence
+        {
+            get => _intelligence;
+            set
+            {
+                _intelligence = value;
+                Mana = new Resource(Mana.RegenerationRate, 100f + _intelligence, Mana.Value);
+            }
+        }
+
+        private int _agility = 1;
+
+        /// <summary>
+        /// <c>Agility</c> property that determines the amount of Agility of the player
+        /// </summary>
+        public int Agility
+        {
+            get => _agility;
+            set
+            {
+                _agility = value;
+                Stamina = new Resource(Stamina.RegenerationRate, 100f + _agility, Stamina.Value);
+            }
+        }
+
+        /// <summary>
+        /// <c>PhysicalDamageModificator</c> calculates the multiplicative modifier for physical attack damage based on the skilled attributes
+        /// </summary>
+        /// <returns>
+        /// the multiplicative modifier for all physical attacks
+        /// </returns>
+        public float PhysicalDamageModificator() => 1f + Strength / 100f;
+
+        /// <summary>
+        /// <c>MagicDamageModificator</c> calculates the multiplicative modifier for magic attack damage based on the skilled attributes
+        /// </summary>
+        /// <returns>
+        /// the multiplicative modifier for all magic attacks
+        /// </returns>
+        public float MagicDamageModificator() => 1f + Intelligence / 100f;
+
+        /// <summary>
+        /// <c>SpeedModificator</c> calculates the multiplicative modifier for movement speed based on the skilled attributes
+        /// </summary>
+        /// <returns>
+        /// the multiplicative modifier for movement speed
+        /// </returns>
+        public float SpeedModificator() => 1f + Agility / 100f;
+
+        /// <summary>
+        /// <c>HasSkillPoints</c> indicates if the player has skill points to invest into attributes
+        /// </summary>
+        public bool HasSkillPoints()
+        {
+            return AttributePoints > 0;
+        }
+
+        /// <summary>
+        /// <c>OnLvlUp</c> applies a player lvl up by granting 5 additional <see cref="AttributePoints"/>
+        /// </summary>
+        public void OnLvlUp()
+        {
+            _attributePoints += 5;
+        }
+
+        private bool IncreaseAttribute(Action<int> attribute)
+        {
+            if (!HasSkillPoints()) return false;
+            attribute(1);
+            _attributePoints -= 1;
+            return true;
+        }
+
+        /// <summary>
+        /// invests one of the <see cref="AttributePoints"/> int to the <see cref="Strength"/> attribute
+        /// </summary>
+        public bool IncreaseStrength() => IncreaseAttribute((i) => _strength += i);
+
+        /// <summary>
+        /// invests one of the <see cref="AttributePoints"/> int to the <see cref="Agility"/> attribute
+        /// </summary>
+        public bool IncreaseAgility() => IncreaseAttribute((i) => _agility += i);
+
+        /// <summary>
+        /// invests one of the <see cref="AttributePoints"/> int to the <see cref="Intelligence"/> attribute
+        /// </summary>
+        public bool IncreaseIntelligence() => IncreaseAttribute((i) => _intelligence += i);
+
+
         /// <summary>
         /// Constructor that initializes a <c>PlayerModel</c> with a given <c>baseSpeed</c>.
         /// Also sets the sprinting speed and instantiates the respective resources (see <see cref="Model.Resource"/>).
@@ -37,9 +151,9 @@ namespace Model.Player
             _baseSpeed = baseSpeed;
             _sprintSpeed = _baseSpeed * 2f;
             _speed = _baseSpeed;
-            Health = new Resource(1f);
-            Stamina = new Resource(3f);
-            Mana = new Resource(2f);
+            Health = new Resource(2f, 100f + _strength, 100f + _strength);
+            Stamina = new Resource(7f, 100 + _agility, 100f + _strength);
+            Mana = new Resource(5f, 100f + _intelligence, 100f + _strength);
         }
 
         /// <summary>
@@ -62,12 +176,10 @@ namespace Model.Player
         /// </param>
         public void UseAbility(IAbility<PlayerModel> ability)
         {
-            if (!GlobalCooldownActive())
+            if (GlobalCooldownActive()) return;
+            if (ability.Use(this))
             {
-                if (ability.Use(this))
-                {
-                    _globalCooldown.Apply(ability.GlobalCooldown);
-                }
+                _globalCooldown.Apply(ability.GlobalCooldown);
             }
         }
 
@@ -77,7 +189,7 @@ namespace Model.Player
         /// </summary>
         public float Speed
         {
-            get => _speed;
+            get => _speed * SpeedModificator();
             private set
             {
                 _speed = value;
@@ -206,6 +318,16 @@ namespace Model.Player
             Stamina.Regenerate(duration);
             Health.Regenerate(duration);
             Mana.Regenerate(duration);
+        }
+
+        /// <summary>
+        /// <c>Reset</c> resets the the player's <c>Stamina</c>, <c>Health</c>, and <c>Mana</c> resources by calling their <see cref="Model.Resource.Reset"/> method for a given duration.
+        /// </summary>
+        public void Reset()
+        {
+            Stamina.Reset();
+            Health.Reset();
+            Mana.Reset();
         }
     }
 }

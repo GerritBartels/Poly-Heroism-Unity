@@ -5,9 +5,10 @@ namespace Controllers
 {
     public abstract class PlayerAttackControllerBase : MonoBehaviour
     {
-        [SerializeField] protected float damage = 10f;
+        public float Damage { get; set; }
 
         [SerializeField] protected float lifeSpan = 1f;
+
 
         public void Update()
         {
@@ -25,7 +26,7 @@ namespace Controllers
             if (other.CompareTag("Enemy"))
             {
                 var enemy = other.GetComponent<AbstractEnemyController>();
-                enemy.TakeDamage(damage);
+                enemy.TakeDamage(Damage);
                 Destroy(gameObject);
             }
             else if (other.CompareTag("Terrain"))
