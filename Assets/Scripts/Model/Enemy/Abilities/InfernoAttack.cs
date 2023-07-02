@@ -7,14 +7,12 @@ namespace Model.Enemy.Abilities
     {
         private readonly GameObject _fireBallPrefab;
         private readonly Transform _transform;
-        private readonly Func<Vector3> _selfToPlayerVector;
 
-        public InfernoAttack(GameObject fireBallPrefab, Transform transform, Func<Vector3> selfToPlayerVector) :
+        public InfernoAttack(GameObject fireBallPrefab, Transform transform) :
             base(3f, 3f)
         {
             _fireBallPrefab = fireBallPrefab;
             _transform = transform;
-            _selfToPlayerVector = selfToPlayerVector;
         }
 
         protected override bool PerformAbility(Enemy enemy)
@@ -23,12 +21,12 @@ namespace Model.Enemy.Abilities
                 _transform.rotation);
             Instantiate(
                 _fireBallPrefab,
-                _transform.position + _transform.forward * 3f + (_transform.right * -0.3f) + _transform.up,
+                _transform.position + _transform.forward * 3f + (_transform.right * -1f) + _transform.up,
                 _transform.rotation * Quaternion.Euler(0f, -10f, 0f)
             );
             Instantiate(
                 _fireBallPrefab,
-                _transform.position + _transform.forward * 3f + (_transform.right * 0.3f) + _transform.up,
+                _transform.position + _transform.forward * 3f + (_transform.right * 1f) + _transform.up,
                 _transform.rotation * Quaternion.Euler(0f, 10f, 0f)
             );
             return true;
