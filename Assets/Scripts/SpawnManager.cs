@@ -24,7 +24,7 @@ public class SpawnManager : MonoBehaviour
 
     private PlayerModel _playerModel;
 
-    private readonly IList<Enemy> _enemies = new List<Enemy>();
+    private readonly IList<AbstractEnemyController> _enemies = new List<AbstractEnemyController>();
 
     private float _planetRadius;
 
@@ -48,11 +48,11 @@ public class SpawnManager : MonoBehaviour
             Debug.Log("radius" + _planetRadius);
             StartCoroutine(SpawnSystem());
         }
-        Debug.Log("enemies" + _enemies.Count);
-        if (_currentWave >= waves && _enemies.All(enemy => !enemy.IsAlive))
-        {
-            OnLvlCompleted();
-        }
+        
+        Debug.Log("all alive" + _enemies.Any(enemy => enemy.GetEnemy().IsAlive));
+        if (_currentWave < waves || _enemies.Any(enemy => enemy.GetEnemy().IsAlive)) return;
+        Debug.Log("Finished");
+        OnLvlCompleted();
     }
 
     public void OnLvlCompleted()
@@ -71,9 +71,8 @@ public class SpawnManager : MonoBehaviour
     /// </summary>
     /// <param name="planetRadius">the radius of the planet</param>
     /// <param name="enemiesToSpawn">enemy prefabs to be spawned</param>
-    public IList<GameObject> SpawnEnemies(float planetRadius, IEnumerable<GameObject> enemiesToSpawn)
+    public void SpawnEnemies(float planetRadius, IEnumerable<GameObject> enemiesToSpawn)
     {
-        var spawns = new List<GameObject>();
         // Exclude the "Planet" layer for the first layer mask and include only it for the second layer mask
         var planetLayer = LayerMask.NameToLayer("Planet");
         var layerMask = ~(1 << planetLayer);
@@ -85,17 +84,10 @@ public class SpawnManager : MonoBehaviour
             // Sample a random point on the sphere
             // Check for collisions, excluding the "Planet" layer
             RaycastHit hit = default;
-            var tries = 0;
             while (Physics.CheckSphere(spawnPosition, minDistance, layerMask) && !Physics.Raycast(spawnPosition,
-                       -spawnPosition.normalized, out hit, planetRadius, layerMask2) && tries < 1000)
+                       -spawnPosition.normalized, out hit, planetRadius, layerMask2))
             {
                 spawnPosition = GetRandomSpawnPosition(planetRadius);
-                tries++;
-            }
-
-            if (tries > 1000)
-            {
-                continue;
             }
 
             spawnPosition = hit.point;
@@ -104,13 +96,12 @@ public class SpawnManager : MonoBehaviour
             var spawnRotation = Quaternion.FromToRotation(Vector3.up, spawnPosition.normalized);
             // Instantiate a random prefab at the sampled position and rotation
             var spawnedPrefab = Instantiate(enemyPrefab, spawnPosition, spawnRotation);
-            spawnedPrefab.GetComponent<AbstractEnemyController>().player = player;
-            spawns.Add(spawnedPrefab);
+            var controller = spawnedPrefab.GetComponent<AbstractEnemyController>();
+            controller.player = player;
+            _enemies.Add(controller);
             // Randomize the rotation of the spawned prefab and parent it to the planet
             RandomizePrefabRotation(spawnedPrefab.transform);
         }
-
-        return spawns;
     }
 
     /// <summary>
@@ -135,31 +126,28 @@ public class SpawnManager : MonoBehaviour
 
     private IEnumerator SpawnSystem()
     {
+        var spawnsPerWave = 1f;
+        var spawnDelay = 4f;
+        var pauseAfterWave = 10f;
         // SPAWNING
-        while (_currentWave <= waves && _playerModel.IsAlive)
+        // TDOD: if player is alive
+        for (var i = 0; i < waves; i++)
         {
-            var duration = 4f; //TODO: dynamic
-            var spawnDelay = 4f;
-            StartCoroutine(Wave(duration, spawnDelay));
-            yield return new WaitForSeconds(duration);
+            for (var j = 0; j < spawnsPerWave; j++)
+            {
+                yield return new WaitForSeconds(spawnDelay);
+                SpawnEnemies(_planetRadius, GenerateEnemies());
+                Debug.Log("enemies spawned");
+            }
+
+            yield return new WaitForSeconds(pauseAfterWave);
+            Debug.Log("wave end:" + _currentWave);
             _currentWave += 1;
         }
 
-        SpawnBoss();
-        yield return null;
-    }
-
-    private IEnumerator Wave(float duration, float spawnDelay)
-    {
-        var endWave = Time.time + duration;
-        while (endWave > Time.time && _playerModel.IsAlive)
-        {
-            var enemies = SpawnEnemies(_planetRadius, GenerateEnemies());
-            _enemies.AddRange(enemies.Select(e => e.GetComponent<AbstractEnemyController>().GetEnemy()));
-            yield return new WaitForSeconds(spawnDelay);
-        }
-
-        yield return null;
+        // spawn boss
+        SpawnEnemies(_planetRadius, new[] { bossEnemyPrefab });
+        // add boss health bar
     }
 
     private IEnumerable<GameObject> GenerateEnemies() => Enumerable.Range(0, EnemiesInWave())
@@ -168,12 +156,5 @@ public class SpawnManager : MonoBehaviour
     private int EnemiesInWave()
     {
         return 1; //TODO: dynamic
-    }
-
-    private void SpawnBoss()
-    {
-        var boss = SpawnEnemies(_planetRadius, new[] { bossEnemyPrefab }).First();
-        Debug.Log(boss.GetComponent<AbstractEnemyController>().GetEnemy());
-        _enemies.Add(boss.GetComponent<AbstractEnemyController>().GetEnemy());
     }
 }

@@ -9,14 +9,27 @@ namespace Controllers.Enemy
     public abstract class EnemyController<T> : AbstractEnemyController where T : Model.Enemy.Enemy
     {
         [SerializeField] protected float baseDamage = 25f;
-        
+
         private Rigidbody _rigidbody;
         private Rigidbody _rigidbodyPlayer;
-        public T Enemy { get; private set; }
+
+        private T _enemy;
+
+        public T Enemy
+        {
+            get
+            {
+                if (_enemy is null)
+                {
+                    _enemy = CreateEnemy();
+                }
+
+                return _enemy;
+            }
+        }
 
         protected void Start()
         {
-            Enemy = CreateEnemy();
             _rigidbodyPlayer = player.GetComponent<Rigidbody>();
             _rigidbody = GetComponent<Rigidbody>();
             _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
@@ -30,7 +43,6 @@ namespace Controllers.Enemy
             if (other.gameObject.CompareTag("Bedrock"))
             {
                 transform.position += (transform.up * 0.25f);
-
             }
         }
 
