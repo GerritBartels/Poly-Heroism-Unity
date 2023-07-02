@@ -177,6 +177,6 @@ public class SpawnManager : MonoBehaviour
 
     private int EnemiesInWave()
     {
-        return 1; // baseEnemiesPerSpawn + _lvl + _currentWave;
+        return baseEnemiesPerSpawn + _lvl + _currentWave;
     }
 }
