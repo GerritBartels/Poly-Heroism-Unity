@@ -19,6 +19,16 @@ namespace GameUI
         [SerializeField] private GameObject mainMenuUI;
         [SerializeField] private GameObject settingsMenuUI;
 
+        void OnApplicationQuit()
+        {
+            // Delete player stats and level
+            PlayerPrefs.DeleteKey("Strength");
+            PlayerPrefs.DeleteKey("Agility");
+            PlayerPrefs.DeleteKey("Intelligence");
+            PlayerPrefs.DeleteKey("Level");
+            Debug.Log("Application ending after " + Time.time + " seconds");
+        }
+
         /// <summary>
         /// <c>PlayGame</c> is hooked up to the "Play" button which, when clicked, loads the next scene. 
         /// </summary>

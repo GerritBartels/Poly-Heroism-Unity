@@ -29,8 +29,8 @@ namespace Model.Player
 
         private readonly Cooldown _blockMovement = new();
 
-        private int _attributePoints = 1;
-        private int AttributePoints => _attributePoints;
+        private int _attributePoints = 0;
+        public int AttributePoints => _attributePoints;
 
         private int _strength = 1;
 

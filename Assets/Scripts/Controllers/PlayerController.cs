@@ -58,8 +58,11 @@ namespace Controllers
 
         private void Start()
         {
-            // Load mouse sensitivity from PlayerPrefs
+            // Load mouse sensitivity and player stats from PlayerPrefs
             rotationSpeed = PlayerPrefs.GetFloat("mouseSensitivity", 2000);
+            PlayerModel.Strength = PlayerPrefs.GetInt("Strength", 1);
+            PlayerModel.Agility = PlayerPrefs.GetInt("Agility", 1);
+            PlayerModel.Intelligence = PlayerPrefs.GetInt("Intelligence", 1);
 
             _animator = GetComponent<Animator>();
 
