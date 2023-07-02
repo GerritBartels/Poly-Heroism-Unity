@@ -9,9 +9,7 @@ namespace Controllers.Enemy
     public abstract class EnemyController<T> : AbstractEnemyController where T : Model.Enemy.Enemy
     {
         [SerializeField] protected float baseDamage = 25f;
-
-        [SerializeField] protected GameObject player;
-
+        
         private Rigidbody _rigidbody;
         private Rigidbody _rigidbodyPlayer;
         public T Enemy { get; private set; }
@@ -23,6 +21,8 @@ namespace Controllers.Enemy
             _rigidbody = GetComponent<Rigidbody>();
             _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         }
+
+        public override Model.Enemy.Enemy GetEnemy() => Enemy;
 
         protected abstract T CreateEnemy();
 
