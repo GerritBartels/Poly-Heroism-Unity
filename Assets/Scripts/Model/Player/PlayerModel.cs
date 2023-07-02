@@ -68,15 +68,41 @@ namespace Model.Player
             }
         }
 
+        /// <summary>
+        /// calculates the multiplicative modifier for physical attack damage based on the skilled attributes
+        /// </summary>
+        /// <returns>
+        /// the multiplicative modifier for all physical attacks
+        /// </returns>
         public float PhysicalDamageModificator() => 1f + Strength / 100f;
+
+        /// <summary>
+        /// calculates the multiplicative modifier for magic attack damage based on the skilled attributes
+        /// </summary>
+        /// <returns>
+        /// the multiplicative modifier for all magic attacks
+        /// </returns>
         public float MagicDamageModificator() => 1f + Intelligence / 100f;
+
+        /// <summary>
+        /// calculates the multiplicative modifier for movement speed based on the skilled attributes
+        /// </summary>
+        /// <returns>
+        /// the multiplicative modifier for movement speed
+        /// </returns>
         public float SpeedModificator() => 1f + Agility / 100f;
 
-        private bool HasSkillPoints()
+        /// <summary>
+        /// indicates if the player has skill points to invest into attributes
+        /// </summary>
+        public bool HasSkillPoints()
         {
             return AttributePoints > 0;
         }
 
+        /// <summary>
+        /// player lvl up by granting 5 additional <see cref="AttributePoints"/>
+        /// </summary>
         public void OnLvlUp()
         {
             _attributePoints += 5;
@@ -90,8 +116,19 @@ namespace Model.Player
             return true;
         }
 
+        /// <summary>
+        /// invests one of the <see cref="AttributePoints"/> int to the <see cref="Strength"/> attribute
+        /// </summary>
         public bool IncreaseStrength() => IncreaseAttribute((i) => _strength += i);
+
+        /// <summary>
+        /// invests one of the <see cref="AttributePoints"/> int to the <see cref="Agility"/> attribute
+        /// </summary>
         public bool IncreaseAgility() => IncreaseAttribute((i) => _agility += i);
+
+        /// <summary>
+        /// invests one of the <see cref="AttributePoints"/> int to the <see cref="Intelligence"/> attribute
+        /// </summary>
         public bool IncreaseIntelligence() => IncreaseAttribute((i) => _intelligence += i);
 
 
