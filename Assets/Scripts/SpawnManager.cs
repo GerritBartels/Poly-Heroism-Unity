@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Controllers;
 using Controllers.Enemy;
-using Model.Enemy;
 using Model.Player;
-using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -17,24 +15,30 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private GameObject bossEnemyPrefab;
     private GameObject[] _enemyPrefabs;
 
-    [SerializeField] private float minDistance = 0.5f;
+    [SerializeField] private float minDistance = 2f;
     [SerializeField] private GameObject player;
-    [SerializeField] private int waves = 4;
-    private int _currentWave = 1;
+
+    // TODO: balancing!!!
+    [SerializeField] private int waves = 2;
+    [SerializeField] private int baseEnemiesPerSpawn = 1;
+    [SerializeField] private int spawnsPerWave = 1;
+    [SerializeField] private float spawnDelay = 15f;
+    [SerializeField] private float pauseAfterWave = 30f;
 
     private PlayerModel _playerModel;
 
     private readonly IList<AbstractEnemyController> _enemies = new List<AbstractEnemyController>();
 
+    private bool _bossSpawned = false;
     private float _planetRadius;
+    private int _lvl = 0; //TODO: load
 
-    private int _lvl = 1; //TODO: load
+    private int _currentWave = 0;
 
     public void Start()
     {
         _playerModel = player.GetComponent<PlayerController>().PlayerModel;
         _enemyPrefabs = new[] { suicideEnemyPrefab, rangedEnemyPrefab, meleeEnemyPrefab };
-        //StartCoroutine(SpawnSystem());
     }
 
     private bool _started = false;
@@ -44,13 +48,11 @@ public class SpawnManager : MonoBehaviour
         if (!_started)
         {
             _started = true;
-            _planetRadius = 15; // TODO: GetComponent<GameObject>().transform.localScale.x;
-            Debug.Log("radius" + _planetRadius);
+            _planetRadius = 15; // TODO: dynamic: GetComponent<GameObject>().transform.localScale.x;
             StartCoroutine(SpawnSystem());
         }
-        
-        Debug.Log("all alive" + _enemies.Any(enemy => enemy.GetEnemy().IsAlive));
-        if (_currentWave < waves || _enemies.Any(enemy => enemy.GetEnemy().IsAlive)) return;
+
+        if (!_bossSpawned || _enemies.Any(enemy => enemy.GetEnemy().IsAlive)) return;
         Debug.Log("Finished");
         OnLvlCompleted();
     }
@@ -126,27 +128,24 @@ public class SpawnManager : MonoBehaviour
 
     private IEnumerator SpawnSystem()
     {
-        var spawnsPerWave = 1f;
-        var spawnDelay = 4f;
-        var pauseAfterWave = 10f;
         // SPAWNING
-        // TDOD: if player is alive
-        for (var i = 0; i < waves; i++)
+        // TODO: if player is alive
+        for (_currentWave = 0; _currentWave < waves; _currentWave++)
         {
+            Debug.Log("wave: " + _currentWave);
             for (var j = 0; j < spawnsPerWave; j++)
             {
                 yield return new WaitForSeconds(spawnDelay);
+                Debug.Log("sub wave: " + j);
                 SpawnEnemies(_planetRadius, GenerateEnemies());
-                Debug.Log("enemies spawned");
             }
 
             yield return new WaitForSeconds(pauseAfterWave);
-            Debug.Log("wave end:" + _currentWave);
-            _currentWave += 1;
         }
 
         // spawn boss
         SpawnEnemies(_planetRadius, new[] { bossEnemyPrefab });
+        _bossSpawned = true;
         // add boss health bar
     }
 
@@ -155,6 +154,6 @@ public class SpawnManager : MonoBehaviour
 
     private int EnemiesInWave()
     {
-        return 1; //TODO: dynamic
+        return baseEnemiesPerSpawn + _lvl + _currentWave;
     }
 }

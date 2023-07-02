@@ -11,7 +11,7 @@ namespace Model.Player.Abilities
         private static readonly int Shot = Animator.StringToHash("scatterShot");
 
         public ScatterShot(Transform transform, GameObject prefab, Animator animator) :
-            base(cooldown: 5f, globalCooldown: 2.7f, resourceCost: 20f, blockMovementFor: 2.7f, baseDamage: 15f)
+            base(cooldown: 5f, globalCooldown: 2.7f, resourceCost: 20f, blockMovementFor: 2.7f, baseDamage: 50f)
         {
             _transform = transform;
             _prefab = prefab;
