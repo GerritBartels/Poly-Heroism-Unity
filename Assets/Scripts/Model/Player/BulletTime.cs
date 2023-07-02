@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Model.Player
 {
     /// <summary>
-    /// <c>BulletTime</c> is an ability that implements the <see cref="IAbility{T}"/> interface and allows the player to slow down time.
+    /// <c>BulletTime</c> is an ability that allows the player to slow down time.
     /// </summary>
     public class BulletTime
     {

@@ -34,6 +34,9 @@ namespace Model.Player
 
         private int _strength = 1;
 
+        /// <summary>
+        /// <c>Strength</c> property that determines the amount of strength of the player
+        /// </summary>
         public int Strength
         {
             get => _strength;
@@ -46,6 +49,9 @@ namespace Model.Player
 
         private int _intelligence = 1;
 
+        /// <summary>
+        /// <c>Strength</c> property that determines the amount of Intelligence of the player
+        /// </summary>
         public int Intelligence
         {
             get => _intelligence;
@@ -58,6 +64,9 @@ namespace Model.Player
 
         private int _agility = 1;
 
+        /// <summary>
+        /// <c>Agility</c> property that determines the amount of Agility of the player
+        /// </summary>
         public int Agility
         {
             get => _agility;
