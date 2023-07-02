@@ -3,12 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using Controllers;
 using Controllers.Enemy;
+using GameUI;
 using Model.Player;
+using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class SpawnManager : MonoBehaviour
 {
+    [SerializeField] private GameObject lvlUpMenu;
+    [SerializeField] private GameObject resourcesView;
+    [SerializeField] private GameObject abilityView;
+    [SerializeField] private TMP_Text enemiesText;
+    [SerializeField] private TMP_Text waveText;
+
     [SerializeField] private GameObject suicideEnemyPrefab;
     [SerializeField] private GameObject rangedEnemyPrefab;
     [SerializeField] private GameObject meleeEnemyPrefab;
@@ -30,6 +38,8 @@ public class SpawnManager : MonoBehaviour
     private readonly IList<AbstractEnemyController> _enemies = new List<AbstractEnemyController>();
 
     private bool _bossSpawned = false;
+    private bool _finished = false;
+
     private float _planetRadius;
     private int _lvl = 0; //TODO: load
 
@@ -37,6 +47,7 @@ public class SpawnManager : MonoBehaviour
 
     public void Start()
     {
+        _lvl = PlayerPrefs.GetInt("Level", 1);
         _playerModel = player.GetComponent<PlayerController>().PlayerModel;
         _enemyPrefabs = new[] { suicideEnemyPrefab, rangedEnemyPrefab, meleeEnemyPrefab };
     }
@@ -45,6 +56,7 @@ public class SpawnManager : MonoBehaviour
 
     private void Update()
     {
+        if (_finished) return;
         if (!_started)
         {
             _started = true;
@@ -52,8 +64,10 @@ public class SpawnManager : MonoBehaviour
             StartCoroutine(SpawnSystem());
         }
 
+        enemiesText.text = "Enemies alive: " + _enemies.Count(e => e.GetEnemy().IsAlive);
+        waveText.text = "Current wave: " + _currentWave + "/" + waves;
         if (!_bossSpawned || _enemies.Any(enemy => enemy.GetEnemy().IsAlive)) return;
-        Debug.Log("Finished");
+        _finished = true;
         OnLvlCompleted();
     }
 
@@ -65,7 +79,11 @@ public class SpawnManager : MonoBehaviour
 
     private void ShowLvlFinishedScreen()
     {
-        //TODO
+        resourcesView.SetActive(false);
+        abilityView.SetActive(false);
+        lvlUpMenu.SetActive(true);
+        lvlUpMenu.GetComponentInParent<LevelUpMenu>().Activate();
+        PlayerPrefs.SetInt("Level", _lvl);
     }
 
     /// <summary>
@@ -86,13 +104,14 @@ public class SpawnManager : MonoBehaviour
             // Sample a random point on the sphere
             // Check for collisions, excluding the "Planet" layer
             RaycastHit hit = default;
-            while (Physics.CheckSphere(spawnPosition, minDistance, layerMask) && !Physics.Raycast(spawnPosition,
-                       -spawnPosition.normalized, out hit, planetRadius, layerMask2))
+            while
+                (Physics.CheckSphere(spawnPosition, minDistance,
+                    layerMask)) // && !Physics.Raycast(spawnPosition, -spawnPosition.normalized, out hit, planetRadius, layerMask2))
             {
                 spawnPosition = GetRandomSpawnPosition(planetRadius);
             }
 
-            spawnPosition = hit.point;
+            //spawnPosition = hit.point;
 
             // Calculate rotation so that the prefab is always facing outwards from the sphere
             var spawnRotation = Quaternion.FromToRotation(Vector3.up, spawnPosition.normalized);
@@ -114,7 +133,7 @@ public class SpawnManager : MonoBehaviour
     private Vector3 GetRandomSpawnPosition(float radius)
     {
         // An offset is added to the radius to avoid spawning objects inside the planet
-        return Random.onUnitSphere * (radius + 0.5f);
+        return Random.onUnitSphere * (radius + 2f);
     }
 
     /// <summary>
@@ -129,24 +148,28 @@ public class SpawnManager : MonoBehaviour
     private IEnumerator SpawnSystem()
     {
         // SPAWNING
-        // TODO: if player is alive
-        for (_currentWave = 0; _currentWave < waves; _currentWave++)
+        yield return new WaitForSeconds(spawnDelay);
+        for (_currentWave = 1; _currentWave <= waves && _playerModel.IsAlive; _currentWave++)
         {
-            Debug.Log("wave: " + _currentWave);
-            for (var j = 0; j < spawnsPerWave; j++)
+            for (var j = 0; j < spawnsPerWave && _playerModel.IsAlive; j++)
             {
-                yield return new WaitForSeconds(spawnDelay);
-                Debug.Log("sub wave: " + j);
                 SpawnEnemies(_planetRadius, GenerateEnemies());
+                yield return new WaitForSeconds(spawnDelay);
             }
 
             yield return new WaitForSeconds(pauseAfterWave);
         }
 
+        _currentWave--;
+
+        yield return new WaitForSeconds(pauseAfterWave);
         // spawn boss
-        SpawnEnemies(_planetRadius, new[] { bossEnemyPrefab });
-        _bossSpawned = true;
-        // add boss health bar
+        if (_playerModel.IsAlive)
+        {
+            SpawnEnemies(_planetRadius, new[] { bossEnemyPrefab });
+            _bossSpawned = true;
+            // TODO: add boss health bar
+        }
     }
 
     private IEnumerable<GameObject> GenerateEnemies() => Enumerable.Range(0, EnemiesInWave())
@@ -154,6 +177,6 @@ public class SpawnManager : MonoBehaviour
 
     private int EnemiesInWave()
     {
-        return baseEnemiesPerSpawn + _lvl + _currentWave;
+        return 1; // baseEnemiesPerSpawn + _lvl + _currentWave;
     }
 }
