@@ -88,34 +88,35 @@ namespace Controllers
 
         public void Update()
         {
+            if (!PlayerModel.IsAlive) return;
             // Attack
-            if (Input.GetKeyDown(KeyCode.Mouse0) && PlayerModel.IsAlive)
+            if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 PlayerModel.UseAbility(_rangedAttack);
             }
 
-            if (Input.GetKeyDown(KeyCode.Mouse1) && PlayerModel.IsAlive)
+            if (Input.GetKeyDown(KeyCode.Mouse1))
             {
                 PlayerModel.UseAbility(_meleeAttack);
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha1) && PlayerModel.IsAlive)
+            if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 PlayerModel.UseAbility(_scatterShot);
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha2) && PlayerModel.IsAlive)
+            if (Input.GetKeyDown(KeyCode.Alpha2))
             {
                 PlayerModel.UseAbility(_fireBall);
             }
 
-            if (Input.GetKeyDown(KeyCode.Space) && PlayerModel.IsAlive)
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 _bulletTime.Use(PlayerModel);
             }
 
             // Sprint or walk
-            if (Input.GetKey(KeyCode.LeftShift) && PlayerModel.IsAlive)
+            if (Input.GetKey(KeyCode.LeftShift))
             {
                 PlayerModel.Sprint();
             }
@@ -126,11 +127,11 @@ namespace Controllers
 
             // Pass the player's movement direction to the animator
             // Might make sense to inlcude a sideways movement animation as well for a and d
-            if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) && PlayerModel.IsAlive)
+            if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)))
             {
                 _animator.SetFloat(PlayerSpeed, PlayerModel.Speed);
             }
-            else if (Input.GetKey(KeyCode.S) && PlayerModel.IsAlive)
+            else if (Input.GetKey(KeyCode.S))
             {
                 _animator.SetFloat(PlayerSpeed, -PlayerModel.Speed);
             }
