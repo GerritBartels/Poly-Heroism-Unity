@@ -1,38 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Controllers.Enemy
 {
     public class HomingMissileAttackController : MonoBehaviour
     {
-        private Vector3 _direction;
-        private Rigidbody _rigidbody;
         private Rigidbody _playerRigidbody;
         [SerializeField] private float lifeSpan = 4f;
-        private readonly float _speed = 15f;
+        private readonly float _speed = 9f;
 
         private void Start()
         {
             _playerRigidbody = GameObject.Find("Player").GetComponent<Rigidbody>();
-            _rigidbody = GetComponent<Rigidbody>();
-        }
-
-        private Vector3 ToPlayerVec()
-        {
-            var position = _rigidbody.position;
-            var playerPosition = _playerRigidbody.position;
-            _direction = (playerPosition - position).normalized;
-            return _direction;
         }
 
         private void Update()
         {
-            // move HomingMissile
-            transform.Translate(ToPlayerVec() * (_speed * Time.deltaTime));
+            // Rotate whilst keeping orientation perpendicular to the planet
+            Vector3 up = transform.position.normalized;
+            Vector3 targetDir = _playerRigidbody.position.normalized;
+            Vector3 forward = targetDir - up * Vector3.Dot(targetDir, up);
+            if (forward != Vector3.zero)
+            {
+                transform.rotation = Quaternion.LookRotation(forward.normalized, up.normalized);
+            }
 
-            // DESTROY
+            // Move HomingMissile
+            transform.Translate(Vector3.forward * (_speed * Time.deltaTime));
+
+            // Destroy
             lifeSpan -= Time.deltaTime;
             if (lifeSpan <= 0)
             {
@@ -44,7 +39,7 @@ namespace Controllers.Enemy
         {
             if (other.CompareTag("Player"))
             {
-                other.GetComponentInParent<PlayerController>().Damage(20);
+                other.GetComponentInParent<PlayerController>().Damage(10);
                 Destroy(gameObject);
             }
             else if (other.CompareTag("Terrain") || other.CompareTag("Enemy"))

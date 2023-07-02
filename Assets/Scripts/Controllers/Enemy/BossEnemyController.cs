@@ -16,17 +16,21 @@ namespace Controllers.Enemy
 
         private void Update()
         {
+            RotateTowardsPlayer();
+            Enemy.Attack();
+        }
+
+        private void FixedUpdate()
+        {
             if (DistanceToPlayer() > distanceToPlayer)
             {
                 MoveTowardsPlayer();
             }
-
-            Enemy.Attack();
         }
 
         protected override EnemyBoss CreateEnemy()
         {
-            return new EnemyBoss(300, new InfernoAttack(fireballPrefab, transform, SelfToPlayerVector),
+            return new EnemyBoss(300, new InfernoAttack(fireballPrefab, transform),
                 new HomingMissilesAttack(homingMissilePrefab, transform), 1f);
         }
     }

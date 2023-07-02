@@ -131,7 +131,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoOrient: 1
   autoOrientSpeed: 1
-  gravity: 12
+  gravity: 2.5
 --- !u!135 &8717579431930545387
 SphereCollider:
   m_ObjectHideFlags: 0
