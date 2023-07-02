@@ -83,7 +83,6 @@ namespace Controllers
             if (other.gameObject.CompareTag("Bedrock"))
             {
                 transform.position += (transform.up * 0.25f);
-
             }
         }
 
@@ -144,11 +143,9 @@ namespace Controllers
         public void LateUpdate()
         {
             // Rotate player
-            if (PlayerModel.IsAlive)
-            {
-                _mouseX = Input.GetAxis("Mouse X");
-                transform.RotateAround(transform.position, transform.up, Time.deltaTime * _mouseX * rotationSpeed);
-            }
+            if (!PlayerModel.IsAlive) return;
+            _mouseX = Input.GetAxis("Mouse X");
+            transform.RotateAround(transform.position, transform.up, Time.deltaTime * _mouseX * rotationSpeed);
         }
 
         public void FixedUpdate()
@@ -163,7 +160,7 @@ namespace Controllers
 
         /// <summary>
         /// <c>Shot</c> is called from an event in the player's <c>Quick Shooting</c> animation and
-        /// performs the actual ability by triggering its <see cref="RangedAttack.PerformAbility"/> method.
+        /// performs the actual ability by triggering its <see cref="RangedAttack.PerformAbility(Model.Player.PlayerModel)"/> method.
         /// </summary>
         private void Shot()
         {
@@ -172,7 +169,7 @@ namespace Controllers
 
         /// <summary>
         /// <c>ScatterShot</c> is called from an event in the player's <c>Scatter Shot</c> animation and
-        /// performs the actual ability by triggering its <see cref="ScatterShot.PerformAbility"/> method.
+        /// performs the actual ability by triggering its <see cref="ScatterShot.PerformAbility(Model.Player.PlayerModel)"/> method.
         /// </summary>
         private void ScatterShot()
         {
@@ -181,7 +178,7 @@ namespace Controllers
 
         /// <summary>
         /// <c>Melee</c> is called from an event in the player's <c>Melee Attack</c> animation and
-        /// performs the actual ability by triggering its <see cref="MeleeAttack.PerformAbility"/> method.
+        /// performs the actual ability by triggering its <see cref="MeleeAttack.PerformAbility(Model.Player.PlayerModel)"/> method.
         /// </summary>
         private void Melee()
         {
@@ -190,7 +187,7 @@ namespace Controllers
 
         /// <summary>
         /// <c>FireBall</c> is called from an event in the player's <c>Fireball</c> animation and
-        /// performs the actual ability by triggering its <see cref="FireBall.PerformAbility"/> method.
+        /// performs the actual ability by triggering its <see cref="FireBall.PerformAbility(Model.Player.PlayerModel)"/> method.
         /// </summary>
         private void FireBall()
         {
@@ -204,20 +201,10 @@ namespace Controllers
         /// <param name="damage">the amount of damage taken</param>
         public void Damage(float damage)
         {
-            if (!PlayerModel.TakeDamage(damage))
-            {
-                // Death
-                _animator.SetTrigger(Dead);
-                canvas.GetComponent<GameMenu>().GameOver();
-
-                // Destroy all remaining enemies
-                GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-                if (enemies == null) return;
-                foreach (var enemy in enemies)
-                {
-                    Destroy(enemy);
-                }
-            }
+            if (PlayerModel.TakeDamage(damage)) return;
+            // Death
+            _animator.SetTrigger(Dead);
+            canvas.GetComponent<GameMenu>().GameOver();
         }
 
         /// <summary>

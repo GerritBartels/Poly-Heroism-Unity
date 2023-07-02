@@ -274,6 +274,9 @@ namespace Model.Player
             Mana.Regenerate(duration);
         }
 
+        /// <summary>
+        /// <c>Reset</c> resets the the player's <c>Stamina</c>, <c>Health</c>, and <c>Mana</c> resources by calling their <see cref="Model.Resource.Reset"/> method for a given duration.
+        /// </summary>
         public void Reset()
         {
             Stamina.Reset();

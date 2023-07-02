@@ -102,6 +102,13 @@ namespace GameUI
             playerResourcesUI.SetActive(false);
             gameOverMenuUI.SetActive(true);
             _cam.GetComponent<Animator>().SetTrigger("dead");
+            // Destroy all remaining enemies
+            var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            if (enemies == null) return;
+            foreach (var enemy in enemies)
+            {
+                Destroy(enemy);
+            }
         }
 
         /// <summary>

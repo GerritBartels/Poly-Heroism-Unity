@@ -30,9 +30,9 @@ namespace Model.Player
         }
 
         /// <summary>
-        /// <c>PerformAbility</c> activates the Bullet Time ability by lowering the in-game time scale in Unity.
+        /// <c>Activate</c> activates the Bullet Time ability by lowering the in-game time scale in Unity.
         /// </summary>
-        protected void Activate()
+        private void Activate()
         {
             Time.timeScale = 0.4f;
             Time.fixedDeltaTime = 0.02f * Time.timeScale;
