@@ -15,6 +15,12 @@ namespace Controllers.Enemy
 
         private void Update()
         {
+            RotateTowardsPlayer();
+            Enemy.Attack();
+        }
+
+        private void FixedUpdate()
+        {
             if (DistanceToPlayer() > distanceToPlayer)
             {
                 MoveTowardsPlayer();
@@ -23,13 +29,11 @@ namespace Controllers.Enemy
             {
                 MoveAwayFromPlayer();
             }
-
-            Enemy.Attack();
         }
 
         protected override EnemyBasic CreateEnemy()
         {
-            return new EnemyBasic(100, new RangedAttack(bulletPrefab, transform, SelfToPlayerVector), 2f);
+            return new EnemyBasic(100, new RangedAttack(bulletPrefab, transform), 2f);
         }
     }
 }

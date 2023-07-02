@@ -26,11 +26,16 @@ namespace Controllers.Enemy
 
         private void Update()
         {
-            MoveTowardsPlayer();
+            RotateTowardsPlayer();
             if (Enemy.Attack())
             {
                 _playerController.Damage(baseDamage);
             }
+        }
+
+        private void FixedUpdate()
+        {
+            MoveTowardsPlayer();
         }
     }
 }

@@ -80,6 +80,7 @@ namespace Controllers
 
         public void OnCollisionEnter(Collision other)
         {
+            // Prevents the player from falling through the planet
             if (other.gameObject.CompareTag("Bedrock"))
             {
                 transform.position += (transform.up * 0.25f);
