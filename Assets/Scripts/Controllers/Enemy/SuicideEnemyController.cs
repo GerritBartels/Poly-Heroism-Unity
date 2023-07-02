@@ -30,6 +30,7 @@ namespace Controllers.Enemy
             if (Enemy.Attack())
             {
                 _playerController.Damage(baseDamage);
+                Enemy.TakeDamage(Enemy.Health.MaxValue);
                 Destroy(gameObject);
             }
         }

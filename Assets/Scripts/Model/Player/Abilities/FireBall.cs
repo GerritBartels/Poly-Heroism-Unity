@@ -10,7 +10,7 @@ namespace Model.Player.Abilities
         private readonly Animator _animator;
 
         public FireBall(Transform transform, GameObject prefab, Animator animator) :
-            base(cooldown: 0.5f, globalCooldown: 0.5f, resourceCost: 10f, blockMovementFor: 0.5f, baseDamage: 25f)
+            base(cooldown: 0.5f, globalCooldown: 0.5f, resourceCost: 10f, blockMovementFor: 0.5f, baseDamage: 50f)
         {
             _transform = transform;
             _prefab = prefab;

@@ -9,7 +9,7 @@ namespace Model.Enemy.Abilities
         private readonly Transform _transform;
 
         public RangedAttack(GameObject bulletPrefab, Transform transform) :
-            base(1f, 1f)
+            base(2f, 2f)
         {
             _bulletPrefab = bulletPrefab;
             _transform = transform;

@@ -63,6 +63,7 @@ namespace Controllers
             PlayerModel.Strength = PlayerPrefs.GetInt("Strength", 1);
             PlayerModel.Agility = PlayerPrefs.GetInt("Agility", 1);
             PlayerModel.Intelligence = PlayerPrefs.GetInt("Intelligence", 1);
+            PlayerModel.Reset();
 
             _animator = GetComponent<Animator>();
 

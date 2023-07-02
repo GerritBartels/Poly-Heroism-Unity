@@ -10,19 +10,32 @@ namespace Controllers.Enemy
     {
         [SerializeField] protected float baseDamage = 25f;
 
-        [SerializeField] protected GameObject player;
-
         private Rigidbody _rigidbody;
         private Rigidbody _rigidbodyPlayer;
-        public T Enemy { get; private set; }
+
+        private T _enemy;
+
+        public T Enemy
+        {
+            get
+            {
+                if (_enemy is null)
+                {
+                    _enemy = CreateEnemy();
+                }
+
+                return _enemy;
+            }
+        }
 
         protected void Start()
         {
-            Enemy = CreateEnemy();
             _rigidbodyPlayer = player.GetComponent<Rigidbody>();
             _rigidbody = GetComponent<Rigidbody>();
             _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         }
+
+        public override Model.Enemy.Enemy GetEnemy() => Enemy;
 
         public void OnCollisionEnter(Collision other)
         {
@@ -30,7 +43,6 @@ namespace Controllers.Enemy
             if (other.gameObject.CompareTag("Bedrock"))
             {
                 transform.position += (transform.up * 0.25f);
-
             }
         }
 
