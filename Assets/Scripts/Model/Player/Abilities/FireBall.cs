@@ -8,6 +8,7 @@ namespace Model.Player.Abilities
         private readonly Transform _transform;
         private readonly GameObject _prefab;
         private readonly Animator _animator;
+        private static readonly int Fireball = Animator.StringToHash("fireball");
 
         public FireBall(Transform transform, GameObject prefab, Animator animator) :
             base(cooldown: 0.5f, globalCooldown: 0.5f, resourceCost: 10f, blockMovementFor: 0.5f, baseDamage: 50f)
@@ -19,8 +20,8 @@ namespace Model.Player.Abilities
 
         protected override bool TriggerAnimation(PlayerModel player)
         {
-            // TODO: add actual animation + trigger and call animator here
-            base.PerformAbility(player);
+            _animator.SetTrigger(Fireball);
+            //base.PerformAbility(player);
             return true;
         }
 
@@ -30,7 +31,7 @@ namespace Model.Player.Abilities
 
         protected override GameObject InstantiateAttack()
         {
-            return Instantiate(_prefab, _transform.position + (_transform.forward * 1f) + _transform.up,
+            return Instantiate(_prefab, _transform.position + (_transform.forward * 0.7f) + _transform.up,
                 _transform.rotation);
         }
     }

@@ -160,8 +160,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.8, y: 0.8, z: 0.8}
-  m_Center: {x: 0, y: 0.6, z: 0}
+  m_Size: {x: 0.8, y: 0.79999995, z: 0.69035083}
+  m_Center: {x: 0, y: 0.6, z: 0.015436083}
 --- !u!114 &3295399373428478177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -189,9 +189,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e22c8e3a76442f44389973c0f7a7e87f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseDamage: 7
   player: {fileID: 0}
-  bulletPrefab: {fileID: 7553974433958985813, guid: 56739b2bab76e034cbdfb0c66938668f, type: 3}
+  baseDamage: 7
+  bulletPrefab: {fileID: 4929160230478827091, guid: 4108c908d2d8ed443b7115954024c7dc, type: 3}
   distanceToPlayer: 4
 --- !u!1 &3294514621702861169
 GameObject:
@@ -656,7 +656,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 641e51ebbef02464da661776af055548, type: 2}
+  - {fileID: 2100000, guid: 0688bf1547a2ca74f954a621c804bddd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

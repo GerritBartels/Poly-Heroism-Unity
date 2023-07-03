@@ -30,7 +30,7 @@ namespace Controllers.Enemy
 
         protected override EnemyBoss CreateEnemy()
         {
-            return new EnemyBoss(300, new InfernoAttack(fireballPrefab, transform),
+            return new EnemyBoss(1000, new InfernoAttack(fireballPrefab, transform),
                 new HomingMissilesAttack(homingMissilePrefab, transform), 1f);
         }
     }
