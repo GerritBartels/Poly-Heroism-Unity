@@ -21,12 +21,12 @@ namespace Model.Enemy.Abilities
                 _transform.rotation);
             Instantiate(
                 _fireBallPrefab,
-                _transform.position + _transform.forward * 3f + (_transform.right * -1f) + _transform.up,
+                _transform.position + _transform.forward * 3f + (_transform.right * -2f) + _transform.up,
                 _transform.rotation * Quaternion.Euler(0f, -10f, 0f)
             );
             Instantiate(
                 _fireBallPrefab,
-                _transform.position + _transform.forward * 3f + (_transform.right * 1f) + _transform.up,
+                _transform.position + _transform.forward * 3f + (_transform.right * 2f) + _transform.up,
                 _transform.rotation * Quaternion.Euler(0f, 10f, 0f)
             );
             return true;

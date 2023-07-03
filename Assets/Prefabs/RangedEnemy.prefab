@@ -189,9 +189,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e22c8e3a76442f44389973c0f7a7e87f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseDamage: 7
   player: {fileID: 0}
-  bulletPrefab: {fileID: 7553974433958985813, guid: 56739b2bab76e034cbdfb0c66938668f, type: 3}
+  baseDamage: 7
+  bulletPrefab: {fileID: 4929160230478827091, guid: 4108c908d2d8ed443b7115954024c7dc, type: 3}
   distanceToPlayer: 4
 --- !u!1 &3294514621702861169
 GameObject:

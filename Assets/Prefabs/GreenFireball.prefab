@@ -41,7 +41,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1725317912486240, guid: e55149ba6f4d00741984987e258c3378, type: 3}
       propertyPath: m_Name
-      value: OrangeFireball
+      value: GreenFireball
       objectReference: {fileID: 0}
     - target: {fileID: 1725317912486240, guid: e55149ba6f4d00741984987e258c3378, type: 3}
       propertyPath: m_IsActive
@@ -498,7 +498,7 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!114 &324178538
+--- !u!114 &-412605615741021992
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -507,11 +507,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2583839736373720835}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8bff5ba2f8340a59de2eb897345e18f, type: 3}
+  m_Script: {fileID: 11500000, guid: 25027276e0a1430b92e74b99c8fae678, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeSpan: 1
-  speed: 15
+  lifeSpan: 2
   explosionPrefab: {fileID: 1845955007268882, guid: 67a684e320da6e7439421a07e3fa265c, type: 3}
 --- !u!114 &7051401133549872780
 MonoBehaviour:

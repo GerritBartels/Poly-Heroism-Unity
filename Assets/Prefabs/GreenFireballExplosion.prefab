@@ -14662,7 +14662,7 @@ GameObject:
   - component: {fileID: 199550515350852312}
   - component: {fileID: 1605321886255189265}
   - component: {fileID: 4564366264235386523}
-  - component: {fileID: 8253574042427118751}
+  - component: {fileID: 790719724349752504}
   m_Layer: 0
   m_Name: GreenFireballExplosion
   m_TagString: Bullet
@@ -19574,7 +19574,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8253574042427118751
+--- !u!114 &790719724349752504
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -19583,10 +19583,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1845955007268882}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9177bf90735d45e489d88ff9d3b87dcf, type: 3}
+  m_Script: {fileID: 11500000, guid: 1d693500e973494388c1b03f7a650d85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeSpan: 0.5
+  damage: 25
+  lifeSpan: 0.4
 --- !u!1 &1988778204445182
 GameObject:
   m_ObjectHideFlags: 0

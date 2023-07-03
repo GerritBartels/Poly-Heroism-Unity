@@ -224,8 +224,8 @@ ParticleSystem:
     startColor:
       serializedVersion: 2
       minMaxState: 2
-      minColor: {r: 0.5327544, g: 0, b: 1, a: 1}
-      maxColor: {r: 0.534441, g: 0, b: 1, a: 1}
+      minColor: {r: 0.039215688, g: 0, b: 1, a: 1}
+      maxColor: {r: 0.03756237, g: 0, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -5112,7 +5112,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.53333336, g: 0, b: 1, a: 1}
+      maxColor: {r: 0.039215688, g: 0, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -9994,7 +9994,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.53333336, g: 0, b: 1, a: 1}
+      maxColor: {r: 0.039215688, g: 0, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -14676,12 +14676,12 @@ GameObject:
   - component: {fileID: -5438521984063559487}
   - component: {fileID: -6024041401009240379}
   - component: {fileID: 4653133885774660838}
-  - component: {fileID: 1318210897503690254}
+  - component: {fileID: 6152638421519825280}
   - component: {fileID: 2867450924221400467}
   - component: {fileID: 998141890041216046}
   m_Layer: 0
-  m_Name: BulletPlayer
-  m_TagString: Bullet
+  m_Name: BulletEnemy
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14695,8 +14695,8 @@ Transform:
   m_GameObject: {fileID: 4929160230478827091}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 651671973585224490}
   m_Father: {fileID: 0}
@@ -19533,8 +19533,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoOrient: 1
   autoOrientSpeed: 4
-  gravity: 7
---- !u!114 &1318210897503690254
+  gravity: 4
+--- !u!114 &6152638421519825280
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -19543,11 +19543,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4929160230478827091}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f94b91d23e5ee6a43aba2f3b21ab830f, type: 3}
+  m_Script: {fileID: 11500000, guid: af8c14576f19d8944a8d2b9fe44463e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeSpan: 1
-  bulletSpeed: 10
+  lifeSpan: 2
+  bulletSpeed: 15
 --- !u!54 &2867450924221400467
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -19575,7 +19575,7 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 0.53333336, g: 0, b: 1, a: 1}
+  m_Color: {r: 0, g: 0.036186695, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
