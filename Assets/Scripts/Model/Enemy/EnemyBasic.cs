@@ -4,7 +4,7 @@
     {
         private readonly IAbility<Enemy> _ability;
 
-        public EnemyBasic(float health, IAbility<Enemy> ability, float speed = 10f) : base(health, speed)
+        public EnemyBasic(float health, IAbility<Enemy> ability, float speed, int lvl) : base(health, speed, lvl)
         {
             _ability = ability;
         }

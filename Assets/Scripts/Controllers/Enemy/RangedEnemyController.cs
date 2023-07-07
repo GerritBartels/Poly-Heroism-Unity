@@ -31,9 +31,9 @@ namespace Controllers.Enemy
             }
         }
 
-        protected override EnemyBasic CreateEnemy()
+        protected override EnemyBasic CreateEnemy(int lvl)
         {
-            return new EnemyBasic(100, new RangedAttack(bulletPrefab, transform), 2f);
+            return new EnemyBasic(100, new RangedAttack(bulletPrefab, transform), 2f, lvl);
         }
     }
 }

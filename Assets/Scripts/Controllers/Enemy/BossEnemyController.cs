@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using Model.Enemy;
 using Model.Enemy.Abilities;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Controllers.Enemy
 {
@@ -28,10 +24,10 @@ namespace Controllers.Enemy
             }
         }
 
-        protected override EnemyBoss CreateEnemy()
+        protected override EnemyBoss CreateEnemy(int lvl)
         {
             return new EnemyBoss(1000, new InfernoAttack(fireballPrefab, transform),
-                new HomingMissilesAttack(homingMissilePrefab, transform), 1f);
+                new HomingMissilesAttack(homingMissilePrefab, transform), 1f, lvl);
         }
     }
 }

@@ -8,28 +8,17 @@ namespace Controllers.Enemy
 {
     public abstract class EnemyController<T> : AbstractEnemyController where T : Model.Enemy.Enemy
     {
-        [SerializeField] protected float baseDamage = 25f;
-
         private Rigidbody _rigidbody;
         private Rigidbody _rigidbodyPlayer;
 
-        private T _enemy;
+        private int _lvl = 0;
 
-        public T Enemy
-        {
-            get
-            {
-                if (_enemy is null)
-                {
-                    _enemy = CreateEnemy();
-                }
-
-                return _enemy;
-            }
-        }
+        public T Enemy { get; private set; }
 
         protected void Start()
         {
+            _lvl = PlayerPrefs.GetInt("Level", 1);
+            Enemy = CreateEnemy(_lvl);
             _rigidbodyPlayer = player.GetComponent<Rigidbody>();
             _rigidbody = GetComponent<Rigidbody>();
             _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
@@ -46,7 +35,7 @@ namespace Controllers.Enemy
             }
         }
 
-        protected abstract T CreateEnemy();
+        protected abstract T CreateEnemy(int lvl);
 
         public override void TakeDamage(float damage)
         {
