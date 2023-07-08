@@ -16,8 +16,9 @@ namespace GameUI
         [SerializeField] private GameObject settingsMenuUi;
         [SerializeField] private GameObject player;
 
-        public static bool GameIsPaused = false;
+        private static bool _gameIsPaused = false;
         private Camera _cam;
+        private static readonly int Dead = Animator.StringToHash("dead");
 
         private void Awake()
         {
@@ -29,7 +30,7 @@ namespace GameUI
         {
             if (Input.GetKeyDown(KeyCode.Escape) && player.GetComponent<PlayerController>().PlayerModel.IsAlive)
             {
-                if (GameIsPaused)
+                if (_gameIsPaused)
                 {
                     Resume();
                 }
@@ -63,7 +64,7 @@ namespace GameUI
             playerResourcesUI.SetActive(false);
             pauseMenuUI.SetActive(true);
             Time.timeScale = 0f;
-            GameIsPaused = true;
+            _gameIsPaused = true;
         }
 
         /// <summary>
@@ -79,7 +80,7 @@ namespace GameUI
             playerAbilitiesUI.SetActive(true);
             playerResourcesUI.SetActive(true);
             Time.timeScale = 1f;
-            GameIsPaused = false;
+            _gameIsPaused = false;
         }
 
         /// <summary>
@@ -87,7 +88,7 @@ namespace GameUI
         /// </summary>
         public void LoadMenu()
         {
-            GameIsPaused = false;
+            _gameIsPaused = false;
             Time.timeScale = 1f;
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
         }
@@ -111,7 +112,7 @@ namespace GameUI
             playerAbilitiesUI.SetActive(false);
             playerResourcesUI.SetActive(false);
             gameOverMenuUI.SetActive(true);
-            _cam.GetComponent<Animator>().SetTrigger("dead");
+            _cam.GetComponent<Animator>().SetTrigger(Dead);
             // Destroy all remaining enemies
             var enemies = GameObject.FindGameObjectsWithTag("Enemy");
             if (enemies == null) return;

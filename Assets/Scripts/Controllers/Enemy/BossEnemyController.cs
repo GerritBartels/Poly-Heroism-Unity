@@ -26,7 +26,7 @@ namespace Controllers.Enemy
 
         protected override EnemyBoss CreateEnemy(int lvl)
         {
-            return new EnemyBoss(1000, new InfernoAttack(fireballPrefab, transform),
+            return new EnemyBoss(500, new InfernoAttack(fireballPrefab, transform),
                 new HomingMissilesAttack(homingMissilePrefab, transform), 1f, lvl);
         }
     }

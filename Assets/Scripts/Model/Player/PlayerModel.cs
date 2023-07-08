@@ -32,7 +32,7 @@ namespace Model.Player
         private int _attributePoints = 0;
         public int AttributePoints => _attributePoints;
 
-        private int _strength = 1;
+        private int _strength = 0;
 
         /// <summary>
         /// <c>Strength</c> property that determines the amount of strength of the player
@@ -47,7 +47,7 @@ namespace Model.Player
             }
         }
 
-        private int _intelligence = 1;
+        private int _intelligence = 0;
 
         /// <summary>
         /// <c>Strength</c> property that determines the amount of Intelligence of the player
@@ -62,7 +62,7 @@ namespace Model.Player
             }
         }
 
-        private int _agility = 1;
+        private int _agility = 0;
 
         /// <summary>
         /// <c>Agility</c> property that determines the amount of Agility of the player
