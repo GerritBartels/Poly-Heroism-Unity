@@ -85,5 +85,5 @@ In our game, you will play a tiny knight that has to fight its way through waves
 # Installation
 
 1. Clone the repository to your local machine.
-2. Open the project in Unity.
+2. Open the project in Unity (version 2021.3.22f1).
 3. Build and run the game.
