@@ -151,7 +151,7 @@ public class SpawnManager : MonoBehaviour
         }
 
         _currentWave--;
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(15f);
         // spawn boss
         if (_playerModel.IsAlive)
         {
