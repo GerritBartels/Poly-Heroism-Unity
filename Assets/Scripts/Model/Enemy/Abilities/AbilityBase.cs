@@ -5,12 +5,17 @@
         private readonly CooldownFixed _cooldown;
         public Cooldown Cooldown => _cooldown;
 
-        protected AbilityBase(float cooldown, float globalCooldown)
+        private float _damage;
+
+        protected AbilityBase(float cooldown, float globalCooldown, float damage)
         {
+            _damage = damage;
             CooldownTime = cooldown;
             GlobalCooldown = globalCooldown;
             _cooldown = new CooldownFixed(cooldown);
         }
+
+        public float Damage(Enemy enemy) => _damage * enemy.DamageModifier();
 
         public float CooldownTime { get; }
         public float GlobalCooldown { get; }

@@ -1,10 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using Model.Enemy;
 using Model.Enemy.Abilities;
-using Unity.VisualScripting;
-using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Controllers.Enemy
 {
@@ -12,16 +7,22 @@ namespace Controllers.Enemy
     {
         private PlayerController _playerController;
 
-        private new void Start()
+        public PlayerController PlayerController
         {
-            base.Start();
-            baseDamage = 25;
-            _playerController = player.GetComponent<PlayerController>();
+            get
+            {
+                if (_playerController is null)
+                {
+                    _playerController = player.GetComponent<PlayerController>();
+                }
+
+                return _playerController;
+            }
         }
 
-        protected override EnemyBasic CreateEnemy()
+        protected override EnemyBasic CreateEnemy(int lvl)
         {
-            return new EnemyBasic(50, new MeleeAttack(DistanceToPlayer, 1f), 4f);
+            return new EnemyBasic(50, new MeleeAttack(DistanceToPlayer, PlayerController, 25f, 1f), 4f, lvl);
         }
 
         private void Update()
@@ -29,7 +30,6 @@ namespace Controllers.Enemy
             RotateTowardsPlayer();
             if (Enemy.Attack())
             {
-                _playerController.Damage(baseDamage);
                 Enemy.TakeDamage(Enemy.Health.MaxValue);
                 Destroy(gameObject);
             }

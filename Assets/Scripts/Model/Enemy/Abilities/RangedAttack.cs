@@ -3,22 +3,22 @@ using UnityEngine;
 
 namespace Model.Enemy.Abilities
 {
-    public class RangedAttack : AbilityBase
+    public class RangedAttack : AttackControllerAbilityBase
     {
         private readonly GameObject _bulletPrefab;
         private readonly Transform _transform;
 
         public RangedAttack(GameObject bulletPrefab, Transform transform) :
-            base(2f, 2f)
+            base(2f, 2f, 5f)
         {
             _bulletPrefab = bulletPrefab;
             _transform = transform;
         }
 
-        protected override bool PerformAbility(Enemy enemy)
+        protected override GameObject InstantiateAttack(Enemy enemy)
         {
-            Instantiate(_bulletPrefab, _transform.position + _transform.forward + _transform.up, _transform.rotation);
-            return true;
+            return Instantiate(_bulletPrefab, _transform.position + _transform.forward + _transform.up,
+                _transform.rotation);
         }
     }
 }

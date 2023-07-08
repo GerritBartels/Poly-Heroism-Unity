@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Controllers.Enemy
 {
-    public class HomingMissileAttackController : MonoBehaviour
+    public class HomingMissileAttackController : EnemyAttackControllerBase
     {
         private Rigidbody _playerRigidbody;
         [SerializeField] private float lifeSpan = 4f;
@@ -16,9 +16,9 @@ namespace Controllers.Enemy
         private void Update()
         {
             // Rotate whilst keeping orientation perpendicular to the planet
-            Vector3 up = transform.position.normalized;
-            Vector3 targetDir = _playerRigidbody.position.normalized;
-            Vector3 forward = targetDir - up * Vector3.Dot(targetDir, up);
+            var up = transform.position.normalized;
+            var targetDir = _playerRigidbody.position.normalized;
+            var forward = targetDir - up * Vector3.Dot(targetDir, up);
             if (forward != Vector3.zero)
             {
                 transform.rotation = Quaternion.LookRotation(forward.normalized, up.normalized);
@@ -34,18 +34,6 @@ namespace Controllers.Enemy
                 Destroy(gameObject);
             }
         }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.CompareTag("Player"))
-            {
-                other.GetComponentInParent<PlayerController>().Damage(10);
-                Destroy(gameObject);
-            }
-            else if (other.CompareTag("Terrain") || other.CompareTag("Enemy"))
-            {
-                Destroy(gameObject);
-            }
-        }
+        
     }
 }

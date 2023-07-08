@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace Model.Enemy
+﻿namespace Model.Enemy
 {
     public class Enemy
     {
@@ -11,10 +9,13 @@ namespace Model.Enemy
         private readonly float _baseSpeed;
         public float Speed => _blockMovement.IsCooldownActive() ? 0f : _baseSpeed;
 
-        public Enemy(float health, float speed = 10f)
+        private readonly int _lvl = 0;
+
+        public Enemy(float health, float speed, int lvl)
         {
             _baseSpeed = speed;
-            Health = new Resource(0f, health);
+            Health = new Resource(0f, health * LvlToScalingFactor());
+            _lvl = lvl;
         }
 
         public bool IsAlive => !Health.Empty();
@@ -29,5 +30,9 @@ namespace Model.Enemy
         {
             _blockMovement.Apply();
         }
+
+        private float LvlToScalingFactor() => 1f + _lvl / 100f;
+
+        public float DamageModifier() => LvlToScalingFactor();
     }
 }

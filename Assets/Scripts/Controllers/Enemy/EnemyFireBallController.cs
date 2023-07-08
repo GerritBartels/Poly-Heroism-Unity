@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Controllers.Enemy
 {
-    public class EnemyFireBallController : MonoBehaviour
+    public class EnemyFireBallController : EnemyAttackControllerBase
     {
         [SerializeField] private float lifeSpan = 2f;
         private readonly float _speed = 10f;
@@ -21,11 +21,12 @@ namespace Controllers.Enemy
             }
         }
 
-        private void OnTriggerEnter(Collider other)
+        protected override void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Terrain") || other.CompareTag("Enemy") || other.CompareTag("Player"))
             {
-                Instantiate(explosionPrefab, transform.position, transform.rotation);
+                var obj = Instantiate(explosionPrefab, transform.position, transform.rotation);
+                obj.GetComponent<EnemyAttackControllerBase>().Damage = Damage;
                 Destroy(gameObject);
             }
         }

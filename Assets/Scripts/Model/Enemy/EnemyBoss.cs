@@ -10,8 +10,8 @@ namespace Model.Enemy
         private readonly Random _rnd = new();
         private readonly Cooldown _globalCooldown = new();
 
-        public EnemyBoss(float health, IAbility<Enemy> inferno, IAbility<Enemy> homingMissiles, float speed = 10f) :
-            base(health, speed)
+        public EnemyBoss(float health, IAbility<Enemy> inferno, IAbility<Enemy> homingMissiles, float speed, int lvl) :
+            base(health, speed, lvl)
         {
             _inferno = inferno;
             _homingMissiles = homingMissiles;

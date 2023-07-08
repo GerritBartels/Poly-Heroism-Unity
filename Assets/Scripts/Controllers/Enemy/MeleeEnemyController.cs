@@ -12,30 +12,41 @@ namespace Controllers.Enemy
     {
         private PlayerController _playerController;
 
+        public PlayerController PlayerController
+        {
+            get
+            {
+                if (_playerController is null)
+                {
+                    _playerController = player.GetComponent<PlayerController>();
+                }
+
+                return _playerController;
+            }
+        }
+
         private new void Start()
         {
             base.Start();
-            baseDamage = 10;
-            _playerController = player.GetComponent<PlayerController>();
         }
 
-        protected override EnemyBasic CreateEnemy()
+        protected override EnemyBasic CreateEnemy(int lvl)
         {
-            return new EnemyBasic(150, new MeleeAttack(DistanceToPlayer, 2f), 4f);
+            return new EnemyBasic(150, new MeleeAttack(DistanceToPlayer, PlayerController, 15f), 4f, lvl);
         }
 
         private void Update()
         {
             RotateTowardsPlayer();
-            if (Enemy.Attack())
-            {
-                _playerController.Damage(baseDamage);
-            }
+            Enemy.Attack();
         }
 
         private void FixedUpdate()
         {
-            MoveTowardsPlayer();
+            if (DistanceToPlayer() > 1.3)
+            {
+                MoveTowardsPlayer();
+            }
         }
     }
 }
