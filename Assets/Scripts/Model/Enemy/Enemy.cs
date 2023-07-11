@@ -1,4 +1,6 @@
-﻿namespace Model.Enemy
+﻿using UnityEngine;
+
+namespace Model.Enemy
 {
     public class Enemy
     {
@@ -13,9 +15,9 @@
 
         public Enemy(float health, float speed, int lvl)
         {
+            _lvl = lvl - 1;
             _baseSpeed = speed;
             Health = new Resource(0f, health * LvlToScalingFactor());
-            _lvl = lvl;
         }
 
         public bool IsAlive => !Health.Empty();

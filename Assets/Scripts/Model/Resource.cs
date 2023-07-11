@@ -2,11 +2,18 @@
 {
     public class Resource
     {
-        public Resource(float regenerationRate, float maxValue = 100f, float value = 100f)
+        public Resource(float regenerationRate, float maxValue, float value)
         {
             RegenerationRate = regenerationRate;
             MaxValue = maxValue;
             Value = value;
+        }
+        
+        public Resource(float regenerationRate, float maxValue)
+        {
+            RegenerationRate = regenerationRate;
+            MaxValue = maxValue;
+            Value = maxValue;
         }
 
         public float RegenerationRate { get; }

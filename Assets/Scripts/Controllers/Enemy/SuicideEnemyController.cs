@@ -1,11 +1,14 @@
 using Model.Enemy;
 using Model.Enemy.Abilities;
+using UnityEngine;
 
 namespace Controllers.Enemy
 {
     public class SuicideEnemyController : EnemyController<EnemyBasic>
     {
         private PlayerController _playerController;
+
+        [SerializeField] private GameObject explosionPrefab;
 
         public PlayerController PlayerController
         {
@@ -22,7 +25,9 @@ namespace Controllers.Enemy
 
         protected override EnemyBasic CreateEnemy(int lvl)
         {
-            return new EnemyBasic(50, new MeleeAttack(DistanceToPlayer, PlayerController, 25f, 1f), 4f, lvl);
+            return new EnemyBasic(50,
+                new ExplosionAttack(DistanceToPlayer, PlayerController, explosionPrefab, gameObject.transform,
+                    25f, 1f), 4f, lvl);
         }
 
         private void Update()

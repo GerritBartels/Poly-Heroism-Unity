@@ -16,5 +16,14 @@ namespace Controllers.Enemy
                 Destroy(gameObject);
             }
         }
+
+        protected override void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                other.GetComponentInParent<PlayerController>().Damage(Damage);
+                Destroy(gameObject.GetComponent<SphereCollider>());
+            }
+        }
     }
 }

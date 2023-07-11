@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Controllers;
 using Controllers.Enemy;
+using Controllers.UI;
 using GameUI;
 using Model.Player;
 using TMPro;
@@ -26,10 +27,10 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private float minDistance = 2f;
     [SerializeField] private GameObject player;
 
-    // TODO: balancing!!!
+    [SerializeField] private GameObject bossHealthBar;
+
     [SerializeField] private int waves = 5;
     [SerializeField] private int baseEnemiesPerSpawn = 1;
-    [SerializeField] private float spawnDelay = 15f;
     [SerializeField] private float pauseAfterWave = 30f;
 
     private PlayerModel _playerModel;
@@ -78,6 +79,7 @@ public class SpawnManager : MonoBehaviour
 
     private void ShowLvlFinishedScreen()
     {
+        bossHealthBar.SetActive(false);
         resourcesView.SetActive(false);
         abilityView.SetActive(false);
         lvlUpMenu.SetActive(true);
@@ -141,7 +143,7 @@ public class SpawnManager : MonoBehaviour
     private IEnumerator SpawnSystem()
     {
         // SPAWNING
-        yield return new WaitForSeconds(spawnDelay);
+        yield return new WaitForSeconds(5f);
         for (_currentWave = 1; _currentWave <= waves && _playerModel.IsAlive; _currentWave++)
         {
             SpawnEnemies(_planetRadius, GenerateEnemies());
@@ -149,13 +151,14 @@ public class SpawnManager : MonoBehaviour
         }
 
         _currentWave--;
-        yield return new WaitForSeconds(pauseAfterWave);
+        yield return new WaitForSeconds(15f);
         // spawn boss
         if (_playerModel.IsAlive)
         {
             SpawnEnemies(_planetRadius, new[] { bossEnemyPrefab });
+            bossHealthBar.SetActive(true);
+            bossHealthBar.GetComponent<BossHealthBarController>().Boss = _enemies.Last();
             _bossSpawned = true;
-            // TODO: add boss health bar
         }
     }
 
