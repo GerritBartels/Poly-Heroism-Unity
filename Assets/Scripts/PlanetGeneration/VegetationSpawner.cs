@@ -44,7 +44,7 @@ namespace PlanetGeneration
             // Sample materials from the materials array
             List<Material> sampledMaterials = SampleObjects<Material>(materials, numberOfDifferentMaterials);
 
-            
+
             for (int i = 0; i < numberOfObjects; i++)
             {
                 // Sample a random point on the sphere
@@ -108,7 +108,7 @@ namespace PlanetGeneration
                 SetPrefabTag(spawnedPrefab);
             }
         }
-        
+
         /// <summary>
         /// <c>SampleObjects</c> samples a given number of objects from an array of objects.
         /// </summary>
@@ -125,6 +125,7 @@ namespace PlanetGeneration
                 T sampledObject = objects[randomIndex];
                 sampledObjects.Add(sampledObject);
             }
+
             return sampledObjects;
         }
 
@@ -175,7 +176,7 @@ namespace PlanetGeneration
             int randomIndex = Random.Range(0, materials.Count);
             prefab.GetComponent<Renderer>().material = materials[randomIndex];
         }
-        
+
         /// <summary>
         /// <c>SetPrefabScale</c> sets the scale of the specified prefab.
         /// </summary>

@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Controllers;
 using Controllers.Enemy;
+using Controllers.Player;
 using Controllers.UI;
-using GameUI;
+using Controllers.UI.Menu;
 using Model.Player;
 using TMPro;
 using UnityEngine;

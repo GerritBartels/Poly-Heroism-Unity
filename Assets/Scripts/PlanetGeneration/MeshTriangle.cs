@@ -3,44 +3,44 @@ using UnityEngine;
 
 namespace PlanetGeneration
 {
-    public class MeshTriangle 
+    public class MeshTriangle
     {
-        public List<int>            VertexIndices;
-        public List<Vector2>        UVs;
-        public List<MeshTriangle>   Neighbours;
+        public List<int> VertexIndices;
+        public List<Vector2> UVs;
+        public List<MeshTriangle> Neighbours;
         public Color Color;
 
-        public MeshTriangle(int _vertexIndexA, int _vertexIndexB, int _vertexIndexC)
+        public MeshTriangle(int vertexIndexA, int vertexIndexB, int vertexIndexC)
         {
-            VertexIndices = new List<int>() {_vertexIndexA,_vertexIndexB,_vertexIndexC};
-            UVs = new List<Vector2>{Vector2.zero,Vector2.zero,Vector2.zero};
+            VertexIndices = new List<int>() { vertexIndexA, vertexIndexB, vertexIndexC };
+            UVs = new List<Vector2> { Vector2.zero, Vector2.zero, Vector2.zero };
             Neighbours = new List<MeshTriangle>();
         }
 
-        public bool IsNeighbouring(MeshTriangle _other)
+        public bool IsNeighbouring(MeshTriangle other)
         {
             int sharedVertices = 0;
-            foreach(int index in VertexIndices)
+            foreach (int index in VertexIndices)
             {
-                if(_other.VertexIndices.Contains(index))
+                if (other.VertexIndices.Contains(index))
                 {
                     sharedVertices++;
                 }
             }
+
             return sharedVertices > 1;
         }
 
-        public void UpdateNeighbour(MeshTriangle _initialNeighbour, MeshTriangle _newNeighbour)
+        public void UpdateNeighbour(MeshTriangle initialNeighbour, MeshTriangle newNeighbour)
         {
-            for(int i = 0; i < Neighbours.Count; i++)
+            for (int i = 0; i < Neighbours.Count; i++)
             {
-                if(_initialNeighbour == Neighbours[i])
+                if (initialNeighbour == Neighbours[i])
                 {
-                    Neighbours[i] = _newNeighbour;
+                    Neighbours[i] = newNeighbour;
                     return;
                 }
             }
         }
     }
 }
-

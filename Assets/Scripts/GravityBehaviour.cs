@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GravityBehaviour : MonoBehaviour
@@ -12,13 +10,13 @@ public class GravityBehaviour : MonoBehaviour
     private Transform _gravityTarget;
     private Rigidbody _rb;
 
-    void Start()
+    private void Start()
     {
         _rb = GetComponent<Rigidbody>();
         _gravityTarget = GameObject.Find("Planet").GetComponent<Transform>();
     }
 
-    public void ProcessGravity()
+    private void ProcessGravity()
     {
         var diff = transform.position - _gravityTarget.position;
         _rb.AddForce(-diff.normalized * (gravity * _rb.mass));
@@ -34,13 +32,13 @@ public class GravityBehaviour : MonoBehaviour
         var transform1 = transform;
         var rotation = transform1.rotation;
 
-        Quaternion targetRotation = Quaternion.FromToRotation(-transform1.up, down) * rotation;
+        var targetRotation = Quaternion.FromToRotation(-transform1.up, down) * rotation;
         rotation = Quaternion.Slerp(rotation, targetRotation, autoOrientSpeed * Time.deltaTime);
 
         transform.rotation = rotation;
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         ProcessGravity();
     }
