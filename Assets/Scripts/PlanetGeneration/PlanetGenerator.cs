@@ -1,23 +1,40 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace PlanetGeneration
 {
     public class PlanetGenerator : MonoBehaviour
     {
-        [Header("Planet Settings:")] public float Radius;
-        public int IcosphereSubdivisions;
-        public Material PlanetMaterial;
-        public bool SmoothNormals;
+        [FormerlySerializedAs("Radius")] [Header("Planet Settings:")]
+        public float radius;
 
-        [Header("Continents:")] public int MaxAmountOfContinents;
-        public float ContinentsMinSize;
-        public float ContinentsMaxSize;
-        public float MinLandExtrusionHeight;
-        public float MaxLandExtrusionHeight;
+        [FormerlySerializedAs("IcosphereSubdivisions")]
+        public int icosphereSubdivisions;
 
-        private List<MeshTriangle> MeshTriangles = new();
-        private List<Vector3> Vertices = new();
+        [FormerlySerializedAs("PlanetMaterial")]
+        public Material planetMaterial;
+
+        [FormerlySerializedAs("SmoothNormals")]
+        public bool smoothNormals;
+
+        [FormerlySerializedAs("MaxAmountOfContinents")] [Header("Continents:")]
+        public int maxAmountOfContinents;
+
+        [FormerlySerializedAs("ContinentsMinSize")]
+        public float continentsMinSize;
+
+        [FormerlySerializedAs("ContinentsMaxSize")]
+        public float continentsMaxSize;
+
+        [FormerlySerializedAs("MinLandExtrusionHeight")]
+        public float minLandExtrusionHeight;
+
+        [FormerlySerializedAs("MaxLandExtrusionHeight")]
+        public float maxLandExtrusionHeight;
+
+        private List<MeshTriangle> _meshTriangles = new();
+        private List<Vector3> _vertices = new();
 
         private GameObject _planetGameObject;
         private MeshRenderer _meshRenderer;
@@ -39,11 +56,11 @@ namespace PlanetGeneration
 
             GameObject treeSpawnerObject = GameObject.Find("TreeSpawner");
             _vegetationSpawner = treeSpawnerObject.GetComponent<VegetationSpawner>();
-            _vegetationSpawner.SpawnPrefabs(gameObject, Radius, _land1Color, _land2Color);
+            _vegetationSpawner.SpawnPrefabs(gameObject, radius, _land1Color, _land2Color);
 
             GameObject stoneSpawnerObject = GameObject.Find("StoneSpawner");
             _vegetationSpawner = stoneSpawnerObject.GetComponent<VegetationSpawner>();
-            _vegetationSpawner.SpawnPrefabs(gameObject, Radius, _land1Color, _land2Color);
+            _vegetationSpawner.SpawnPrefabs(gameObject, radius, _land1Color, _land2Color);
         }
 
         public void StartGeneration()
@@ -52,7 +69,7 @@ namespace PlanetGeneration
             _planetGameObject.transform.parent = transform;
 
             _meshRenderer = _planetGameObject.AddComponent<MeshRenderer>();
-            _meshRenderer.material = PlanetMaterial;
+            _meshRenderer.material = planetMaterial;
 
             _meshFilter = _planetGameObject.AddComponent<MeshFilter>();
 
@@ -72,10 +89,10 @@ namespace PlanetGeneration
         {
             _continents = new TriangleHashSet();
 
-            for (int i = 0; i < MaxAmountOfContinents; i++)
+            for (int i = 0; i < maxAmountOfContinents; i++)
             {
-                float continentSize = Random.Range(ContinentsMinSize, ContinentsMaxSize);
-                TriangleHashSet addedLandmass = GetTriangles(Random.onUnitSphere, continentSize, MeshTriangles);
+                float continentSize = Random.Range(continentsMinSize, continentsMaxSize);
+                TriangleHashSet addedLandmass = GetTriangles(Random.onUnitSphere, continentSize, _meshTriangles);
 
                 _continents.UnionWith(addedLandmass);
             }
@@ -83,14 +100,14 @@ namespace PlanetGeneration
             _land1Color = SampleRandomColor();
             _continents.ApplyColor(_land1Color);
 
-            Extrude(_continents, Random.Range(MinLandExtrusionHeight, MaxLandExtrusionHeight));
+            Extrude(_continents, Random.Range(minLandExtrusionHeight, maxLandExtrusionHeight));
         }
 
         private void AddSecondaryLandmass()
         {
             _continents2 = new TriangleHashSet();
 
-            foreach (MeshTriangle triangle in MeshTriangles)
+            foreach (MeshTriangle triangle in _meshTriangles)
             {
                 if (!_continents.Contains(triangle))
                     _continents2.Add(triangle);
@@ -108,7 +125,7 @@ namespace PlanetGeneration
             GameObject bedrock = new GameObject("Bedrock");
             bedrock.tag = "Bedrock";
             bedrock.transform.parent = transform;
-            bedrock.AddComponent<SphereCollider>().radius = Radius - 0.5f;
+            bedrock.AddComponent<SphereCollider>().radius = radius - 0.5f;
         }
 
         private Color SampleRandomColor()
@@ -124,45 +141,45 @@ namespace PlanetGeneration
 
         public void GenerateIcosphere()
         {
-            this.transform.localScale = Vector3.one * Radius;
-            MeshTriangles = new List<MeshTriangle>();
-            Vertices = new List<Vector3>();
+            this.transform.localScale = Vector3.one * radius;
+            _meshTriangles = new List<MeshTriangle>();
+            _vertices = new List<Vector3>();
 
             float t = (1.0f + Mathf.Sqrt(5.0f)) / 2.0f;
 
-            Vertices.Add(new Vector3(-1, t, 0).normalized);
-            Vertices.Add(new Vector3(1, t, 0).normalized);
-            Vertices.Add(new Vector3(-1, -t, 0).normalized);
-            Vertices.Add(new Vector3(1, -t, 0).normalized);
-            Vertices.Add(new Vector3(0, -1, t).normalized);
-            Vertices.Add(new Vector3(0, 1, t).normalized);
-            Vertices.Add(new Vector3(0, -1, -t).normalized);
-            Vertices.Add(new Vector3(0, 1, -t).normalized);
-            Vertices.Add(new Vector3(t, 0, -1).normalized);
-            Vertices.Add(new Vector3(t, 0, 1).normalized);
-            Vertices.Add(new Vector3(-t, 0, -1).normalized);
-            Vertices.Add(new Vector3(-t, 0, 1).normalized);
+            _vertices.Add(new Vector3(-1, t, 0).normalized);
+            _vertices.Add(new Vector3(1, t, 0).normalized);
+            _vertices.Add(new Vector3(-1, -t, 0).normalized);
+            _vertices.Add(new Vector3(1, -t, 0).normalized);
+            _vertices.Add(new Vector3(0, -1, t).normalized);
+            _vertices.Add(new Vector3(0, 1, t).normalized);
+            _vertices.Add(new Vector3(0, -1, -t).normalized);
+            _vertices.Add(new Vector3(0, 1, -t).normalized);
+            _vertices.Add(new Vector3(t, 0, -1).normalized);
+            _vertices.Add(new Vector3(t, 0, 1).normalized);
+            _vertices.Add(new Vector3(-t, 0, -1).normalized);
+            _vertices.Add(new Vector3(-t, 0, 1).normalized);
 
-            MeshTriangles.Add(new MeshTriangle(0, 11, 5));
-            MeshTriangles.Add(new MeshTriangle(0, 5, 1));
-            MeshTriangles.Add(new MeshTriangle(0, 1, 7));
-            MeshTriangles.Add(new MeshTriangle(0, 7, 10));
-            MeshTriangles.Add(new MeshTriangle(0, 10, 11));
-            MeshTriangles.Add(new MeshTriangle(1, 5, 9));
-            MeshTriangles.Add(new MeshTriangle(5, 11, 4));
-            MeshTriangles.Add(new MeshTriangle(11, 10, 2));
-            MeshTriangles.Add(new MeshTriangle(10, 7, 6));
-            MeshTriangles.Add(new MeshTriangle(7, 1, 8));
-            MeshTriangles.Add(new MeshTriangle(3, 9, 4));
-            MeshTriangles.Add(new MeshTriangle(3, 4, 2));
-            MeshTriangles.Add(new MeshTriangle(3, 2, 6));
-            MeshTriangles.Add(new MeshTriangle(3, 6, 8));
-            MeshTriangles.Add(new MeshTriangle(3, 8, 9));
-            MeshTriangles.Add(new MeshTriangle(4, 9, 5));
-            MeshTriangles.Add(new MeshTriangle(2, 4, 11));
-            MeshTriangles.Add(new MeshTriangle(6, 2, 10));
-            MeshTriangles.Add(new MeshTriangle(8, 6, 7));
-            MeshTriangles.Add(new MeshTriangle(9, 8, 1));
+            _meshTriangles.Add(new MeshTriangle(0, 11, 5));
+            _meshTriangles.Add(new MeshTriangle(0, 5, 1));
+            _meshTriangles.Add(new MeshTriangle(0, 1, 7));
+            _meshTriangles.Add(new MeshTriangle(0, 7, 10));
+            _meshTriangles.Add(new MeshTriangle(0, 10, 11));
+            _meshTriangles.Add(new MeshTriangle(1, 5, 9));
+            _meshTriangles.Add(new MeshTriangle(5, 11, 4));
+            _meshTriangles.Add(new MeshTriangle(11, 10, 2));
+            _meshTriangles.Add(new MeshTriangle(10, 7, 6));
+            _meshTriangles.Add(new MeshTriangle(7, 1, 8));
+            _meshTriangles.Add(new MeshTriangle(3, 9, 4));
+            _meshTriangles.Add(new MeshTriangle(3, 4, 2));
+            _meshTriangles.Add(new MeshTriangle(3, 2, 6));
+            _meshTriangles.Add(new MeshTriangle(3, 6, 8));
+            _meshTriangles.Add(new MeshTriangle(3, 8, 9));
+            _meshTriangles.Add(new MeshTriangle(4, 9, 5));
+            _meshTriangles.Add(new MeshTriangle(2, 4, 11));
+            _meshTriangles.Add(new MeshTriangle(6, 2, 10));
+            _meshTriangles.Add(new MeshTriangle(8, 6, 7));
+            _meshTriangles.Add(new MeshTriangle(9, 8, 1));
 
             Subdivide();
         }
@@ -171,10 +188,10 @@ namespace PlanetGeneration
         {
             var midPointCache = new Dictionary<int, int>();
 
-            for (int i = 0; i < IcosphereSubdivisions; i++)
+            for (int i = 0; i < icosphereSubdivisions; i++)
             {
                 var newPolys = new List<MeshTriangle>();
-                foreach (var poly in MeshTriangles)
+                foreach (var poly in _meshTriangles)
                 {
                     int a = poly.VertexIndices[0];
                     int b = poly.VertexIndices[1];
@@ -190,7 +207,7 @@ namespace PlanetGeneration
                     newPolys.Add(new MeshTriangle(ab, bc, ca));
                 }
 
-                MeshTriangles = newPolys;
+                _meshTriangles = newPolys;
             }
         }
 
@@ -209,12 +226,12 @@ namespace PlanetGeneration
             // If we're here, it's because a midpoint for these two
             // vertices hasn't been created yet. Let's do that now!
 
-            Vector3 p1 = Vertices[indexA];
-            Vector3 p2 = Vertices[indexB];
+            Vector3 p1 = _vertices[indexA];
+            Vector3 p2 = _vertices[indexB];
             Vector3 middle = Vector3.Lerp(p1, p2, 0.5f).normalized;
 
-            ret = Vertices.Count;
-            Vertices.Add(middle);
+            ret = _vertices.Count;
+            _vertices.Add(middle);
 
             // Add our new midpoint to the cache so we don't have
             // to do this again. =)
@@ -225,7 +242,7 @@ namespace PlanetGeneration
 
         public void GenerateMesh()
         {
-            int vertexCount = MeshTriangles.Count * 3;
+            int vertexCount = _meshTriangles.Count * 3;
 
             int[] indices = new int[vertexCount];
 
@@ -234,17 +251,17 @@ namespace PlanetGeneration
             Color32[] colors = new Color32[vertexCount];
             Vector2[] uvs = new Vector2[vertexCount];
 
-            for (int i = 0; i < MeshTriangles.Count; i++)
+            for (int i = 0; i < _meshTriangles.Count; i++)
             {
-                var poly = MeshTriangles[i];
+                var poly = _meshTriangles[i];
 
                 indices[i * 3 + 0] = i * 3 + 0;
                 indices[i * 3 + 1] = i * 3 + 1;
                 indices[i * 3 + 2] = i * 3 + 2;
 
-                vertices[i * 3 + 0] = Vertices[poly.VertexIndices[0]];
-                vertices[i * 3 + 1] = Vertices[poly.VertexIndices[1]];
-                vertices[i * 3 + 2] = Vertices[poly.VertexIndices[2]];
+                vertices[i * 3 + 0] = _vertices[poly.VertexIndices[0]];
+                vertices[i * 3 + 1] = _vertices[poly.VertexIndices[1]];
+                vertices[i * 3 + 2] = _vertices[poly.VertexIndices[2]];
 
                 uvs[i * 3 + 0] = poly.UVs[0];
                 uvs[i * 3 + 1] = poly.UVs[1];
@@ -254,16 +271,16 @@ namespace PlanetGeneration
                 colors[i * 3 + 1] = poly.Color;
                 colors[i * 3 + 2] = poly.Color;
 
-                if (SmoothNormals)
+                if (smoothNormals)
                 {
-                    normals[i * 3 + 0] = Vertices[poly.VertexIndices[0]].normalized;
-                    normals[i * 3 + 1] = Vertices[poly.VertexIndices[1]].normalized;
-                    normals[i * 3 + 2] = Vertices[poly.VertexIndices[2]].normalized;
+                    normals[i * 3 + 0] = _vertices[poly.VertexIndices[0]].normalized;
+                    normals[i * 3 + 1] = _vertices[poly.VertexIndices[1]].normalized;
+                    normals[i * 3 + 2] = _vertices[poly.VertexIndices[2]].normalized;
                 }
                 else
                 {
-                    Vector3 ab = Vertices[poly.VertexIndices[1]] - Vertices[poly.VertexIndices[0]];
-                    Vector3 ac = Vertices[poly.VertexIndices[2]] - Vertices[poly.VertexIndices[0]];
+                    Vector3 ab = _vertices[poly.VertexIndices[1]] - _vertices[poly.VertexIndices[0]];
+                    Vector3 ac = _vertices[poly.VertexIndices[2]] - _vertices[poly.VertexIndices[0]];
 
                     Vector3 normal = Vector3.Cross(ab, ac).normalized;
 
@@ -291,7 +308,7 @@ namespace PlanetGeneration
             {
                 foreach (int vertexIndex in p.VertexIndices)
                 {
-                    float distanceToSphere = Vector3.Distance(center, Vertices[vertexIndex]);
+                    float distanceToSphere = Vector3.Distance(center, _vertices[vertexIndex]);
 
                     if (distanceToSphere <= radius)
                     {
@@ -309,9 +326,9 @@ namespace PlanetGeneration
             List<int> newVerts = new List<int>();
             foreach (int oldVert in oldVerts)
             {
-                Vector3 clonedVert = Vertices[oldVert];
-                newVerts.Add(Vertices.Count);
-                Vertices.Add(clonedVert);
+                Vector3 clonedVert = _vertices[oldVert];
+                newVerts.Add(_vertices.Count);
+                _vertices.Add(clonedVert);
             }
 
             return newVerts;
@@ -321,7 +338,7 @@ namespace PlanetGeneration
         {
             TriangleHashSet stichedPolys = new TriangleHashSet();
 
-            stichedPolys.IterationIndex = Vertices.Count;
+            stichedPolys.IterationIndex = _vertices.Count;
 
             stitchedEdge = polys.CreateBoarderHashSet();
             var originalVerts = stitchedEdge.RemoveDublicates();
@@ -346,8 +363,8 @@ namespace PlanetGeneration
                 edge.InnerTriangle.UpdateNeighbour(edge.OuterTriangle, stitchPoly2);
                 edge.OuterTriangle.UpdateNeighbour(edge.InnerTriangle, stitchPoly1);
 
-                MeshTriangles.Add(stitchPoly1);
-                MeshTriangles.Add(stitchPoly2);
+                _meshTriangles.Add(stitchPoly1);
+                _meshTriangles.Add(stitchPoly2);
 
                 stichedPolys.Add(stitchPoly1);
                 stichedPolys.Add(stitchPoly2);
@@ -381,9 +398,9 @@ namespace PlanetGeneration
 
             foreach (int vert in verts)
             {
-                Vector3 v = Vertices[vert];
+                Vector3 v = _vertices[vert];
                 v = v.normalized * (v.magnitude + height);
-                Vertices[vert] = v;
+                _vertices[vert] = v;
             }
 
             return stitchedPolys;
@@ -391,9 +408,9 @@ namespace PlanetGeneration
 
         public void CalculateNeighbors()
         {
-            foreach (MeshTriangle poly in MeshTriangles)
+            foreach (MeshTriangle poly in _meshTriangles)
             {
-                foreach (MeshTriangle otherPoly in MeshTriangles)
+                foreach (MeshTriangle otherPoly in _meshTriangles)
                 {
                     if (poly == otherPoly)
                         continue;

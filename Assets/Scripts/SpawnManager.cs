@@ -165,5 +165,5 @@ public class SpawnManager : MonoBehaviour
     private IEnumerable<GameObject> GenerateEnemies() => Enumerable.Range(0, EnemiesInWave())
         .Select(x => _enemyPrefabs[Random.Range(0, _enemyPrefabs.Length)]);
 
-    private int EnemiesInWave() => baseEnemiesPerSpawn + _lvl + _currentWave;
+    private int EnemiesInWave() => baseEnemiesPerSpawn + _lvl - 1 + _currentWave - 1;
 }
