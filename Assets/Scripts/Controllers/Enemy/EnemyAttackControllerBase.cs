@@ -11,13 +11,23 @@ namespace Controllers.Enemy
         {
             if (other.CompareTag("Player"))
             {
-                other.GetComponentInParent<PlayerController>().Damage(Damage);
-                Destroy(gameObject);
+                OnPlayerContact(other.GetComponentInParent<PlayerController>());
             }
-            else if (other.CompareTag("Terrain") || other.CompareTag("Enemy"))
+            else if (other.CompareTag("Terrain") || other.CompareTag("Bullet"))
             {
-                Destroy(gameObject);
+                Destroy();
             }
+        }
+
+        protected virtual void Destroy()
+        {
+            Destroy(gameObject);
+        }
+
+        protected virtual void OnPlayerContact(PlayerController player)
+        {
+            player.Damage(Damage);
+            Destroy();
         }
     }
 }

@@ -25,14 +25,24 @@ namespace Controllers.Player
             // Apply damage enemy
             if (other.CompareTag("Enemy"))
             {
-                var enemy = other.GetComponent<AbstractEnemyController>();
-                enemy.TakeDamage(Damage);
-                Destroy(gameObject);
+                OnEnemyContact(other.GetComponent<AbstractEnemyController>());
             }
-            else if (other.CompareTag("Terrain"))
+            else if (other.CompareTag("Terrain") || other.CompareTag("EnemyBullet"))
             {
-                Destroy(gameObject);
+                Destroy();
             }
+        }
+
+
+        protected virtual void Destroy()
+        {
+            Destroy(gameObject);
+        }
+
+        protected virtual void OnEnemyContact(AbstractEnemyController enemy)
+        {
+            enemy.TakeDamage(Damage);
+            Destroy();
         }
     }
 }

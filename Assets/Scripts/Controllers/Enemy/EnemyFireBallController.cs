@@ -1,3 +1,4 @@
+using Controllers.Player;
 using UnityEngine;
 
 namespace Controllers.Enemy
@@ -21,14 +22,16 @@ namespace Controllers.Enemy
             }
         }
 
-        protected override void OnTriggerEnter(Collider other)
+        protected override void Destroy()
         {
-            if (other.CompareTag("Terrain") || other.CompareTag("Enemy") || other.CompareTag("Player"))
-            {
-                var obj = Instantiate(explosionPrefab, transform.position, transform.rotation);
-                obj.GetComponent<EnemyAttackControllerBase>().Damage = Damage;
-                Destroy(gameObject);
-            }
+            var obj = Instantiate(explosionPrefab, transform.position, transform.rotation);
+            obj.GetComponent<EnemyAttackControllerBase>().Damage = Damage;
+            Destroy(gameObject);
+        }
+
+        protected override void OnPlayerContact(PlayerController player)
+        {
+            Destroy();
         }
     }
 }

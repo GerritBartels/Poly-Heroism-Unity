@@ -14665,7 +14665,7 @@ GameObject:
   - component: {fileID: 790719724349752504}
   m_Layer: 0
   m_Name: GreenFireballExplosion
-  m_TagString: Bullet
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19586,7 +19586,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d693500e973494388c1b03f7a650d85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 25
   lifeSpan: 0.4
 --- !u!1 &1988778204445182
 GameObject:

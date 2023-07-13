@@ -1,3 +1,5 @@
+using System;
+using Controllers.Enemy;
 using UnityEngine;
 
 namespace Controllers.Player
@@ -18,14 +20,16 @@ namespace Controllers.Player
             transform.Translate(Vector3.forward * (speed * Time.deltaTime));
         }
 
-        protected override void OnTriggerEnter(Collider other)
+        protected override void Destroy()
         {
-            if (other.CompareTag("Enemy") || other.CompareTag("Terrain"))
-            {
-                var obj = Instantiate(explosionPrefab, transform.position, transform.rotation);
-                obj.GetComponent<PlayerAttackControllerBase>().Damage = Damage;
-                Destroy(gameObject);
-            }
+            var obj = Instantiate(explosionPrefab, transform.position, transform.rotation);
+            obj.GetComponent<PlayerAttackControllerBase>().Damage = Damage;
+            Destroy(gameObject);
+        }
+
+        protected override void OnEnemyContact(AbstractEnemyController enemy)
+        {
+            Destroy();
         }
     }
 }
