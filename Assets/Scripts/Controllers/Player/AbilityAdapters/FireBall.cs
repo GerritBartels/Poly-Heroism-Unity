@@ -32,7 +32,7 @@ namespace Controllers.Player.AbilityAdapters
 
         protected override GameObject InstantiateAttack()
         {
-            return Instantiate(_prefab, _transform.position + (_transform.forward * 0.7f) + _transform.up,
+            return Instantiate(_prefab, _transform.position + (_transform.forward * 0.9f) + _transform.up,
                 _transform.rotation);
         }
     }

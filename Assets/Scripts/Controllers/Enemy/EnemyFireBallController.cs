@@ -9,6 +9,8 @@ namespace Controllers.Enemy
         private readonly float _speed = 10f;
         [SerializeField] private GameObject explosionPrefab;
 
+        private bool _destroyed = false;
+
         private void Update()
         {
             // Move Fireballs
@@ -24,8 +26,10 @@ namespace Controllers.Enemy
 
         protected override void Destroy()
         {
+            if (_destroyed) return;
             var obj = Instantiate(explosionPrefab, transform.position, transform.rotation);
             obj.GetComponent<EnemyAttackControllerBase>().Damage = Damage;
+            _destroyed = true;
             Destroy(gameObject);
         }
 

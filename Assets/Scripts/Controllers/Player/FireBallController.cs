@@ -1,4 +1,3 @@
-using System;
 using Controllers.Enemy;
 using UnityEngine;
 
@@ -8,6 +7,7 @@ namespace Controllers.Player
     {
         [SerializeField] private float speed = 15f;
         [SerializeField] private GameObject explosionPrefab;
+        private bool _destroied = false;
 
         private void Awake()
         {
@@ -22,8 +22,10 @@ namespace Controllers.Player
 
         protected override void Destroy()
         {
+            if (_destroied) return;
             var obj = Instantiate(explosionPrefab, transform.position, transform.rotation);
             obj.GetComponent<PlayerAttackControllerBase>().Damage = Damage;
+            _destroied = true;
             Destroy(gameObject);
         }
 
