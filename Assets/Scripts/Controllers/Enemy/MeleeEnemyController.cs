@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Controllers.Enemy.AbilityAdapters;
+using Controllers.Player;
 using Model.Enemy;
-using Model.Enemy.Abilities;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;

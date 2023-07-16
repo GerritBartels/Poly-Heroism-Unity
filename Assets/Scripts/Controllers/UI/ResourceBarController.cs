@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Controllers.Player;
 using Model;
 using UnityEngine;
 using UnityEngine.Serialization;

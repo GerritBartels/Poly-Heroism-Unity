@@ -1,5 +1,5 @@
+using Controllers.Enemy.AbilityAdapters;
 using Model.Enemy;
-using Model.Enemy.Abilities;
 using UnityEngine;
 
 namespace Controllers.Enemy

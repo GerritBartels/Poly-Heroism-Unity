@@ -8,10 +8,10 @@ namespace PlanetGeneration
     // vertices. This means the Edge will need to keep track of what the outer Polygon's vertices are
     // along its border with the inner Polygon, and what the inner Polygon's vertices are for that
     // same border.
-    public class TriangleBorder 
+    public class TriangleBorder
     {
-        public MeshTriangle InnerTriangle;//The Poly that's inside the Edge. The one we'll be extruding or insetting.
-        public MeshTriangle OuterTriangle;//The Poly that's outside the Edge. We'll be leaving this one alone.
+        public MeshTriangle InnerTriangle; //The Poly that's inside the Edge. The one we'll be extruding or insetting.
+        public MeshTriangle OuterTriangle; //The Poly that's outside the Edge. We'll be leaving this one alone.
 
         public List<int> InnerVertices; //The vertices along this edge, according to the Inner poly.
         public List<int> OuterVertices; //The vertices along this edge, according to the Outer poly.
@@ -20,10 +20,10 @@ namespace PlanetGeneration
         //The third vertex of the inner polygon. That is, the one
         //that doesn't touch this edge.
 
-        public TriangleBorder(MeshTriangle _innerTriangle, MeshTriangle _outerTriangle)
+        public TriangleBorder(MeshTriangle innerTriangle, MeshTriangle outerTriangle)
         {
-            InnerTriangle = _innerTriangle;
-            OuterTriangle = _outerTriangle;
+            InnerTriangle = innerTriangle;
+            OuterTriangle = outerTriangle;
 
             InnerVertices = new List<int>(2);
             OuterVertices = new List<int>(2);
@@ -31,9 +31,9 @@ namespace PlanetGeneration
             // Examine all three of the inner poly's vertices. Add the vertices that it shares with the
             // outer poly to the m_InnerVerts list. We also make a note of which vertex wasn't on the edge
             // and store it for later in m_InwardDirectionVertex.
-            for(int i = 0; i < InnerTriangle.VertexIndices.Count; i++)
+            for (int i = 0; i < InnerTriangle.VertexIndices.Count; i++)
             {
-                if(OuterTriangle.VertexIndices.Contains(InnerTriangle.VertexIndices[i]))
+                if (OuterTriangle.VertexIndices.Contains(InnerTriangle.VertexIndices[i]))
                 {
                     InnerVertices.Add(InnerTriangle.VertexIndices[i]);
                 }
@@ -43,7 +43,7 @@ namespace PlanetGeneration
                 }
             }
 
-             // Calculate the 'inward direction', a vector that goes from the midpoint of the edge, to the third vertex on
+            // Calculate the 'inward direction', a vector that goes from the midpoint of the edge, to the third vertex on
             // the inner poly (the vertex that isn't part of the edge). This will come in handy later if we want to push
             // vertices directly away from the edge.
 
@@ -57,7 +57,8 @@ namespace PlanetGeneration
             // The formula above will give us [1st inner poly vertex, 3rd inner poly vertex] though, so
             // we check for that situation and reverse the vertices.
 
-            if(InnerVertices[0] == InnerTriangle.VertexIndices[0] && InnerVertices[1] == InnerTriangle.VertexIndices[2])
+            if (InnerVertices[0] == InnerTriangle.VertexIndices[0] &&
+                InnerVertices[1] == InnerTriangle.VertexIndices[2])
             {
                 (InnerVertices[0], InnerVertices[1]) = (InnerVertices[1], InnerVertices[0]);
             }
@@ -69,5 +70,3 @@ namespace PlanetGeneration
         }
     }
 }
-
-

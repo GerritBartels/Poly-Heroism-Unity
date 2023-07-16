@@ -1,5 +1,4 @@
 ﻿using System;
-using static System.Random;
 
 namespace Model.Enemy
 {

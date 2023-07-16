@@ -5,10 +5,16 @@ namespace PlanetGeneration
 {
     public class TriangleHashSet : HashSet<MeshTriangle>
     {
-        public TriangleHashSet() {}
-        public TriangleHashSet(TriangleHashSet source) : base(source) {}
+        public TriangleHashSet()
+        {
+        }
+
+        public TriangleHashSet(TriangleHashSet source) : base(source)
+        {
+        }
+
         public int IterationIndex = -1;
-    
+
         public BorderHashSet CreateBoarderHashSet()
         {
             BorderHashSet boarderSet = new BorderHashSet();
@@ -16,17 +22,19 @@ namespace PlanetGeneration
             {
                 foreach (MeshTriangle neighbor in triangle.Neighbours)
                 {
-                    if (this.Contains(neighbor))
+                    if (Contains(neighbor))
                     {
                         continue;
                     }
+
                     TriangleBorder boarder = new TriangleBorder(triangle, neighbor);
                     boarderSet.Add(boarder);
                 }
             }
+
             return boarderSet;
         }
-    
+
         public List<int> RemoveDublicates()
         {
             List<int> vertices = new List<int>();
@@ -37,17 +45,17 @@ namespace PlanetGeneration
                     if (!vertices.Contains(vertexIndex))
                     {
                         vertices.Add(vertexIndex);
-                    }      
+                    }
                 }
             }
+
             return vertices;
         }
-    
-        public void ApplyColor(Color _color)
+
+        public void ApplyColor(Color color)
         {
             foreach (MeshTriangle triangle in this)
-                triangle.Color = _color;
+                triangle.Color = color;
         }
     }
 }
-
